@@ -30,8 +30,6 @@ Apply these rules when writing TypeScript files or Vue component setup functions
 
 - Write JSDoc comments for all exported functions, variables, and types for better readability and understanding.
 - In JSDoc, `@return` annotation can be omitted since it's self-explanatory in most cases.
-- Write in Japanese
-- Don't use 丁寧語 (Don't put "です" / "ます")
 - Document complex functions with clear examples.
 
 ## Naming Conventions

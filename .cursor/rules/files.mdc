@@ -14,10 +14,6 @@ Adopt the following rules when adding new files and directories.
 - Use `app/composables` for composables.
 - Use `app/types` for type definitions.
 - Use `app/utils` for utility functions.
-- Use `server/api` for API endpoints.
-- Use `server/db` for database models and queries.
-- Use `server/utils` for utility functions.
-- Use `shared` for both Vue app and server.
 
 ## Test files
 
