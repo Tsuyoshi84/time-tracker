@@ -2,7 +2,6 @@ import { computed, onMounted, onUnmounted, ref } from 'vue'
 import type { DayStats, TimerState, TimeSession } from '../types'
 import { formatDate } from '../types'
 import {
-	calculateDayStats,
 	checkForOverlappingSessions,
 	deleteSession as deleteSessionFromDB,
 	getActiveSession,
@@ -196,7 +195,7 @@ export function useTimeTracker() {
 			loading.value = true
 			error.value = ''
 
-			await deleteSessionFromDB(session.id!)
+			await deleteSessionFromDB(session.id)
 			await refreshCurrentDateSessions()
 		} catch (err) {
 			error.value = `Failed to delete session: ${
@@ -310,7 +309,7 @@ export function useTimeTracker() {
 		timerInterval = window.setInterval(() => {
 			// Force reactivity update for real-time timer display
 			if (timerState.value.isRunning) {
-				// This triggers reactivity
+				// biome-ignore lint/correctness/noSelfAssign: This triggers reactivity
 				timerState.value.startTime = timerState.value.startTime
 			}
 		}, 1000)
