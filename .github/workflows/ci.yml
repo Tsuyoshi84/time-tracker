@@ -1,0 +1,75 @@
+name: CI
+
+on:
+  pull_request:
+    branches: ["main"]
+    types: [opened, synchronize, reopened, ready_for_review]
+    paths:
+      - "**/*.*"
+      - "!**/*.md"
+      - "!.coderabbit.yaml"
+      - "!.cursorrules"
+      - "!.cursor/**"
+      - "!.vscode/**"
+      - "!.github/dependabot.yml"
+      - "!.github/copilot-instructions.md"
+      - "!.github/PULL_REQUEST_TEMPLATE/**"
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: pnpm/action-setup@v4
+
+      - name: Use Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version-file: '.tool-versions'
+          cache: 'pnpm'
+          cache-dependency-path: pnpm-lock.yaml
+
+      - name: Install dependencies
+        run: pnpm install --no-save
+
+      - name: Type Check
+        run: pnpm typecheck
+
+      # - name: Test
+      #   run: pnpm test
+
+      # - name: Lint
+      #   run: pnpm lint:fix
+
+      # - name: Biome Check
+      #   run: pnpm check
+
+      - name: Commit changes
+        uses: stefanzweifel/git-auto-commit-action@v6
+
+      - name: Build
+        run: pnpm build
+
+  auto-merge:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    if: ${{ github.actor == 'dependabot[bot]' && github.event_name == 'pull_request' }}
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+      - name: Wait for checks to pass
+        uses: fountainhead/action-wait-for-check@v1.2.0
+        id: wait-for-checks
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          checkName: 'test' 
+          ref: ${{ github.event.pull_request.head.sha }}
+      - name: Merge PR
+        if: ${{ steps.wait-for-checks.outputs.conclusion == 'success' }}
+        run: gh pr merge --auto --squash ${{ github.event.pull_request.html_url }}
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
