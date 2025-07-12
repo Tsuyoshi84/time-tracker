@@ -15,11 +15,11 @@
 }
 
 .session-item.active {
-  @apply border-primary bg-primary/5;
+  @apply border-primary bg-primary opacity-5;
 }
 
 .time-input {
-  @apply input input-bordered input-sm w-20 text-center font-mono;
+  @apply input border input-sm w-20 text-center font-mono;
 }
 
 .btn-timer {
@@ -53,9 +53,9 @@
 }
 
 .day-card.selected {
-  @apply border-primary bg-primary/10;
+  @apply border-primary bg-primary opacity-10;
 }
 
 .day-card.today {
-  @apply border-secondary bg-secondary/10;
+  @apply border-secondary bg-secondary opacity-10;
 }
