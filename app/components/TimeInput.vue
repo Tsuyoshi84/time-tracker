@@ -26,21 +26,21 @@
 </template>
 
 <script setup lang="ts">
-import { ref, nextTick, computed } from 'vue'
+import { computed, nextTick, ref } from 'vue'
 
 // Props
 interface Props {
-  value: string
-  disabled?: boolean
+	value: string
+	disabled?: boolean
 }
 
 const props = withDefaults(defineProps<Props>(), {
-  disabled: false
+	disabled: false,
 })
 
 // Emits
 const emit = defineEmits<{
-  update: [value: string]
+	update: [value: string]
 }>()
 
 // Refs
@@ -50,38 +50,38 @@ const editValue = ref('')
 
 // Computed
 const hasError = computed(() => {
-  if (!editValue.value) return false
-  return !isValidTimeFormat(editValue.value)
+	if (!editValue.value) return false
+	return !isValidTimeFormat(editValue.value)
 })
 
 // Methods
 const startEdit = () => {
-  if (props.disabled) return
-  
-  isEditing.value = true
-  editValue.value = props.value
-  
-  nextTick(() => {
-    inputRef.value?.focus()
-    inputRef.value?.select()
-  })
+	if (props.disabled) return
+
+	isEditing.value = true
+	editValue.value = props.value
+
+	nextTick(() => {
+		inputRef.value?.focus()
+		inputRef.value?.select()
+	})
 }
 
 const finishEdit = () => {
-  if (isValidTimeFormat(editValue.value)) {
-    emit('update', editValue.value)
-  }
-  isEditing.value = false
+	if (isValidTimeFormat(editValue.value)) {
+		emit('update', editValue.value)
+	}
+	isEditing.value = false
 }
 
 const cancelEdit = () => {
-  isEditing.value = false
-  editValue.value = ''
+	isEditing.value = false
+	editValue.value = ''
 }
 
 const isValidTimeFormat = (timeString: string): boolean => {
-  const pattern = /^([01]?\d|2[0-3]):([0-5]\d)$/
-  return pattern.test(timeString)
+	const pattern = /^([01]?\d|2[0-3]):([0-5]\d)$/
+	return pattern.test(timeString)
 }
 </script>
 

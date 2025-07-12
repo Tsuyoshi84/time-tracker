@@ -66,57 +66,57 @@
 
 <script setup lang="ts">
 import { computed, ref, watch } from 'vue'
+import SessionList from '~/components/SessionList.vue'
+import TimerDisplay from '~/components/TimerDisplay.vue'
 import { useTimeTracker } from '~/composables/useTimeTracker'
 import { formatDuration } from '~/types'
-import TimerDisplay from '~/components/TimerDisplay.vue'
-import SessionList from '~/components/SessionList.vue'
 
 // Use the time tracker composable
 const {
-  timerState,
-  sessions,
-  selectedDate,
-  dailyStats,
-  loading,
-  error,
-  currentSessionDuration,
-  todaysTotalDuration,
-  sessionCount,
-  toggleTimer,
-  updateSessionData,
-  deleteSessionData,
-  addManualSession,
-  selectDate
+	timerState,
+	sessions,
+	selectedDate,
+	dailyStats,
+	loading,
+	error,
+	currentSessionDuration,
+	todaysTotalDuration,
+	sessionCount,
+	toggleTimer,
+	updateSessionData,
+	deleteSessionData,
+	addManualSession,
+	selectDate,
 } = useTimeTracker()
 
 // Date input handling
 const selectedDateInput = ref(selectedDate.value)
 
 watch(selectedDate, (newDate) => {
-  selectedDateInput.value = newDate
+	selectedDateInput.value = newDate
 })
 
 const handleDateChange = () => {
-  selectDate(selectedDateInput.value)
+	selectDate(selectedDateInput.value)
 }
 
 // Quick stats computations
 const weeklyTotal = computed(() => {
-  return dailyStats.value.reduce((total, day) => total + day.totalDuration, 0)
+	return dailyStats.value.reduce((total, day) => total + day.totalDuration, 0)
 })
 
 const dailyAverage = computed(() => {
-  const total = weeklyTotal.value
-  return Math.round(total / 7)
+	const total = weeklyTotal.value
+	return Math.round(total / 7)
 })
 
 const totalWeeklySessions = computed(() => {
-  return dailyStats.value.reduce((total, day) => total + day.sessionCount, 0)
+	return dailyStats.value.reduce((total, day) => total + day.sessionCount, 0)
 })
 
 // SEO
 useSeoMeta({
-  title: 'Time Tracker - Freelance Time Management',
-  description: 'Track your freelance work hours with flexible timer and session management',
+	title: 'Time Tracker - Freelance Time Management',
+	description: 'Track your freelance work hours with flexible timer and session management',
 })
 </script>
