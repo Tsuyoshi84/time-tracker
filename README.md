@@ -1,75 +1,156 @@
-# Nuxt Minimal Starter
+# Time Tracker - Freelance Time Management
 
-Look at the [Nuxt documentation](https://nuxt.com/docs/getting-started/introduction) to learn more.
+A professional time tracking application built for freelance engineers with flexible hours and multiple work sessions per day.
 
-## Setup
+## Features
 
-Make sure to install dependencies:
+### 🕐 Flexible Timer System
+- **Start/Pause functionality** - No stop button, only pause to allow resuming
+- **Multiple sessions per day** - Track several work periods with breaks
+- **Real-time display** - Live updates of current session and total daily time
+- **Cross-midnight support** - Automatic date handling for night work
+
+### ✏️ Editable Time Entries
+- **Click-to-edit** - Edit start and end times directly in the interface
+- **Manual session creation** - Add sessions retroactively
+- **Delete sessions** - Remove individual sessions
+- **Validation** - Prevents overlapping time entries and invalid time ranges
+
+### 📊 Analytics & Tracking
+- **Daily totals** - See total hours worked per day
+- **Weekly overview** - 7-day summary with daily breakdowns
+- **Session management** - List all sessions with durations
+- **Visual indicators** - Clear distinction between active and completed sessions
+
+### 💾 Data Persistence
+- **IndexedDB storage** - All data stored locally in your browser
+- **Automatic backup** - No data loss between sessions
+- **Fast queries** - Efficient date-based data retrieval
+
+## Technical Stack
+
+- **Framework**: Nuxt 3 with TypeScript
+- **Styling**: Tailwind CSS 3 + daisyUI
+- **Icons**: Lucide Vue Next
+- **Database**: IndexedDB (via idb library)
+- **Architecture**: SPA mode for GitHub Pages deployment
+
+## Getting Started
+
+### Prerequisites
+- Node.js 18+ 
+- pnpm (recommended) or npm
+
+### Installation
+
+1. Clone the repository
+2. Install dependencies:
+   ```bash
+   pnpm install
+   ```
+
+3. Start the development server:
+   ```bash
+   pnpm dev
+   ```
+
+4. Open [http://localhost:3000](http://localhost:3000) in your browser
+
+### Building for Production
 
 ```bash
-# npm
-npm install
+# Generate static files for deployment
+pnpm generate
 
-# pnpm
-pnpm install
-
-# yarn
-yarn install
-
-# bun
-bun install
-```
-
-## Development Server
-
-Start the development server on `http://localhost:3000`:
-
-```bash
-# npm
-npm run dev
-
-# pnpm
-pnpm dev
-
-# yarn
-yarn dev
-
-# bun
-bun run dev
-```
-
-## Production
-
-Build the application for production:
-
-```bash
-# npm
-npm run build
-
-# pnpm
-pnpm build
-
-# yarn
-yarn build
-
-# bun
-bun run build
-```
-
-Locally preview production build:
-
-```bash
-# npm
-npm run preview
-
-# pnpm
+# Preview the production build
 pnpm preview
-
-# yarn
-yarn preview
-
-# bun
-bun run preview
 ```
 
-Check out the [deployment documentation](https://nuxt.com/docs/getting-started/deployment) for more information.
+## Usage
+
+### Starting a Work Session
+1. Click the green "Start" button on the dashboard
+2. The timer begins tracking your current session
+3. Work as needed with the timer running
+
+### Pausing Work
+1. Click the orange "Pause" button
+2. The session is saved with an end time
+3. You can resume work by clicking "Start" again (creates a new session)
+
+### Editing Time Entries
+1. Go to the daily sessions list
+2. Click on any start or end time to edit it
+3. Enter time in HH:MM format (24-hour)
+4. Press Enter to save or Escape to cancel
+
+### Adding Manual Sessions
+1. Click "Add Session" in the sessions list
+2. A default 1-hour session is created
+3. Edit the start and end times as needed
+
+### Weekly Overview
+1. Navigate to the "Weekly" tab
+2. View 7-day summary with daily breakdowns
+3. Click on any day to see detailed sessions
+4. Use navigation arrows to view different weeks
+
+## Data Storage
+
+All data is stored locally in your browser's IndexedDB. This means:
+- ✅ No internet connection required
+- ✅ Complete privacy - data never leaves your device
+- ✅ Fast performance
+- ⚠️ Data is tied to your browser/device
+- ⚠️ Clearing browser data will remove all sessions
+
+## Architecture
+
+### Key Components
+- **TimerDisplay** - Main timer interface with start/pause controls
+- **SessionList** - Displays and manages daily sessions
+- **WeeklyView** - Week overview with daily statistics
+- **TimeInput** - Inline time editing component
+
+### Data Flow
+1. **Timer State** - Managed by `useTimeTracker` composable
+2. **IndexedDB** - Persistent storage via `database.ts` utility
+3. **Reactive Updates** - Real-time UI updates with Vue 3 reactivity
+
+### File Structure
+```
+app/
+├── components/          # Vue components
+├── composables/         # Composable functions
+├── layouts/            # Layout components
+├── pages/              # Route pages
+├── types/              # TypeScript type definitions
+├── utils/              # Utility functions
+└── assets/css/         # Stylesheets
+```
+
+## Contributing
+
+This is a single-user application focused on simplicity and core functionality. If you'd like to extend it:
+
+1. Fork the repository
+2. Create a feature branch
+3. Make your changes
+4. Test thoroughly
+5. Submit a pull request
+
+## License
+
+MIT License - feel free to use and modify for your own projects.
+
+## Support
+
+This application is designed to work in modern browsers with IndexedDB support. If you encounter issues:
+
+1. Check browser console for errors
+2. Ensure IndexedDB is available in your browser
+3. Try clearing browser data and refreshing
+
+---
+
+Built with ❤️ for freelance engineers who need flexible time tracking without the complexity of enterprise solutions.
