@@ -1,70 +1,3 @@
-<template>
-  <div class="space-y-6">
-    <div class="flex items-center justify-between">
-      <h2 class="text-xl font-semibold">Weekly Overview</h2>
-      <div class="flex items-center space-x-2">
-        <button
-          @click="previousWeek"
-          class="btn btn-sm btn-outline"
-          :disabled="loading"
-        >
-          <ChevronLeft class="w-4 h-4" />
-        </button>
-        <span class="text-sm font-medium px-3">
-          {{ formatWeekRange(weekStart, weekEnd) }}
-        </span>
-        <button
-          @click="nextWeek"
-          class="btn btn-sm btn-outline"
-          :disabled="loading"
-        >
-          <ChevronRight class="w-4 h-4" />
-        </button>
-      </div>
-    </div>
-
-    <div class="weekly-grid">
-      <div
-        v-for="day in weekDays"
-        :key="day.date"
-        @click="selectDay(day.date)"
-        :class="[
-          'day-card',
-          {
-            selected: selectedDate === day.date,
-            today: day.isToday,
-          },
-        ]"
-      >
-        <div class="text-sm font-medium mb-1">
-          {{ day.dayName }}
-        </div>
-        <div class="text-xs text-gray-500 mb-2">
-          {{ formatDate(day.date) }}
-        </div>
-        <div class="text-lg font-semibold text-primary">
-          {{ formatDuration(day.totalDuration) }}
-        </div>
-        <div class="text-xs text-gray-500 mt-1">
-          {{ day.sessionCount }} session{{ day.sessionCount !== 1 ? "s" : "" }}
-        </div>
-      </div>
-    </div>
-
-    <div class="stats-card">
-      <div class="text-center">
-        <div class="text-sm text-gray-600 mb-1">Week Total</div>
-        <div class="text-3xl font-bold text-primary">
-          {{ formatDuration(weekTotal) }}
-        </div>
-        <div class="text-sm text-gray-500 mt-1">
-          {{ totalSessions }} total sessions
-        </div>
-      </div>
-    </div>
-  </div>
-</template>
-
 <script setup lang="ts">
 import { ChevronLeft, ChevronRight } from 'lucide-vue-next'
 import { computed } from 'vue'
@@ -161,3 +94,70 @@ const formatDate = (dateString: string): string => {
 	return date.toLocaleDateString('en-US', { month: 'numeric', day: 'numeric' })
 }
 </script>
+
+<template>
+  <div class="space-y-6">
+    <div class="flex items-center justify-between">
+      <h2 class="text-xl font-semibold">Weekly Overview</h2>
+      <div class="flex items-center space-x-2">
+        <button
+          @click="previousWeek"
+          class="btn btn-sm btn-outline"
+          :disabled="loading"
+        >
+          <ChevronLeft class="w-4 h-4" />
+        </button>
+        <span class="text-sm font-medium px-3">
+          {{ formatWeekRange(weekStart, weekEnd) }}
+        </span>
+        <button
+          @click="nextWeek"
+          class="btn btn-sm btn-outline"
+          :disabled="loading"
+        >
+          <ChevronRight class="w-4 h-4" />
+        </button>
+      </div>
+    </div>
+
+    <div class="weekly-grid">
+      <div
+        v-for="day in weekDays"
+        :key="day.date"
+        @click="selectDay(day.date)"
+        :class="[
+          'day-card',
+          {
+            selected: selectedDate === day.date,
+            today: day.isToday,
+          },
+        ]"
+      >
+        <div class="text-sm font-medium mb-1">
+          {{ day.dayName }}
+        </div>
+        <div class="text-xs text-gray-500 mb-2">
+          {{ formatDate(day.date) }}
+        </div>
+        <div class="text-lg font-semibold text-primary">
+          {{ formatDuration(day.totalDuration) }}
+        </div>
+        <div class="text-xs text-gray-500 mt-1">
+          {{ day.sessionCount }} session{{ day.sessionCount !== 1 ? "s" : "" }}
+        </div>
+      </div>
+    </div>
+
+    <div class="stats-card">
+      <div class="text-center">
+        <div class="text-sm text-gray-600 mb-1">Week Total</div>
+        <div class="text-3xl font-bold text-primary">
+          {{ formatDuration(weekTotal) }}
+        </div>
+        <div class="text-sm text-gray-500 mt-1">
+          {{ totalSessions }} total sessions
+        </div>
+      </div>
+    </div>
+  </div>
+</template>

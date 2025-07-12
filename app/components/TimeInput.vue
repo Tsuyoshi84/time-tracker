@@ -1,30 +1,3 @@
-<template>
-  <div class="inline-block">
-    <input
-      v-if="isEditing"
-      ref="inputRef"
-      v-model="editValue"
-      @blur="finishEdit"
-      @keydown.enter="finishEdit"
-      @keydown.escape="cancelEdit"
-      class="time-input"
-      :class="{ 'input-error': hasError }"
-      type="text"
-      placeholder="HH:MM"
-      :disabled="disabled"
-    />
-    <button
-      v-else
-      @click="startEdit"
-      class="time-input bg-transparent border-transparent hover:border-gray-300 hover:bg-gray-50"
-      :class="{ 'cursor-not-allowed opacity-50': disabled }"
-      :disabled="disabled"
-    >
-      {{ value }}
-    </button>
-  </div>
-</template>
-
 <script setup lang="ts">
 import { computed, nextTick, ref } from 'vue'
 
@@ -84,6 +57,33 @@ const isValidTimeFormat = (timeString: string): boolean => {
 	return pattern.test(timeString)
 }
 </script>
+
+<template>
+  <div class="inline-block">
+    <input
+      v-if="isEditing"
+      ref="inputRef"
+      v-model="editValue"
+      @blur="finishEdit"
+      @keydown.enter="finishEdit"
+      @keydown.escape="cancelEdit"
+      class="time-input"
+      :class="{ 'input-error': hasError }"
+      type="text"
+      placeholder="HH:MM"
+      :disabled="disabled"
+    />
+    <button
+      v-else
+      @click="startEdit"
+      class="time-input bg-transparent border-transparent hover:border-gray-300 hover:bg-gray-50"
+      :class="{ 'cursor-not-allowed opacity-50': disabled }"
+      :disabled="disabled"
+    >
+      {{ value }}
+    </button>
+  </div>
+</template>
 
 <style scoped>
 .time-input {
