@@ -1,3 +1,7 @@
+<script setup lang="ts">
+import { Timer } from 'lucide-vue-next'
+</script>
+
 <template>
   <div class="min-h-screen bg-base-200">
     <!-- Header -->
@@ -9,15 +13,15 @@
             <h1 class="text-2xl font-bold text-primary">Time Tracker</h1>
           </div>
           <nav class="flex space-x-4">
-            <NuxtLink 
-              to="/" 
+            <NuxtLink
+              to="/"
               class="btn btn-sm btn-ghost"
               :class="{ 'btn-active': $route.path === '/' }"
             >
               Dashboard
             </NuxtLink>
-            <NuxtLink 
-              to="/weekly" 
+            <NuxtLink
+              to="/weekly"
               class="btn btn-sm btn-ghost"
               :class="{ 'btn-active': $route.path === '/weekly' }"
             >
@@ -43,10 +47,6 @@
     </footer>
   </div>
 </template>
-
-<script setup lang="ts">
-import { Timer } from 'lucide-vue-next'
-</script>
 
 <style scoped>
 .btn-active {
