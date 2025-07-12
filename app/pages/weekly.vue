@@ -106,87 +106,80 @@
 </template>
 
 <script setup lang="ts">
-import { computed } from 'vue'
 import { Calendar } from 'lucide-vue-next'
-import { useTimeTracker } from '~/composables/useTimeTracker'
-import { formatDuration, formatTime, calculateDuration } from '~/types'
-import type { TimeSession } from '~/types'
+import { computed } from 'vue'
 import WeeklyView from '~/components/WeeklyView.vue'
+import { useTimeTracker } from '~/composables/useTimeTracker'
+import type { TimeSession } from '~/types'
+import { calculateDuration, formatDuration, formatTime } from '~/types'
 
 // Use the time tracker composable
-const {
-  selectedDate,
-  weekStart,
-  weekEnd,
-  dailyStats,
-  loading,
-  navigateWeek,
-  selectDate
-} = useTimeTracker()
+const { selectedDate, weekStart, weekEnd, dailyStats, loading, navigateWeek, selectDate } =
+	useTimeTracker()
 
 // Selected day details
 const selectedDayStats = computed(() => {
-  return dailyStats.value.find(day => day.date === selectedDate.value)
+	return dailyStats.value.find((day) => day.date === selectedDate.value)
 })
 
 // Weekly stats
 const weeklyTotal = computed(() => {
-  return dailyStats.value.reduce((total, day) => total + day.totalDuration, 0)
+	return dailyStats.value.reduce((total, day) => total + day.totalDuration, 0)
 })
 
 const dailyAverage = computed(() => {
-  const total = weeklyTotal.value
-  return Math.round(total / 7)
+	const total = weeklyTotal.value
+	return Math.round(total / 7)
 })
 
 const totalWeeklySessions = computed(() => {
-  return dailyStats.value.reduce((total, day) => total + day.sessionCount, 0)
+	return dailyStats.value.reduce((total, day) => total + day.sessionCount, 0)
 })
 
 const mostProductiveDay = computed(() => {
-  if (dailyStats.value.length === 0) return 'None'
-  
-  const maxDay = dailyStats.value.reduce((max, day) => 
-    day.totalDuration > max.totalDuration ? day : max
-  )
-  
-  if (maxDay.totalDuration === 0) return 'None'
-  
-  const date = new Date(maxDay.date)
-  return date.toLocaleDateString('en-US', { weekday: 'long' })
+	if (dailyStats.value.length === 0) return 'None'
+
+	const maxDay = dailyStats.value.reduce((max, day) =>
+		day.totalDuration > max.totalDuration ? day : max,
+	)
+
+	if (maxDay.totalDuration === 0) return 'None'
+
+	const date = new Date(maxDay.date)
+	return date.toLocaleDateString('en-US', { weekday: 'long' })
 })
 
 // Methods
 const selectDay = (date: string) => {
-  selectDate(date)
+	selectDate(date)
 }
 
 const formatSelectedDate = (dateString: string): string => {
-  const date = new Date(dateString)
-  return date.toLocaleDateString('en-US', { 
-    weekday: 'long', 
-    year: 'numeric', 
-    month: 'long', 
-    day: 'numeric' 
-  })
+	const date = new Date(dateString)
+	return date.toLocaleDateString('en-US', {
+		weekday: 'long',
+		year: 'numeric',
+		month: 'long',
+		day: 'numeric',
+	})
 }
 
 const getSessionDuration = (session: TimeSession): string => {
-  if (session.isActive) {
-    return 'Running...'
-  }
-  
-  if (session.endTime) {
-    const duration = calculateDuration(session.startTime, session.endTime)
-    return formatDuration(duration)
-  }
-  
-  return '--:--:--'
+	if (session.isActive) {
+		return 'Running...'
+	}
+
+	if (session.endTime) {
+		const duration = calculateDuration(session.startTime, session.endTime)
+		return formatDuration(duration)
+	}
+
+	return '--:--:--'
 }
 
 // SEO
 useSeoMeta({
-  title: 'Weekly Overview - Time Tracker',
-  description: 'View your weekly time tracking progress and analyze work patterns',
+	title: 'Weekly Overview - Time Tracker',
+	description: 'View your weekly time tracking progress and analyze work patterns',
 })
 </script>

@@ -41,32 +41,32 @@
 </template>
 
 <script setup lang="ts">
-import { Play, Pause, AlertCircle } from 'lucide-vue-next'
+import { AlertCircle, Pause, Play } from 'lucide-vue-next'
 import { formatDuration } from '~/types'
 
 // Props
 interface Props {
-  isRunning: boolean
-  currentSessionDuration: number
-  todaysTotalDuration: number
-  sessionCount: number
-  loading?: boolean
-  error?: string
+	isRunning: boolean
+	currentSessionDuration: number
+	todaysTotalDuration: number
+	sessionCount: number
+	loading?: boolean
+	error?: string
 }
 
 const props = withDefaults(defineProps<Props>(), {
-  loading: false,
-  error: ''
+	loading: false,
+	error: '',
 })
 
 // Emits
 const emit = defineEmits<{
-  toggleTimer: []
+	toggleTimer: []
 }>()
 
 // Methods
 const toggleTimer = () => {
-  emit('toggleTimer')
+	emit('toggleTimer')
 }
 </script>
 

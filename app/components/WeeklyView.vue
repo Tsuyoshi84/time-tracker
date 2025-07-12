@@ -66,98 +66,98 @@
 </template>
 
 <script setup lang="ts">
-import { computed } from "vue"
-import { ChevronLeft, ChevronRight } from "lucide-vue-next"
-import { formatDuration } from "~/types"
-import type { DayStats } from "~/types"
+import { ChevronLeft, ChevronRight } from 'lucide-vue-next'
+import { computed } from 'vue'
+import type { DayStats } from '~/types'
+import { formatDuration } from '~/types'
 
 // Props
 interface Props {
-  weekStart: Date
-  weekEnd: Date
-  dailyStats: DayStats[]
-  selectedDate: string
-  loading?: boolean
+	weekStart: Date
+	weekEnd: Date
+	dailyStats: DayStats[]
+	selectedDate: string
+	loading?: boolean
 }
 
 const props = withDefaults(defineProps<Props>(), {
-  loading: false,
+	loading: false,
 })
 
 // Emits
 const emit = defineEmits<{
-  previousWeek: []
-  nextWeek: []
-  selectDay: [date: string]
+	previousWeek: []
+	nextWeek: []
+	selectDay: [date: string]
 }>()
 
 // Computed
 const weekDays = computed<
-  {
-    date: string
-    dayName: string
-    isToday: boolean
-    totalDuration: number
-    sessionCount: number
-  }[]
+	{
+		date: string
+		dayName: string
+		isToday: boolean
+		totalDuration: number
+		sessionCount: number
+	}[]
 >(() => {
-  const days = []
-  const current = new Date(props.weekStart)
-  const today = new Date().toISOString().split("T")[0]
+	const days = []
+	const current = new Date(props.weekStart)
+	const today = new Date().toISOString().split('T')[0]
 
-  for (let i = 0; i < 7; i++) {
-    const dateString = current.toISOString().split("T")[0]
-    const dayStats = props.dailyStats.find((stats) => stats.date === dateString)
+	for (let i = 0; i < 7; i++) {
+		const dateString = current.toISOString().split('T')[0]
+		const dayStats = props.dailyStats.find((stats) => stats.date === dateString)
 
-    days.push({
-      date: dateString as string,
-      dayName: current.toLocaleDateString("en-US", { weekday: "short" }),
-      isToday: dateString === today,
-      totalDuration: dayStats?.totalDuration || 0,
-      sessionCount: dayStats?.sessionCount || 0,
-    })
+		days.push({
+			date: dateString as string,
+			dayName: current.toLocaleDateString('en-US', { weekday: 'short' }),
+			isToday: dateString === today,
+			totalDuration: dayStats?.totalDuration || 0,
+			sessionCount: dayStats?.sessionCount || 0,
+		})
 
-    current.setDate(current.getDate() + 1)
-  }
+		current.setDate(current.getDate() + 1)
+	}
 
-  return days
+	return days
 })
 
 const weekTotal = computed(() => {
-  return props.dailyStats.reduce((total, day) => total + day.totalDuration, 0)
+	return props.dailyStats.reduce((total, day) => total + day.totalDuration, 0)
 })
 
 const totalSessions = computed(() => {
-  return props.dailyStats.reduce((total, day) => total + day.sessionCount, 0)
+	return props.dailyStats.reduce((total, day) => total + day.sessionCount, 0)
 })
 
 // Methods
 const previousWeek = () => {
-  emit("previousWeek")
+	emit('previousWeek')
 }
 
 const nextWeek = () => {
-  emit("nextWeek")
+	emit('nextWeek')
 }
 
 const selectDay = (date: string) => {
-  emit("selectDay", date)
+	emit('selectDay', date)
 }
 
 const formatWeekRange = (start: Date, end: Date): string => {
-  const startStr = start.toLocaleDateString("en-US", {
-    month: "short",
-    day: "numeric",
-  })
-  const endStr = end.toLocaleDateString("en-US", {
-    month: "short",
-    day: "numeric",
-  })
-  return `${startStr} - ${endStr}`
+	const startStr = start.toLocaleDateString('en-US', {
+		month: 'short',
+		day: 'numeric',
+	})
+	const endStr = end.toLocaleDateString('en-US', {
+		month: 'short',
+		day: 'numeric',
+	})
+	return `${startStr} - ${endStr}`
 }
 
 const formatDate = (dateString: string): string => {
-  const date = new Date(dateString)
-  return date.toLocaleDateString("en-US", { month: "numeric", day: "numeric" })
+	const date = new Date(dateString)
+	return date.toLocaleDateString('en-US', { month: 'numeric', day: 'numeric' })
 }
 </script>

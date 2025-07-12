@@ -93,69 +93,75 @@
 </template>
 
 <script setup lang="ts">
-import { Plus, Clock, Trash2 } from 'lucide-vue-next'
-import { formatTime, formatDuration, parseTimeInput, validateTimeRange, calculateDuration } from '~/types'
+import { Clock, Plus, Trash2 } from 'lucide-vue-next'
 import type { TimeSession, ValidationError } from '~/types'
+import {
+	calculateDuration,
+	formatDuration,
+	formatTime,
+	parseTimeInput,
+	validateTimeRange,
+} from '~/types'
 import TimeInput from './TimeInput.vue'
 
 // Props
 interface Props {
-  sessions: TimeSession[]
-  loading?: boolean
+	sessions: TimeSession[]
+	loading?: boolean
 }
 
 const props = withDefaults(defineProps<Props>(), {
-  loading: false
+	loading: false,
 })
 
 // Emits
 const emit = defineEmits<{
-  updateSession: [session: TimeSession, updates: Partial<TimeSession>]
-  deleteSession: [session: TimeSession]
-  addManualSession: []
+	updateSession: [session: TimeSession, updates: Partial<TimeSession>]
+	deleteSession: [session: TimeSession]
+	addManualSession: []
 }>()
 
 // Methods
 const updateStartTime = (session: TimeSession, timeString: string) => {
-  const newStartTime = parseTimeInput(timeString)
-  if (newStartTime) {
-    emit('updateSession', session, { startTime: newStartTime })
-  }
+	const newStartTime = parseTimeInput(timeString)
+	if (newStartTime) {
+		emit('updateSession', session, { startTime: newStartTime })
+	}
 }
 
 const updateEndTime = (session: TimeSession, timeString: string) => {
-  const newEndTime = parseTimeInput(timeString)
-  if (newEndTime) {
-    emit('updateSession', session, { endTime: newEndTime })
-  }
+	const newEndTime = parseTimeInput(timeString)
+	if (newEndTime) {
+		emit('updateSession', session, { endTime: newEndTime })
+	}
 }
 
 const deleteSession = (session: TimeSession) => {
-  if (confirm('Are you sure you want to delete this session?')) {
-    emit('deleteSession', session)
-  }
+	if (confirm('Are you sure you want to delete this session?')) {
+		emit('deleteSession', session)
+	}
 }
 
 const addManualSession = () => {
-  emit('addManualSession')
+	emit('addManualSession')
 }
 
 const getDurationDisplay = (session: TimeSession): string => {
-  if (session.isActive) {
-    return 'Running...'
-  }
-  
-  if (session.endTime) {
-    const duration = calculateDuration(session.startTime, session.endTime)
-    return formatDuration(duration)
-  }
-  
-  return '--:--:--'
+	if (session.isActive) {
+		return 'Running...'
+	}
+
+	if (session.endTime) {
+		const duration = calculateDuration(session.startTime, session.endTime)
+		return formatDuration(duration)
+	}
+
+	return '--:--:--'
 }
 
 const getSessionErrors = (session: TimeSession): ValidationError[] => {
-  if (!session.endTime) return []
-  
-  return validateTimeRange(session.startTime, session.endTime)
+	if (!session.endTime) return []
+
+	return validateTimeRange(session.startTime, session.endTime)
 }
 </script>
