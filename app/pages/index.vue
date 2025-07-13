@@ -83,7 +83,7 @@ useSeoMeta({
               class="input input-bordered input-sm"
               :disabled="loading"
               @change="handleDateChange"
-            />
+            >
           </div>
         </div>
 

@@ -1,4 +1,5 @@
-import { type IDBPDatabase, openDB } from 'idb'
+import type { IDBPDatabase } from 'idb'
+import { openDB } from 'idb'
 import type { TimeSession } from '../types'
 
 const DB_NAME = 'timeTracker'

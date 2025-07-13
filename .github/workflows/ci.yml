@@ -41,14 +41,14 @@ jobs:
       # - name: Test
       #   run: pnpm test
 
-      # - name: Lint
-      #   run: pnpm lint:fix
+      - name: Lint
+        run: pnpm lint:fix
 
       - name: Biome Check
         run: pnpm check
 
       - name: Commit changes
-        uses: stefanzweifel/git-auto-commit-action@v6
+        uses: stefanzweifel/git-auto-commit-action@v5
 
       - name: Build
         run: pnpm build

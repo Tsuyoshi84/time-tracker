@@ -12,7 +12,7 @@ interface Props {
 	error?: string
 }
 
-const props = withDefaults(defineProps<Props>(), {
+withDefaults(defineProps<Props>(), {
 	loading: false,
 	error: '',
 })
@@ -38,9 +38,9 @@ function toggleTimer() {
       </div>
 
       <button
-        @click="toggleTimer"
         :class="['btn-timer', isRunning ? 'active' : 'inactive']"
         :disabled="loading"
+        @click="toggleTimer"
       >
         <Play v-if="!isRunning" class="w-6 h-6 mr-2" />
         <Pause v-else class="w-6 h-6 mr-2" />
