@@ -28,7 +28,7 @@ const hasError = computed(() => {
 })
 
 // Methods
-const startEdit = () => {
+function startEdit() {
 	if (props.disabled) return
 
 	isEditing.value = true
@@ -40,19 +40,19 @@ const startEdit = () => {
 	})
 }
 
-const finishEdit = () => {
+function finishEdit() {
 	if (isValidTimeFormat(editValue.value)) {
 		emit('update', editValue.value)
 	}
 	isEditing.value = false
 }
 
-const cancelEdit = () => {
+function cancelEdit() {
 	isEditing.value = false
 	editValue.value = ''
 }
 
-const isValidTimeFormat = (timeString: string): boolean => {
+function isValidTimeFormat(timeString: string): boolean {
 	const pattern = /^([01]?\d|2[0-3]):([0-5]\d)$/
 	return pattern.test(timeString)
 }

@@ -54,7 +54,7 @@ export function useTimeTracker() {
 	})
 
 	// Methods
-	const initializeTimer = async () => {
+	async function initializeTimer() {
 		try {
 			loading.value = true
 			await initDatabase()
@@ -69,7 +69,7 @@ export function useTimeTracker() {
 		}
 	}
 
-	const loadActiveSession = async () => {
+	async function loadActiveSession() {
 		try {
 			const activeSession = await getActiveSession()
 			if (activeSession) {
@@ -86,7 +86,7 @@ export function useTimeTracker() {
 		}
 	}
 
-	const toggleTimer = async () => {
+	async function toggleTimer() {
 		try {
 			loading.value = true
 			error.value = ''
@@ -103,7 +103,7 @@ export function useTimeTracker() {
 		}
 	}
 
-	const startTimer = async () => {
+	async function startTimer() {
 		const now = new Date()
 		const sessionData = {
 			startTime: now,
@@ -125,7 +125,7 @@ export function useTimeTracker() {
 		await refreshCurrentDateSessions()
 	}
 
-	const pauseTimer = async () => {
+	async function pauseTimer() {
 		if (!timerState.value.currentSession) return
 
 		const endTime = new Date()
@@ -146,22 +146,20 @@ export function useTimeTracker() {
 		await refreshCurrentDateSessions()
 	}
 
-	const loadSessionsForDate = async (date: string) => {
+	async function loadSessionsForDate(date: string) {
 		try {
-			sessions.value = await getSessionsByDate(date)
+			const dateSessions = await getSessionsByDate(date)
+			sessions.value = dateSessions
 		} catch (err) {
-			error.value = `Failed to load sessions: ${
-				err instanceof Error ? err.message : 'Unknown error'
-			}`
+			error.value = `Failed to load sessions: ${err instanceof Error ? err.message : 'Unknown error'}`
 		}
 	}
 
-	const refreshCurrentDateSessions = async () => {
+	async function refreshCurrentDateSessions() {
 		await loadSessionsForDate(selectedDate.value)
-		await loadWeeklyStats()
 	}
 
-	const updateSessionData = async (session: TimeSession, updates: Partial<TimeSession>) => {
+	async function updateSessionData(session: TimeSession, updates: Partial<TimeSession>) {
 		try {
 			loading.value = true
 			error.value = ''
@@ -181,6 +179,7 @@ export function useTimeTracker() {
 
 			await updateSession(session.id, updates)
 			await refreshCurrentDateSessions()
+			await loadWeeklyStats()
 		} catch (err) {
 			error.value = `Failed to update session: ${
 				err instanceof Error ? err.message : 'Unknown error'
@@ -190,13 +189,14 @@ export function useTimeTracker() {
 		}
 	}
 
-	const deleteSessionData = async (session: TimeSession) => {
+	async function deleteSessionData(session: TimeSession) {
 		try {
 			loading.value = true
 			error.value = ''
 
 			await deleteSessionFromDB(session.id)
 			await refreshCurrentDateSessions()
+			await loadWeeklyStats()
 		} catch (err) {
 			error.value = `Failed to delete session: ${
 				err instanceof Error ? err.message : 'Unknown error'
@@ -206,7 +206,7 @@ export function useTimeTracker() {
 		}
 	}
 
-	const addManualSession = async () => {
+	async function addManualSession() {
 		const now = new Date()
 		const startTime = new Date(now.getTime() - 60 * 60 * 1000) // 1 hour ago
 		const endTime = now
@@ -234,6 +234,7 @@ export function useTimeTracker() {
 
 			await saveSession(sessionData)
 			await refreshCurrentDateSessions()
+			await loadWeeklyStats()
 		} catch (err) {
 			error.value = `Failed to add session: ${err instanceof Error ? err.message : 'Unknown error'}`
 		} finally {
@@ -241,7 +242,7 @@ export function useTimeTracker() {
 		}
 	}
 
-	const loadWeeklyStats = async () => {
+	async function loadWeeklyStats() {
 		try {
 			const weekStartStr = formatDate(weekStart.value)
 			const weekEndStr = formatDate(weekEnd.value)
@@ -292,19 +293,19 @@ export function useTimeTracker() {
 		}
 	}
 
-	const selectDate = async (date: string) => {
+	async function selectDate(date: string) {
 		selectedDate.value = date
 		await loadSessionsForDate(date)
 	}
 
-	const navigateWeek = async (direction: 'prev' | 'next') => {
+	async function navigateWeek(direction: 'prev' | 'next') {
 		const days = direction === 'prev' ? -7 : 7
 		weekStart.value = new Date(weekStart.value.getTime() + days * 24 * 60 * 60 * 1000)
 		weekEnd.value = new Date(weekEnd.value.getTime() + days * 24 * 60 * 60 * 1000)
 		await loadWeeklyStats()
 	}
 
-	const startTimerInterval = () => {
+	function startTimerInterval() {
 		if (timerInterval) clearInterval(timerInterval)
 		timerInterval = window.setInterval(() => {
 			// Force reactivity update for real-time timer display
@@ -315,7 +316,7 @@ export function useTimeTracker() {
 		}, 1000)
 	}
 
-	const stopTimerInterval = () => {
+	function stopTimerInterval() {
 		if (timerInterval) {
 			clearInterval(timerInterval)
 			timerInterval = null
