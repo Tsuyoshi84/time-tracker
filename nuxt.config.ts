@@ -9,4 +9,11 @@ export default defineNuxtConfig({
 	modules: ['@nuxt/eslint', '@nuxtjs/tailwindcss'],
 	ssr: false,
 	css: ['~/assets/css/main.css'],
+	eslint: {
+		config: {
+			nuxt: {
+				sortConfigKeys: true,
+			},
+		},
+	},
 })

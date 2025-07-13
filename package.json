@@ -10,7 +10,9 @@
     "preview": "nuxt preview",
     "postinstall": "nuxt prepare",
     "typecheck": "nuxi typecheck",
-    "check": "biome check --write"
+    "check": "biome check --write",
+    "lint": "eslint .",
+    "lint:fix": "eslint . --fix"
   },
   "dependencies": {
     "@nuxt/eslint": "1.5.2",
@@ -25,6 +27,7 @@
   },
   "devDependencies": {
     "@biomejs/biome": "^2.1.1",
+    "typescript": "^5.8.3",
     "vue-tsc": "^3.0.1"
   }
 }

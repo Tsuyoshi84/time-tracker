@@ -16,7 +16,7 @@ interface Props {
 	loading?: boolean
 }
 
-const props = withDefaults(defineProps<Props>(), {
+withDefaults(defineProps<Props>(), {
 	loading: false,
 })
 
@@ -77,9 +77,9 @@ function getSessionErrors(session: TimeSession): ValidationError[] {
     <div class="flex items-center justify-between">
       <h3 class="text-lg font-semibold">Sessions</h3>
       <button
-        @click="addManualSession"
         class="btn btn-sm btn-primary"
         :disabled="loading"
+        @click="addManualSession"
       >
         <Plus class="w-4 h-4 mr-1" />
         Add Session
@@ -116,15 +116,15 @@ function getSessionErrors(session: TimeSession): ValidationError[] {
             <div class="flex items-center space-x-2">
               <TimeInput
                 :value="formatTime(session.startTime)"
-                @update="(value) => updateStartTime(session, value)"
                 :disabled="session.isActive || loading"
+                @update="(value) => updateStartTime(session, value)"
               />
               <span class="text-gray-400">-</span>
               <TimeInput
                 v-if="session.endTime"
                 :value="formatTime(session.endTime)"
-                @update="(value) => updateEndTime(session, value)"
                 :disabled="loading"
+                @update="(value) => updateEndTime(session, value)"
               />
               <span v-else class="text-gray-400 text-sm">Running...</span>
             </div>
@@ -139,9 +139,9 @@ function getSessionErrors(session: TimeSession): ValidationError[] {
           <div class="flex items-center space-x-2">
             <button
               v-if="!session.isActive"
-              @click="deleteSession(session)"
               class="btn btn-sm btn-ghost text-red-500 hover:bg-red-50"
               :disabled="loading"
+              @click="deleteSession(session)"
             >
               <Trash2 class="w-4 h-4" />
             </button>

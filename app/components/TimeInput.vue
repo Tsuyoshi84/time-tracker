@@ -64,21 +64,21 @@ function isValidTimeFormat(timeString: string): boolean {
       v-if="isEditing"
       ref="inputRef"
       v-model="editValue"
-      @blur="finishEdit"
-      @keydown.enter="finishEdit"
-      @keydown.escape="cancelEdit"
       class="time-input"
       :class="{ 'input-error': hasError }"
       type="text"
       placeholder="HH:MM"
       :disabled="disabled"
-    />
+      @blur="finishEdit"
+      @keydown.enter="finishEdit"
+      @keydown.escape="cancelEdit"
+    >
     <button
       v-else
-      @click="startEdit"
       class="time-input bg-transparent border-transparent hover:border-gray-300 hover:bg-gray-50"
       :class="{ 'cursor-not-allowed opacity-50': disabled }"
       :disabled="disabled"
+      @click="startEdit"
     >
       {{ value }}
     </button>

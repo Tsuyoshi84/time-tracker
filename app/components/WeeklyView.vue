@@ -101,9 +101,9 @@ function formatDate(dateString: string): string {
       <h2 class="text-xl font-semibold">Weekly Overview</h2>
       <div class="flex items-center space-x-2">
         <button
-          @click="previousWeek"
           class="btn btn-sm btn-outline"
           :disabled="loading"
+          @click="previousWeek"
         >
           <ChevronLeft class="w-4 h-4" />
         </button>
@@ -111,9 +111,9 @@ function formatDate(dateString: string): string {
           {{ formatWeekRange(weekStart, weekEnd) }}
         </span>
         <button
-          @click="nextWeek"
           class="btn btn-sm btn-outline"
           :disabled="loading"
+          @click="nextWeek"
         >
           <ChevronRight class="w-4 h-4" />
         </button>
@@ -124,7 +124,6 @@ function formatDate(dateString: string): string {
       <div
         v-for="day in weekDays"
         :key="day.date"
-        @click="selectDay(day.date)"
         :class="[
           'day-card',
           {
@@ -132,6 +131,7 @@ function formatDate(dateString: string): string {
             today: day.isToday,
           },
         ]"
+        @click="selectDay(day.date)"
       >
         <div class="text-sm font-medium mb-1">
           {{ day.dayName }}

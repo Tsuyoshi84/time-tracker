@@ -3,8 +3,8 @@ import { Calendar } from 'lucide-vue-next'
 import { computed } from 'vue'
 import WeeklyView from '~/components/WeeklyView.vue'
 import { useTimeTracker } from '~/composables/useTimeTracker'
-import type { TimeSession } from '~/types'
 import { calculateDuration, formatDuration, formatTime } from '~/types'
+import type { TimeSession } from '~/types/index'
 
 // Use the time tracker composable
 const { selectedDate, weekStart, weekEnd, dailyStats, loading, navigateWeek, selectDate } =
