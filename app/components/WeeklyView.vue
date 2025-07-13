@@ -65,19 +65,19 @@ const totalSessions = computed(() => {
 })
 
 // Methods
-const previousWeek = () => {
+function previousWeek() {
 	emit('previousWeek')
 }
 
-const nextWeek = () => {
+function nextWeek() {
 	emit('nextWeek')
 }
 
-const selectDay = (date: string) => {
+function selectDay(date: string) {
 	emit('selectDay', date)
 }
 
-const formatWeekRange = (start: Date, end: Date): string => {
+function formatWeekRange(start: Date, end: Date): string {
 	const startStr = start.toLocaleDateString('en-US', {
 		month: 'short',
 		day: 'numeric',
@@ -89,7 +89,7 @@ const formatWeekRange = (start: Date, end: Date): string => {
 	return `${startStr} - ${endStr}`
 }
 
-const formatDate = (dateString: string): string => {
+function formatDate(dateString: string): string {
 	const date = new Date(dateString)
 	return date.toLocaleDateString('en-US', { month: 'numeric', day: 'numeric' })
 }

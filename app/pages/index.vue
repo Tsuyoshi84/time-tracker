@@ -30,7 +30,7 @@ watch(selectedDate, (newDate) => {
 	selectedDateInput.value = newDate
 })
 
-const handleDateChange = () => {
+function handleDateChange() {
 	selectDate(selectedDateInput.value)
 }
 

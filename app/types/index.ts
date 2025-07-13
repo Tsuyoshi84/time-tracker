@@ -45,7 +45,7 @@ export interface SessionEdit {
 	endTime: Date
 }
 
-export const formatDuration = (milliseconds: number): string => {
+export function formatDuration(milliseconds: number): string {
 	if (milliseconds <= 0) return '0:00:00'
 
 	const totalSeconds = Math.floor(milliseconds / 1000)
@@ -53,12 +53,14 @@ export const formatDuration = (milliseconds: number): string => {
 	const minutes = Math.floor((totalSeconds % 3600) / 60)
 	const seconds = totalSeconds % 60
 
-	const pad = (num: number): string => (num < 10 ? `0${num}` : `${num}`)
+	function pad(num: number): string {
+		return num < 10 ? `0${num}` : `${num}`
+	}
 
 	return `${hours}:${pad(minutes)}:${pad(seconds)}`
 }
 
-export const formatTime = (date: Date): string => {
+export function formatTime(date: Date): string {
 	return date.toLocaleTimeString('en-US', {
 		hour12: false,
 		hour: '2-digit',
@@ -66,12 +68,12 @@ export const formatTime = (date: Date): string => {
 	})
 }
 
-export const formatDate = (date?: Date): string => {
+export function formatDate(date?: Date): string {
 	if (!date) return ''
 	return date.toISOString().split('T')[0] || ''
 }
 
-export const parseTimeInput = (timeString: string): Date | null => {
+export function parseTimeInput(timeString: string): Date | null {
 	const match = timeString.match(/^(\d{1,2}):(\d{2})$/)
 	if (!match) return null
 
@@ -85,11 +87,11 @@ export const parseTimeInput = (timeString: string): Date | null => {
 	return result
 }
 
-export const calculateDuration = (startTime: Date, endTime: Date): number => {
+export function calculateDuration(startTime: Date, endTime: Date): number {
 	return Math.max(0, endTime.getTime() - startTime.getTime())
 }
 
-export const validateTimeRange = (startTime: Date, endTime: Date): ValidationError[] => {
+export function validateTimeRange(startTime: Date, endTime: Date): ValidationError[] {
 	const errors: ValidationError[] = []
 
 	if (startTime >= endTime) {

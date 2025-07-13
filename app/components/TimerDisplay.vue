@@ -23,7 +23,7 @@ const emit = defineEmits<{
 }>()
 
 // Methods
-const toggleTimer = () => {
+function toggleTimer() {
 	emit('toggleTimer')
 }
 </script>

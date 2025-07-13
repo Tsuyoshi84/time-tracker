@@ -43,11 +43,11 @@ const mostProductiveDay = computed(() => {
 })
 
 // Methods
-const selectDay = (date: string) => {
+function selectDay(date: string) {
 	selectDate(date)
 }
 
-const formatSelectedDate = (dateString: string): string => {
+function formatSelectedDate(dateString: string): string {
 	const date = new Date(dateString)
 	return date.toLocaleDateString('en-US', {
 		weekday: 'long',
@@ -57,7 +57,7 @@ const formatSelectedDate = (dateString: string): string => {
 	})
 }
 
-const getSessionDuration = (session: TimeSession): string => {
+function getSessionDuration(session: TimeSession): string {
 	if (session.isActive) {
 		return 'Running...'
 	}

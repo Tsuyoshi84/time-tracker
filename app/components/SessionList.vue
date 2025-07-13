@@ -28,31 +28,31 @@ const emit = defineEmits<{
 }>()
 
 // Methods
-const updateStartTime = (session: TimeSession, timeString: string) => {
+function updateStartTime(session: TimeSession, timeString: string) {
 	const newStartTime = parseTimeInput(timeString)
 	if (newStartTime) {
 		emit('updateSession', session, { startTime: newStartTime })
 	}
 }
 
-const updateEndTime = (session: TimeSession, timeString: string) => {
+function updateEndTime(session: TimeSession, timeString: string) {
 	const newEndTime = parseTimeInput(timeString)
 	if (newEndTime) {
 		emit('updateSession', session, { endTime: newEndTime })
 	}
 }
 
-const deleteSession = (session: TimeSession) => {
+function deleteSession(session: TimeSession) {
 	if (confirm('Are you sure you want to delete this session?')) {
 		emit('deleteSession', session)
 	}
 }
 
-const addManualSession = () => {
+function addManualSession() {
 	emit('addManualSession')
 }
 
-const getDurationDisplay = (session: TimeSession): string => {
+function getDurationDisplay(session: TimeSession): string {
 	if (session.isActive) {
 		return 'Running...'
 	}
@@ -65,7 +65,7 @@ const getDurationDisplay = (session: TimeSession): string => {
 	return '--:--:--'
 }
 
-const getSessionErrors = (session: TimeSession): ValidationError[] => {
+function getSessionErrors(session: TimeSession): ValidationError[] {
 	if (!session.endTime) return []
 
 	return validateTimeRange(session.startTime, session.endTime)
