@@ -4,27 +4,25 @@ import { computed } from 'vue'
 import type { DayStats } from '~/types'
 import { formatDuration } from '~/types'
 
-// Props
-interface Props {
-	weekStart: Date
-	weekEnd: Date
-	dailyStats: DayStats[]
-	selectedDate: string
-	loading?: boolean
-}
+const props = withDefaults(
+	defineProps<{
+		weekStart: Date
+		weekEnd: Date
+		dailyStats: DayStats[]
+		selectedDate: string
+		loading?: boolean
+	}>(),
+	{
+		loading: false,
+	},
+)
 
-const props = withDefaults(defineProps<Props>(), {
-	loading: false,
-})
-
-// Emits
-const emit = defineEmits<{
+defineEmits<{
 	previousWeek: []
 	nextWeek: []
 	selectDay: [date: string]
 }>()
 
-// Computed
 const weekDays = computed<
 	{
 		date: string
@@ -64,19 +62,6 @@ const totalSessions = computed(() => {
 	return props.dailyStats.reduce((total, day) => total + day.sessionCount, 0)
 })
 
-// Methods
-function previousWeek() {
-	emit('previousWeek')
-}
-
-function nextWeek() {
-	emit('nextWeek')
-}
-
-function selectDay(date: string) {
-	emit('selectDay', date)
-}
-
 function formatWeekRange(start: Date, end: Date): string {
 	const startStr = start.toLocaleDateString('en-US', {
 		month: 'short',
@@ -101,9 +86,10 @@ function formatDate(dateString: string): string {
       <h2 class="text-xl font-semibold">Weekly Overview</h2>
       <div class="flex items-center space-x-2">
         <button
+          type="button"
           class="btn btn-sm btn-outline"
           :disabled="loading"
-          @click="previousWeek"
+          @click="$emit('previousWeek')"
         >
           <ChevronLeft class="w-4 h-4" />
         </button>
@@ -111,27 +97,26 @@ function formatDate(dateString: string): string {
           {{ formatWeekRange(weekStart, weekEnd) }}
         </span>
         <button
+          type="button"
           class="btn btn-sm btn-outline"
           :disabled="loading"
-          @click="nextWeek"
+          @click="$emit('nextWeek')"
         >
           <ChevronRight class="w-4 h-4" />
         </button>
       </div>
     </div>
 
-    <div class="weekly-grid">
+    <div class="grid weekly-grid grid-cols-1 gap-1 sm:grid-cols-1 sm:gap-1">
       <div
         v-for="day in weekDays"
         :key="day.date"
-        :class="[
-          'day-card',
-          {
-            selected: selectedDate === day.date,
-            today: day.isToday,
-          },
-        ]"
-        @click="selectDay(day.date)"
+        class="bg-base-100 border border-base-300 rounded-lg p-3 text-center hover:bg-base-200 transition-colors cursor-pointer"
+        :class="{
+          'border-primary bg-primary opacity-10': selectedDate === day.date,
+          'border-secondary bg-secondary opacity-10': day.isToday,
+        }"
+        @click="$emit('selectDay', day.date)"
       >
         <div class="text-sm font-medium mb-1">
           {{ day.dayName }}

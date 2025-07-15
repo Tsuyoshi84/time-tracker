@@ -2,27 +2,25 @@
 import { AlertCircle, Pause, Play } from 'lucide-vue-next'
 import { formatDuration } from '~/types'
 
-// Props
-interface Props {
-	isRunning: boolean
-	currentSessionDuration: number
-	todaysTotalDuration: number
-	sessionCount: number
-	loading?: boolean
-	error?: string
-}
+withDefaults(
+	defineProps<{
+		isRunning: boolean
+		currentSessionDuration: number
+		todaysTotalDuration: number
+		sessionCount: number
+		loading?: boolean
+		error?: string
+	}>(),
+	{
+		loading: false,
+		error: '',
+	},
+)
 
-withDefaults(defineProps<Props>(), {
-	loading: false,
-	error: '',
-})
-
-// Emits
 const emit = defineEmits<{
 	toggleTimer: []
 }>()
 
-// Methods
 function toggleTimer() {
 	emit('toggleTimer')
 }
@@ -38,8 +36,10 @@ function toggleTimer() {
       </div>
 
       <button
-        :class="['btn-timer', isRunning ? 'active' : 'inactive']"
+        class="btn btn-lg min-h-16 px-8 font-semibold text-2xl"
+        :class="{'btn-warning': isRunning, 'btn-success': !isRunning}"
         :disabled="loading"
+        type="button"
         @click="toggleTimer"
       >
         <Play v-if="!isRunning" class="w-6 h-6 mr-2" />
@@ -51,7 +51,7 @@ function toggleTimer() {
     <!-- Today's Total -->
     <div class="stats-card">
       <div class="text-sm text-gray-600 mb-2">Today's Total</div>
-      <div class="timer-display text-4xl font-semibold text-secondary">
+      <div class="timer-display  text-4xl font-semibold text-secondary">
         {{ formatDuration(todaysTotalDuration) }}
       </div>
       <div class="text-sm text-gray-500 mt-1">

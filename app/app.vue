@@ -22,7 +22,7 @@ useHead({
 		{ name: 'format-detection', content: 'telephone=no' },
 		{ name: 'theme-color', content: '#3b82f6' },
 	],
-	link: [{ rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' }],
+	link: [{ rel: 'icon', type: 'image/svg+xml', href: '/favicon.svg' }],
 })
 </script>
 
