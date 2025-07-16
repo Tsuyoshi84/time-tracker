@@ -1,5 +1,5 @@
 import { computed, onMounted, onUnmounted, ref } from 'vue'
-import type { DateString, DayStats, TimerState, TimeSession } from '../types'
+import type { DateString, DayStats, Milliseconds, TimerState, TimeSession } from '../types'
 import { formatDate } from '../types'
 import {
 	checkForOverlappingSessions,
@@ -13,7 +13,6 @@ import {
 } from '../utils/database'
 
 export function useTimeTracker() {
-	// Reactive state
 	const timerState = ref<TimerState>({
 		isRunning: false,
 		currentSession: null,
@@ -31,21 +30,27 @@ export function useTimeTracker() {
 	// Timer for real-time updates
 	let timerInterval: number | null = null
 
-	// Computed properties
-	const currentSessionDuration = computed(() => {
-		if (!timerState.value.isRunning || !timerState.value.startTime) return 0
-		return Date.now() - timerState.value.startTime.getTime()
-	})
+	/** The duration of the current session in milliseconds. */
+	const currentSessionDuration = shallowRef<Milliseconds>(0 as Milliseconds)
 
-	const todaysTotalDuration = computed(() => {
+	const { pause, resume } = useIntervalFn(() => {
+		updateCurrentSessionDuration()
+	}, 1000)
+
+	function updateCurrentSessionDuration() {
+		if (!timerState.value.isRunning || !timerState.value.startTime) return
+		currentSessionDuration.value = diffInMilliseconds(timerState.value.startTime, new Date())
+	}
+
+	const todaysTotalDuration = computed<Milliseconds>(() => {
 		const today = formatDate(new Date())
 		const todaySessions = sessions.value.filter((s) => s.date === today && s.endTime)
-		return todaySessions.reduce((total, session) => {
-			if (session.endTime) {
-				return total + (session.endTime.getTime() - session.startTime.getTime())
-			}
-			return total
-		}, 0)
+		return (currentSessionDuration.value +
+			todaySessions.reduce(
+				(total, session) =>
+					session.endTime ? total + diffInMilliseconds(session.startTime, session.endTime) : total,
+				0,
+			)) as Milliseconds
 	})
 
 	const sessionCount = computed(() => {
@@ -109,7 +114,7 @@ export function useTimeTracker() {
 			startTime: now,
 			date: formatDate(now),
 			isActive: true,
-			duration: 0,
+			duration: 0 as Milliseconds,
 			createdAt: now,
 			updatedAt: now,
 		}
@@ -123,13 +128,14 @@ export function useTimeTracker() {
 		}
 
 		await refreshCurrentDateSessions()
+		resume()
 	}
 
 	async function pauseTimer() {
 		if (!timerState.value.currentSession) return
 
 		const endTime = new Date()
-		const duration = endTime.getTime() - timerState.value.currentSession.startTime.getTime()
+		const duration = diffInMilliseconds(timerState.value.currentSession.startTime, endTime)
 
 		await updateSession(timerState.value.currentSession.id, {
 			endTime,
@@ -142,8 +148,10 @@ export function useTimeTracker() {
 			currentSession: null,
 			startTime: null,
 		}
+		currentSessionDuration.value = 0 as Milliseconds
 
 		await refreshCurrentDateSessions()
+		pause()
 	}
 
 	async function loadSessionsForDate(date: DateString) {
@@ -216,7 +224,7 @@ export function useTimeTracker() {
 			endTime,
 			date: formatDate(startTime),
 			isActive: false,
-			duration: endTime.getTime() - startTime.getTime(),
+			duration: diffInMilliseconds(startTime, endTime),
 			createdAt: now,
 			updatedAt: now,
 		}
@@ -378,4 +386,8 @@ function getEndOfWeek(date: Date): Date {
 	result.setDate(diff)
 	result.setHours(23, 59, 59, 999)
 	return result
+}
+
+function diffInMilliseconds(start: Date, end: Date): Milliseconds {
+	return (end.getTime() - start.getTime()) as Milliseconds
 }

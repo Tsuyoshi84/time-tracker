@@ -1,11 +1,13 @@
 /** The date string format. (YYYY-MM-DD) */
 export type DateString = `${number}-${number}-${number}`
 
+export type Milliseconds = number & { __brand: 'Milliseconds' }
+
 export interface TimeSession {
 	id: number
 	startTime: Date
 	endTime?: Date
-	duration?: number // in milliseconds
+	duration?: Milliseconds
 	date: DateString
 	isActive: boolean
 	createdAt: Date
