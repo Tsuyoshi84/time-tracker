@@ -1,5 +1,5 @@
 import { computed, onMounted, onUnmounted, ref } from 'vue'
-import type { DateString, DayStats, TimerState, TimeSession } from '../types'
+import type { DateString, DayStats, Milliseconds, TimerState, TimeSession } from '../types'
 import { formatDate } from '../types'
 import {
 	checkForOverlappingSessions,
@@ -32,12 +32,12 @@ export function useTimeTracker() {
 	let timerInterval: number | null = null
 
 	// Computed properties
-	const currentSessionDuration = computed(() => {
-		if (!timerState.value.isRunning || !timerState.value.startTime) return 0
-		return Date.now() - timerState.value.startTime.getTime()
+	const currentSessionDuration = computed<Milliseconds>(() => {
+		if (!timerState.value.isRunning || !timerState.value.startTime) return 0 as Milliseconds
+		return (Date.now() - timerState.value.startTime.getTime()) as Milliseconds
 	})
 
-	const todaysTotalDuration = computed(() => {
+	const todaysTotalDuration = computed<Milliseconds>(() => {
 		const today = formatDate(new Date())
 		const todaySessions = sessions.value.filter((s) => s.date === today && s.endTime)
 		return todaySessions.reduce((total, session) => {
@@ -45,7 +45,7 @@ export function useTimeTracker() {
 				return total + (session.endTime.getTime() - session.startTime.getTime())
 			}
 			return total
-		}, 0)
+		}, 0) as Milliseconds
 	})
 
 	const sessionCount = computed(() => {

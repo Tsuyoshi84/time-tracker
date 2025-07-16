@@ -1,6 +1,8 @@
 /** The date string format. (YYYY-MM-DD) */
 export type DateString = `${number}-${number}-${number}`
 
+export type Milliseconds = number & { __brand: 'Milliseconds' }
+
 export interface TimeSession {
 	id: number
 	startTime: Date

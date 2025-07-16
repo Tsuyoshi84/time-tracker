@@ -1,15 +1,22 @@
 <script setup lang="ts">
 import { AlertCircle, Pause, Play } from 'lucide-vue-next'
+import type { Milliseconds } from '~/types'
 import { formatDuration } from '~/types'
 import AppCard from './AppCard.vue'
 
 withDefaults(
 	defineProps<{
+		/** Indicates if the timer is currently running. */
 		isRunning: boolean
-		currentSessionDuration: number
-		todaysTotalDuration: number
+		/** Duration of the current session in milliseconds. */
+		currentSessionDuration: Milliseconds
+		/** Total duration for today in milliseconds. */
+		todaysTotalDuration: Milliseconds
+		/** Number of sessions for today. */
 		sessionCount: number
+		/** Whether the timer is in a loading state. */
 		loading?: boolean
+		/** Error message to display, if any. */
 		error?: string
 	}>(),
 	{
@@ -18,13 +25,9 @@ withDefaults(
 	},
 )
 
-const emit = defineEmits<{
+defineEmits<{
 	toggleTimer: []
 }>()
-
-function toggleTimer() {
-	emit('toggleTimer')
-}
 </script>
 
 <template>
@@ -41,7 +44,7 @@ function toggleTimer() {
         :class="{'btn-warning': isRunning, 'btn-success': !isRunning}"
         :disabled="loading"
         type="button"
-        @click="toggleTimer"
+        @click="$emit('toggleTimer')"
       >
         <Play v-if="!isRunning" class="w-6 h-6 mr-2" />
         <Pause v-else class="w-6 h-6 mr-2" />
@@ -67,9 +70,3 @@ function toggleTimer() {
     </div>
   </div>
 </template>
-
-<style scoped>
-.timer-display {
-  font-variant-numeric: tabular-nums;
-}
-</style>
