@@ -7,7 +7,7 @@ export interface TimeSession {
 	id: number
 	startTime: Date
 	endTime?: Date
-	duration?: number // in milliseconds
+	duration?: Milliseconds
 	date: DateString
 	isActive: boolean
 	createdAt: Date
