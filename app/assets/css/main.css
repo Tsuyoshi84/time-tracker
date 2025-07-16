@@ -1,14 +1,6 @@
-@import url("https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap");
-
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
-
-/* Custom styles for the time tracker */
-.timer-display {
-	font-family: "Inter", monospace;
-	font-variant-numeric: tabular-nums;
-}
 
 .stats-card {
 	@apply bg-base-100 border border-base-300 rounded-lg p-6 shadow-sm;

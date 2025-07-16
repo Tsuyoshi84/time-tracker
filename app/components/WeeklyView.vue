@@ -3,6 +3,7 @@ import { ChevronLeft, ChevronRight } from 'lucide-vue-next'
 import { computed } from 'vue'
 import type { DayStats } from '~/types'
 import { formatDuration } from '~/types'
+import AppCard from './AppCard.vue'
 
 const props = withDefaults(
 	defineProps<{
@@ -54,11 +55,11 @@ const weekDays = computed<
 	return days
 })
 
-const weekTotal = computed(() => {
+const weekTotal = computed<number>(() => {
 	return props.dailyStats.reduce((total, day) => total + day.totalDuration, 0)
 })
 
-const totalSessions = computed(() => {
+const totalSessions = computed<number>(() => {
 	return props.dailyStats.reduce((total, day) => total + day.sessionCount, 0)
 })
 
@@ -107,7 +108,7 @@ function formatDate(dateString: string): string {
       </div>
     </div>
 
-    <div class="grid weekly-grid grid-cols-1 gap-1 sm:grid-cols-1 sm:gap-1">
+    <div class="grid grid-cols-1 sm:grid-cols-7 gap-1 sm:gap-1">
       <div
         v-for="day in weekDays"
         :key="day.date"
@@ -133,7 +134,7 @@ function formatDate(dateString: string): string {
       </div>
     </div>
 
-    <div class="stats-card">
+    <AppCard>
       <div class="text-center">
         <div class="text-sm text-gray-600 mb-1">Week Total</div>
         <div class="text-3xl font-bold text-primary">
@@ -143,6 +144,6 @@ function formatDate(dateString: string): string {
           {{ totalSessions }} total sessions
         </div>
       </div>
-    </div>
+    </AppCard>
   </div>
 </template>

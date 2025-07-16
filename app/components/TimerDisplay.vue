@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { AlertCircle, Pause, Play } from 'lucide-vue-next'
 import { formatDuration } from '~/types'
+import AppCard from './AppCard.vue'
 
 withDefaults(
 	defineProps<{
@@ -29,9 +30,9 @@ function toggleTimer() {
 <template>
   <div class="text-center space-y-6">
     <!-- Current Session Timer -->
-    <div class="stats-card">
+    <AppCard>
       <div class="text-sm text-gray-600 mb-2">Current Session</div>
-      <div class="timer-display text-6xl font-bold text-primary mb-4">
+      <div class="font-inter text-6xl tabular-nums font-bold text-primary mb-4">
         {{ formatDuration(currentSessionDuration) }}
       </div>
 
@@ -46,18 +47,18 @@ function toggleTimer() {
         <Pause v-else class="w-6 h-6 mr-2" />
         {{ isRunning ? "Pause" : "Start" }}
       </button>
-    </div>
+    </AppCard>
 
     <!-- Today's Total -->
-    <div class="stats-card">
+    <AppCard>
       <div class="text-sm text-gray-600 mb-2">Today's Total</div>
-      <div class="timer-display  text-4xl font-semibold text-secondary">
+      <div class="font-inter text-4xl tabular-nums font-semibold text-secondary">
         {{ formatDuration(todaysTotalDuration) }}
       </div>
       <div class="text-sm text-gray-500 mt-1">
         {{ sessionCount }} session{{ sessionCount !== 1 ? "s" : "" }}
       </div>
-    </div>
+    </AppCard>
 
     <!-- Error Messages -->
     <div v-if="error" class="alert alert-error">
