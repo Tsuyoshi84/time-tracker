@@ -7,10 +7,15 @@ import AppCard from './AppCard.vue'
 
 const props = withDefaults(
 	defineProps<{
+		/** The start date of the week. */
 		weekStart: Date
+		/** The end date of the week. */
 		weekEnd: Date
+		/** Array of daily statistics for the week. */
 		dailyStats: DayStats[]
+		/** The currently selected date (YYYY-MM-DD). */
 		selectedDate: string
+		/** Whether the data is loading. @default false */
 		loading?: boolean
 	}>(),
 	{
@@ -19,30 +24,43 @@ const props = withDefaults(
 )
 
 defineEmits<{
+	/** Emitted when the user requests the previous week. */
 	previousWeek: []
+	/** Emitted when the user requests the next week. */
 	nextWeek: []
+	/** Emitted when a day is selected, with the date (YYYY-MM-DD). */
 	selectDay: [date: string]
 }>()
 
-const weekDays = computed<
-	{
-		date: string
-		dayName: string
-		isToday: boolean
-		totalDuration: number
-		sessionCount: number
-	}[]
->(() => {
-	const days = []
+/**
+ * Represents a single day's summary in the week view.
+ */
+interface WeekDay {
+	/** The date in YYYY-MM-DD format. */
+	date: string
+	/** The short name of the day (e.g., 'Mon', 'Tue'). */
+	dayName: string
+	/** Whether this day is today. */
+	isToday: boolean
+	/** Total duration tracked for this day, in seconds. */
+	totalDuration: number
+	/** Number of sessions for this day. */
+	sessionCount: number
+}
+
+const weekDays = computed<WeekDay[]>(() => {
+	const days: WeekDay[] = []
 	const current = new Date(props.weekStart)
 	const today = new Date().toISOString().split('T')[0]
 
 	for (let i = 0; i < 7; i++) {
 		const dateString = current.toISOString().split('T')[0]
+
 		const dayStats = props.dailyStats.find((stats) => stats.date === dateString)
 
 		days.push({
-			date: dateString as string,
+			// biome-ignore lint/style/noNonNullAssertion: The value is guaranteed to be defined
+			date: dateString!,
 			dayName: current.toLocaleDateString('en-US', { weekday: 'short' }),
 			isToday: dateString === today,
 			totalDuration: dayStats?.totalDuration || 0,
@@ -114,8 +132,8 @@ function formatDate(dateString: string): string {
         :key="day.date"
         class="bg-base-100 border border-base-300 rounded-lg p-3 text-center hover:bg-base-200 transition-colors cursor-pointer"
         :class="{
-          'border-primary bg-primary opacity-10': selectedDate === day.date,
-          'border-secondary bg-secondary opacity-10': day.isToday,
+          'border-primary bg-primary/10': selectedDate === day.date,
+          'border-secondary bg-secondary/10': day.isToday,
         }"
         @click="$emit('selectDay', day.date)"
       >
