@@ -46,14 +46,8 @@ function deleteSession(session: TimeSession) {
 	}
 }
 
-function addManualSession() {
-	emit('addManualSession')
-}
-
 function getDurationDisplay(session: TimeSession): string {
-	if (session.isActive) {
-		return 'Running...'
-	}
+	if (session.isActive) return 'Running...'
 
 	if (session.endTime) {
 		const duration = calculateDuration(session.startTime, session.endTime)
@@ -78,7 +72,7 @@ function getSessionErrors(session: TimeSession): ValidationError[] {
         class="btn btn-sm btn-primary"
         :disabled="loading"
         type="button"
-        @click="addManualSession"
+        @click="$emit('addManualSession')"
       >
         <Plus class="w-4 h-4 mr-1" />
         Add Session
@@ -95,17 +89,15 @@ function getSessionErrors(session: TimeSession): ValidationError[] {
         v-for="session in sessions"
         :key="session.id"
         class="bg-base-100 border border-base-300 rounded-lg p-4 shadow-sm hover:shadow-md transition-shadow"
-        :class="{ 'border-primary bg-primary opacity-5': session.isActive }"
+        :class="{ 'bg-green-100': session.isActive }"
       >
-        <div class="flex items-center justify-between">
-          <div class="flex items-center space-x-4">
+        <div class="grid grid-cols-[1fr_2rem] items-center justify-between">
+          <div class="grid grid-cols-[6rem_1fr_6rem] items-center gap-4">
             <!-- Session Status -->
             <div class="flex items-center">
               <div
-                :class="[
-                  'w-3 h-3 rounded-full',
-                  session.isActive ? 'bg-green-500' : 'bg-gray-300',
-                ]"
+                class="w-3 h-3 rounded-full"
+                :class="session.isActive ? 'bg-green-500' : 'bg-gray-300'"
               />
               <span class="ml-2 text-sm font-medium">
                 {{ session.isActive ? "Active" : "Completed" }}
@@ -116,7 +108,8 @@ function getSessionErrors(session: TimeSession): ValidationError[] {
             <div class="flex items-center space-x-2">
               <TimeInput
                 :value="formatTime(session.startTime)"
-                :disabled="session.isActive || loading"
+                :disabled="loading"
+                :readonly="session.isActive"
                 @update="(value) => updateStartTime(session, value)"
               />
               <span class="text-gray-400">-</span>
@@ -126,7 +119,6 @@ function getSessionErrors(session: TimeSession): ValidationError[] {
                 :disabled="loading"
                 @update="(value) => updateEndTime(session, value)"
               />
-              <span v-else class="text-gray-400 text-sm">Running...</span>
             </div>
 
             <!-- Duration -->
