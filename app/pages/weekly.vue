@@ -5,7 +5,7 @@ import AppCard from '~/components/AppCard.vue'
 import WeeklyView from '~/components/WeeklyView.vue'
 import { useTimeTracker } from '~/composables/useTimeTracker'
 import { calculateDuration, formatDuration, formatTime } from '~/types'
-import type { TimeSession } from '~/types/index'
+import type { DateString, TimeSession } from '~/types/index'
 
 // Use the time tracker composable
 const { selectedDate, weekStart, weekEnd, dailyStats, loading, navigateWeek, selectDate } =
@@ -44,7 +44,7 @@ const mostProductiveDay = computed(() => {
 })
 
 // Methods
-function selectDay(date: string) {
+function selectDay(date: DateString) {
 	selectDate(date)
 }
 

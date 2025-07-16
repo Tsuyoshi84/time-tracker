@@ -1,24 +1,27 @@
+/** The date string format. (YYYY-MM-DD) */
+export type DateString = `${number}-${number}-${number}`
+
 export interface TimeSession {
 	id: number
 	startTime: Date
 	endTime?: Date
 	duration?: number // in milliseconds
-	date: string // YYYY-MM-DD format
+	date: DateString
 	isActive: boolean
 	createdAt: Date
 	updatedAt: Date
 }
 
 export interface DayStats {
-	date: string // YYYY-MM-DD format
+	date: DateString
 	totalDuration: number // in milliseconds
 	sessionCount: number
 	sessions: TimeSession[]
 }
 
 export interface WeekStats {
-	weekStart: string // YYYY-MM-DD format
-	weekEnd: string // YYYY-MM-DD format
+	weekStart: DateString
+	weekEnd: DateString
 	totalDuration: number // in milliseconds
 	dailyStats: DayStats[]
 }
@@ -68,9 +71,8 @@ export function formatTime(date: Date): string {
 	})
 }
 
-export function formatDate(date?: Date): string {
-	if (!date) return ''
-	return date.toISOString().split('T')[0] || ''
+export function formatDate(date: Date): DateString {
+	return date.toISOString().split('T')[0] as DateString
 }
 
 export function parseTimeInput(timeString: string): Date | null {

@@ -20,12 +20,12 @@ importers:
       daisyui:
         specifier: ^5.0.46
         version: 5.0.46
+      dexie:
+        specifier: ^4.0.11
+        version: 4.0.11
       eslint:
         specifier: ^9.0.0
         version: 9.31.0(jiti@2.4.2)
-      idb:
-        specifier: ^8.0.3
-        version: 8.0.3
       lucide-vue-next:
         specifier: ^0.525.0
         version: 0.525.0(vue@3.5.17(typescript@5.8.3))
@@ -2123,6 +2123,9 @@ packages:
   devalue@5.1.1:
     resolution: {integrity: sha512-maua5KUiapvEwiEAe+XnlZ3Rh0GD+qI1J/nb9vrJc3muPXvcF/8gXYTWF76+5DAqHyDUtOIImEuo0YKE9mshVw==}
 
+  dexie@4.0.11:
+    resolution: {integrity: sha512-SOKO002EqlvBYYKQSew3iymBoN2EQ4BDw/3yprjh7kAfFzjBYkaMNa/pZvcA7HSWlcKSQb9XhPe3wKyQ0x4A8A==}
+
   dfa@1.2.0:
     resolution: {integrity: sha512-ED3jP8saaweFTjeGX8HQPjeC1YYyZs98jGNZx6IiBvxW7JG5v492kamAQB3m2wop07CvU/RQmzcKr6bgcC5D/Q==}
 
@@ -2676,9 +2679,6 @@ packages:
   human-signals@5.0.0:
     resolution: {integrity: sha512-AXcZb6vzzrFAUE61HnN4mpLqd/cSIwNQjtNWR0euPm6y0iqx3G4gOXaIDdtdDwZmhwe82LA6+zinmW4UBWVePQ==}
     engines: {node: '>=16.17.0'}
-
-  idb@8.0.3:
-    resolution: {integrity: sha512-LtwtVyVYO5BqRvcsKuB2iUMnHwPVByPCXFXOpuU96IZPPoPN6xjOGxZQ74pgSVVLQWtUOYgyeL4GE98BY5D3wg==}
 
   ieee754@1.2.1:
     resolution: {integrity: sha512-dcyqhDvX1C46lXZcVqCpK+FtMRQVdIMN6/Df5js2zouUsqG7I6sFxitIC+7KYK29KdXOLHdu9zL4sFnoVQnqaA==}
@@ -7018,6 +7018,8 @@ snapshots:
 
   devalue@5.1.1: {}
 
+  dexie@4.0.11: {}
+
   dfa@1.2.0: {}
 
   didyoumean@1.2.2: {}
@@ -7692,8 +7694,6 @@ snapshots:
   httpxy@0.1.7: {}
 
   human-signals@5.0.0: {}
-
-  idb@8.0.3: {}
 
   ieee754@1.2.1: {}
 
