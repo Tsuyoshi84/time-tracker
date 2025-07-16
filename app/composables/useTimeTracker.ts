@@ -1,5 +1,5 @@
 import { computed, onMounted, onUnmounted, ref } from 'vue'
-import type { DayStats, TimerState, TimeSession } from '../types'
+import type { DateString, DayStats, TimerState, TimeSession } from '../types'
 import { formatDate } from '../types'
 import {
 	checkForOverlappingSessions,
@@ -21,7 +21,7 @@ export function useTimeTracker() {
 	})
 
 	const sessions = ref<TimeSession[]>([])
-	const selectedDate = ref<string>(formatDate(new Date()))
+	const selectedDate = ref<DateString>(formatDate(new Date()))
 	const weekStart = ref<Date>(getStartOfWeek(new Date()))
 	const weekEnd = ref<Date>(getEndOfWeek(new Date()))
 	const dailyStats = ref<DayStats[]>([])
@@ -146,7 +146,7 @@ export function useTimeTracker() {
 		await refreshCurrentDateSessions()
 	}
 
-	async function loadSessionsForDate(date: string) {
+	async function loadSessionsForDate(date: DateString) {
 		try {
 			const dateSessions = await getSessionsByDate(date)
 			sessions.value = dateSessions
@@ -293,7 +293,7 @@ export function useTimeTracker() {
 		}
 	}
 
-	async function selectDate(date: string) {
+	async function selectDate(date: DateString) {
 		selectedDate.value = date
 		await loadSessionsForDate(date)
 	}

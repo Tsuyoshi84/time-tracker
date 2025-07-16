@@ -32,7 +32,7 @@ A professional time tracking application built for freelance engineers with flex
 - **Framework**: Nuxt 3 with TypeScript
 - **Styling**: Tailwind CSS 3 + daisyUI
 - **Icons**: Lucide Vue Next
-- **Database**: IndexedDB (via idb library)
+- **Database**: IndexedDB (via Dexie library)
 - **Architecture**: SPA mode for GitHub Pages deployment
 
 ## Getting Started

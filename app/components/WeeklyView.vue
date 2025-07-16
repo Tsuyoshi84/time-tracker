@@ -1,8 +1,8 @@
 <script setup lang="ts">
 import { ChevronLeft, ChevronRight } from 'lucide-vue-next'
 import { computed } from 'vue'
-import type { DayStats } from '~/types'
-import { formatDuration } from '~/types'
+import type { DateString, DayStats } from '~/types'
+import { formatDate, formatDuration } from '~/types'
 import AppCard from './AppCard.vue'
 
 const props = withDefaults(
@@ -29,7 +29,7 @@ defineEmits<{
 	/** Emitted when the user requests the next week. */
 	nextWeek: []
 	/** Emitted when a day is selected, with the date (YYYY-MM-DD). */
-	selectDay: [date: string]
+	selectDay: [date: DateString]
 }>()
 
 /**
@@ -37,7 +37,7 @@ defineEmits<{
  */
 interface WeekDay {
 	/** The date in YYYY-MM-DD format. */
-	date: string
+	date: DateString
 	/** The short name of the day (e.g., 'Mon', 'Tue'). */
 	dayName: string
 	/** Whether this day is today. */
@@ -51,10 +51,10 @@ interface WeekDay {
 const weekDays = computed<WeekDay[]>(() => {
 	const days: WeekDay[] = []
 	const current = new Date(props.weekStart)
-	const today = new Date().toISOString().split('T')[0]
+	const today = formatDate(new Date())
 
 	for (let i = 0; i < 7; i++) {
-		const dateString = current.toISOString().split('T')[0]
+		const dateString = formatDate(current)
 
 		const dayStats = props.dailyStats.find((stats) => stats.date === dateString)
 
@@ -93,7 +93,7 @@ function formatWeekRange(start: Date, end: Date): string {
 	return `${startStr} - ${endStr}`
 }
 
-function formatDate(dateString: string): string {
+function formatDateLabel(dateString: string): string {
 	const date = new Date(dateString)
 	return date.toLocaleDateString('en-US', { month: 'numeric', day: 'numeric' })
 }
@@ -141,7 +141,7 @@ function formatDate(dateString: string): string {
           {{ day.dayName }}
         </div>
         <div class="text-xs text-gray-500 mb-2">
-          {{ formatDate(day.date) }}
+          {{ formatDateLabel(day.date) }}
         </div>
         <div class="text-lg font-semibold text-primary">
           {{ formatDuration(day.totalDuration) }}

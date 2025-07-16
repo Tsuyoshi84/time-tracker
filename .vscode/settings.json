@@ -20,7 +20,7 @@
 	"[vue]": {
 		"editor.defaultFormatter": "biomejs.biome"
 	},
-	"cSpell.words": ["IDBP", "nums", "nuxi", "Nuxt", "nuxtjs"],
+	"cSpell.words": ["Dexie", "IDBP", "nums", "nuxi", "Nuxt", "nuxtjs"],
 	"editor.codeActionsOnSave": {
 		"source.fixAll.biome": "never",
 		"source.fixAll.eslint": "explicit",
