@@ -9,10 +9,8 @@ module.exports = {
 		'./app/error.vue',
 	],
 	theme: {
-		extend: {
-			fontFamily: {
-				sans: ['Inter', 'system-ui', 'sans-serif'],
-			},
+		fontFamily: {
+			inter: 'Inter',
 		},
 	},
 	plugins: [require('daisyui')],

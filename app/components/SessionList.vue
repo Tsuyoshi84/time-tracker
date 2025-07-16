@@ -10,24 +10,22 @@ import {
 } from '~/types'
 import TimeInput from './TimeInput.vue'
 
-// Props
-interface Props {
-	sessions: TimeSession[]
-	loading?: boolean
-}
+withDefaults(
+	defineProps<{
+		sessions: TimeSession[]
+		loading?: boolean
+	}>(),
+	{
+		loading: false,
+	},
+)
 
-withDefaults(defineProps<Props>(), {
-	loading: false,
-})
-
-// Emits
 const emit = defineEmits<{
 	updateSession: [session: TimeSession, updates: Partial<TimeSession>]
 	deleteSession: [session: TimeSession]
 	addManualSession: []
 }>()
 
-// Methods
 function updateStartTime(session: TimeSession, timeString: string) {
 	const newStartTime = parseTimeInput(timeString)
 	if (newStartTime) {
@@ -79,6 +77,7 @@ function getSessionErrors(session: TimeSession): ValidationError[] {
       <button
         class="btn btn-sm btn-primary"
         :disabled="loading"
+        type="button"
         @click="addManualSession"
       >
         <Plus class="w-4 h-4 mr-1" />
@@ -95,7 +94,8 @@ function getSessionErrors(session: TimeSession): ValidationError[] {
       <div
         v-for="session in sessions"
         :key="session.id"
-        :class="['session-item', { active: session.isActive }]"
+        class="bg-base-100 border border-base-300 rounded-lg p-4 shadow-sm hover:shadow-md transition-shadow"
+        :class="{ 'border-primary bg-primary opacity-5': session.isActive }"
       >
         <div class="flex items-center justify-between">
           <div class="flex items-center space-x-4">
@@ -139,6 +139,7 @@ function getSessionErrors(session: TimeSession): ValidationError[] {
           <div class="flex items-center space-x-2">
             <button
               v-if="!session.isActive"
+              type="button"
               class="btn btn-sm btn-ghost text-red-500 hover:bg-red-50"
               :disabled="loading"
               @click="deleteSession(session)"

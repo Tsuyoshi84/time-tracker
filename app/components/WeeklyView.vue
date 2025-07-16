@@ -3,47 +3,64 @@ import { ChevronLeft, ChevronRight } from 'lucide-vue-next'
 import { computed } from 'vue'
 import type { DayStats } from '~/types'
 import { formatDuration } from '~/types'
+import AppCard from './AppCard.vue'
 
-// Props
-interface Props {
-	weekStart: Date
-	weekEnd: Date
-	dailyStats: DayStats[]
-	selectedDate: string
-	loading?: boolean
-}
+const props = withDefaults(
+	defineProps<{
+		/** The start date of the week. */
+		weekStart: Date
+		/** The end date of the week. */
+		weekEnd: Date
+		/** Array of daily statistics for the week. */
+		dailyStats: DayStats[]
+		/** The currently selected date (YYYY-MM-DD). */
+		selectedDate: string
+		/** Whether the data is loading. @default false */
+		loading?: boolean
+	}>(),
+	{
+		loading: false,
+	},
+)
 
-const props = withDefaults(defineProps<Props>(), {
-	loading: false,
-})
-
-// Emits
-const emit = defineEmits<{
+defineEmits<{
+	/** Emitted when the user requests the previous week. */
 	previousWeek: []
+	/** Emitted when the user requests the next week. */
 	nextWeek: []
+	/** Emitted when a day is selected, with the date (YYYY-MM-DD). */
 	selectDay: [date: string]
 }>()
 
-// Computed
-const weekDays = computed<
-	{
-		date: string
-		dayName: string
-		isToday: boolean
-		totalDuration: number
-		sessionCount: number
-	}[]
->(() => {
-	const days = []
+/**
+ * Represents a single day's summary in the week view.
+ */
+interface WeekDay {
+	/** The date in YYYY-MM-DD format. */
+	date: string
+	/** The short name of the day (e.g., 'Mon', 'Tue'). */
+	dayName: string
+	/** Whether this day is today. */
+	isToday: boolean
+	/** Total duration tracked for this day, in seconds. */
+	totalDuration: number
+	/** Number of sessions for this day. */
+	sessionCount: number
+}
+
+const weekDays = computed<WeekDay[]>(() => {
+	const days: WeekDay[] = []
 	const current = new Date(props.weekStart)
 	const today = new Date().toISOString().split('T')[0]
 
 	for (let i = 0; i < 7; i++) {
 		const dateString = current.toISOString().split('T')[0]
+
 		const dayStats = props.dailyStats.find((stats) => stats.date === dateString)
 
 		days.push({
-			date: dateString as string,
+			// biome-ignore lint/style/noNonNullAssertion: The value is guaranteed to be defined
+			date: dateString!,
 			dayName: current.toLocaleDateString('en-US', { weekday: 'short' }),
 			isToday: dateString === today,
 			totalDuration: dayStats?.totalDuration || 0,
@@ -56,26 +73,13 @@ const weekDays = computed<
 	return days
 })
 
-const weekTotal = computed(() => {
+const weekTotal = computed<number>(() => {
 	return props.dailyStats.reduce((total, day) => total + day.totalDuration, 0)
 })
 
-const totalSessions = computed(() => {
+const totalSessions = computed<number>(() => {
 	return props.dailyStats.reduce((total, day) => total + day.sessionCount, 0)
 })
-
-// Methods
-function previousWeek() {
-	emit('previousWeek')
-}
-
-function nextWeek() {
-	emit('nextWeek')
-}
-
-function selectDay(date: string) {
-	emit('selectDay', date)
-}
 
 function formatWeekRange(start: Date, end: Date): string {
 	const startStr = start.toLocaleDateString('en-US', {
@@ -101,9 +105,10 @@ function formatDate(dateString: string): string {
       <h2 class="text-xl font-semibold">Weekly Overview</h2>
       <div class="flex items-center space-x-2">
         <button
+          type="button"
           class="btn btn-sm btn-outline"
           :disabled="loading"
-          @click="previousWeek"
+          @click="$emit('previousWeek')"
         >
           <ChevronLeft class="w-4 h-4" />
         </button>
@@ -111,27 +116,26 @@ function formatDate(dateString: string): string {
           {{ formatWeekRange(weekStart, weekEnd) }}
         </span>
         <button
+          type="button"
           class="btn btn-sm btn-outline"
           :disabled="loading"
-          @click="nextWeek"
+          @click="$emit('nextWeek')"
         >
           <ChevronRight class="w-4 h-4" />
         </button>
       </div>
     </div>
 
-    <div class="weekly-grid">
+    <div class="grid grid-cols-1 sm:grid-cols-7 gap-1 sm:gap-1">
       <div
         v-for="day in weekDays"
         :key="day.date"
-        :class="[
-          'day-card',
-          {
-            selected: selectedDate === day.date,
-            today: day.isToday,
-          },
-        ]"
-        @click="selectDay(day.date)"
+        class="bg-base-100 border border-base-300 rounded-lg p-3 text-center hover:bg-base-200 transition-colors cursor-pointer"
+        :class="{
+          'border-primary bg-primary/10': selectedDate === day.date,
+          'border-secondary bg-secondary/10': day.isToday,
+        }"
+        @click="$emit('selectDay', day.date)"
       >
         <div class="text-sm font-medium mb-1">
           {{ day.dayName }}
@@ -148,7 +152,7 @@ function formatDate(dateString: string): string {
       </div>
     </div>
 
-    <div class="stats-card">
+    <AppCard>
       <div class="text-center">
         <div class="text-sm text-gray-600 mb-1">Week Total</div>
         <div class="text-3xl font-bold text-primary">
@@ -158,6 +162,6 @@ function formatDate(dateString: string): string {
           {{ totalSessions }} total sessions
         </div>
       </div>
-    </div>
+    </AppCard>
   </div>
 </template>

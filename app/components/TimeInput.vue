@@ -1,33 +1,29 @@
 <script setup lang="ts">
 import { computed, nextTick, ref } from 'vue'
 
-// Props
-interface Props {
-	value: string
-	disabled?: boolean
-}
+const props = withDefaults(
+	defineProps<{
+		value: string
+		disabled?: boolean
+	}>(),
+	{
+		disabled: false,
+	},
+)
 
-const props = withDefaults(defineProps<Props>(), {
-	disabled: false,
-})
-
-// Emits
 const emit = defineEmits<{
 	update: [value: string]
 }>()
 
-// Refs
 const inputRef = ref<HTMLInputElement>()
 const isEditing = ref(false)
 const editValue = ref('')
 
-// Computed
 const hasError = computed(() => {
 	if (!editValue.value) return false
 	return !isValidTimeFormat(editValue.value)
 })
 
-// Methods
 function startEdit() {
 	if (props.disabled) return
 
@@ -64,8 +60,8 @@ function isValidTimeFormat(timeString: string): boolean {
       v-if="isEditing"
       ref="inputRef"
       v-model="editValue"
-      class="time-input"
-      :class="{ 'input-error': hasError }"
+      class="input border input-sm w-20 text-center font-mono"
+      :class="{ 'border-red-500 bg-red-50': hasError }"
       type="text"
       placeholder="HH:MM"
       :disabled="disabled"
@@ -75,9 +71,10 @@ function isValidTimeFormat(timeString: string): boolean {
     >
     <button
       v-else
-      class="time-input bg-transparent border-transparent hover:border-gray-300 hover:bg-gray-50"
+      class="input border input-sm w-20 content-center grid font-mono bg-transparent border-transparent hover:border-gray-300 hover:bg-gray-50 transition-all "
       :class="{ 'cursor-not-allowed opacity-50': disabled }"
       :disabled="disabled"
+      type="button"
       @click="startEdit"
     >
       {{ value }}
@@ -85,14 +82,3 @@ function isValidTimeFormat(timeString: string): boolean {
   </div>
 </template>
 
-<style scoped>
-.time-input {
-  min-width: 80px;
-  text-align: center;
-  font-family: monospace;
-}
-
-.input-error {
-  @apply border-red-500 bg-red-50;
-}
-</style>

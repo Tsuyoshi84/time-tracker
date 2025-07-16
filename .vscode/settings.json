@@ -5,6 +5,9 @@
 	"[html]": {
 		"editor.defaultFormatter": "biomejs.biome"
 	},
+	"[javascript]": {
+		"editor.defaultFormatter": "biomejs.biome"
+	},
 	"[json]": {
 		"editor.defaultFormatter": "biomejs.biome"
 	},
@@ -17,7 +20,7 @@
 	"[vue]": {
 		"editor.defaultFormatter": "biomejs.biome"
 	},
-	"cSpell.words": ["IDBP", "nuxi", "Nuxt", "nuxtjs"],
+	"cSpell.words": ["IDBP", "nums", "nuxi", "Nuxt", "nuxtjs"],
 	"editor.codeActionsOnSave": {
 		"source.fixAll.biome": "never",
 		"source.fixAll.eslint": "explicit",

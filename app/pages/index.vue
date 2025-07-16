@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { computed, ref, watch } from 'vue'
+import AppCard from '~/components/AppCard.vue'
 import SessionList from '~/components/SessionList.vue'
 import TimerDisplay from '~/components/TimerDisplay.vue'
 import { useTimeTracker } from '~/composables/useTimeTracker'
@@ -99,24 +100,24 @@ useSeoMeta({
 
     <!-- Quick Stats -->
     <div class="mt-12 grid grid-cols-1 md:grid-cols-3 gap-6">
-      <div class="stats-card text-center">
+      <AppCard class="text-center">
         <div class="text-sm text-gray-600 mb-1">This Week</div>
         <div class="text-2xl font-bold text-primary">
           {{ formatDuration(weeklyTotal) }}
         </div>
-      </div>
-      <div class="stats-card text-center">
+      </AppCard>
+      <AppCard class="text-center">
         <div class="text-sm text-gray-600 mb-1">Average/Day</div>
         <div class="text-2xl font-bold text-secondary">
           {{ formatDuration(dailyAverage) }}
         </div>
-      </div>
-      <div class="stats-card text-center">
+      </AppCard>
+      <AppCard class="text-center">
         <div class="text-sm text-gray-600 mb-1">Total Sessions</div>
         <div class="text-2xl font-bold text-accent">
           {{ totalWeeklySessions }}
         </div>
-      </div>
+      </AppCard>
     </div>
   </div>
 </template>

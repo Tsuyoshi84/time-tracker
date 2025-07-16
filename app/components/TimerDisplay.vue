@@ -1,28 +1,27 @@
 <script setup lang="ts">
 import { AlertCircle, Pause, Play } from 'lucide-vue-next'
 import { formatDuration } from '~/types'
+import AppCard from './AppCard.vue'
 
-// Props
-interface Props {
-	isRunning: boolean
-	currentSessionDuration: number
-	todaysTotalDuration: number
-	sessionCount: number
-	loading?: boolean
-	error?: string
-}
+withDefaults(
+	defineProps<{
+		isRunning: boolean
+		currentSessionDuration: number
+		todaysTotalDuration: number
+		sessionCount: number
+		loading?: boolean
+		error?: string
+	}>(),
+	{
+		loading: false,
+		error: '',
+	},
+)
 
-withDefaults(defineProps<Props>(), {
-	loading: false,
-	error: '',
-})
-
-// Emits
 const emit = defineEmits<{
 	toggleTimer: []
 }>()
 
-// Methods
 function toggleTimer() {
 	emit('toggleTimer')
 }
@@ -31,33 +30,35 @@ function toggleTimer() {
 <template>
   <div class="text-center space-y-6">
     <!-- Current Session Timer -->
-    <div class="stats-card">
+    <AppCard>
       <div class="text-sm text-gray-600 mb-2">Current Session</div>
-      <div class="timer-display text-6xl font-bold text-primary mb-4">
+      <div class="font-inter text-6xl tabular-nums font-bold text-primary mb-4">
         {{ formatDuration(currentSessionDuration) }}
       </div>
 
       <button
-        :class="['btn-timer', isRunning ? 'active' : 'inactive']"
+        class="btn btn-lg min-h-16 px-8 font-semibold text-2xl"
+        :class="{'btn-warning': isRunning, 'btn-success': !isRunning}"
         :disabled="loading"
+        type="button"
         @click="toggleTimer"
       >
         <Play v-if="!isRunning" class="w-6 h-6 mr-2" />
         <Pause v-else class="w-6 h-6 mr-2" />
         {{ isRunning ? "Pause" : "Start" }}
       </button>
-    </div>
+    </AppCard>
 
     <!-- Today's Total -->
-    <div class="stats-card">
+    <AppCard>
       <div class="text-sm text-gray-600 mb-2">Today's Total</div>
-      <div class="timer-display text-4xl font-semibold text-secondary">
+      <div class="font-inter text-4xl tabular-nums font-semibold text-secondary">
         {{ formatDuration(todaysTotalDuration) }}
       </div>
       <div class="text-sm text-gray-500 mt-1">
         {{ sessionCount }} session{{ sessionCount !== 1 ? "s" : "" }}
       </div>
-    </div>
+    </AppCard>
 
     <!-- Error Messages -->
     <div v-if="error" class="alert alert-error">

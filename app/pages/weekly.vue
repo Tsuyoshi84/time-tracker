@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { Calendar } from 'lucide-vue-next'
 import { computed } from 'vue'
+import AppCard from '~/components/AppCard.vue'
 import WeeklyView from '~/components/WeeklyView.vue'
 import { useTimeTracker } from '~/composables/useTimeTracker'
 import { calculateDuration, formatDuration, formatTime } from '~/types'
@@ -165,30 +166,30 @@ useSeoMeta({
 
     <!-- Weekly Stats Summary -->
     <div class="mt-12 grid grid-cols-1 md:grid-cols-4 gap-6">
-      <div class="stats-card text-center">
+      <AppCard class="text-center">
         <div class="text-sm text-gray-600 mb-1">Total Hours</div>
         <div class="text-2xl font-bold text-primary">
           {{ formatDuration(weeklyTotal) }}
         </div>
-      </div>
-      <div class="stats-card text-center">
+      </AppCard>
+      <AppCard class="text-center">
         <div class="text-sm text-gray-600 mb-1">Daily Average</div>
         <div class="text-2xl font-bold text-secondary">
           {{ formatDuration(dailyAverage) }}
         </div>
-      </div>
-      <div class="stats-card text-center">
+      </AppCard>
+      <AppCard class="text-center">
         <div class="text-sm text-gray-600 mb-1">Most Productive Day</div>
         <div class="text-lg font-bold text-accent">
           {{ mostProductiveDay }}
         </div>
-      </div>
-      <div class="stats-card text-center">
+      </AppCard>
+      <AppCard class="text-center">
         <div class="text-sm text-gray-600 mb-1">Total Sessions</div>
         <div class="text-2xl font-bold text-warning">
           {{ totalWeeklySessions }}
         </div>
-      </div>
+      </AppCard>
     </div>
   </div>
 </template>
