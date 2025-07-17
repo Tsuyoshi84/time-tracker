@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { Calendar, Clock, Timer } from "lucide-vue-next"
+import { Calendar, Clock, Timer } from 'lucide-vue-next'
 </script>
 
 <template>

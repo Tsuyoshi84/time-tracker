@@ -50,6 +50,22 @@ export interface SessionEdit {
 	endTime: Date
 }
 
+/**
+ * Represents a single day's summary in the week view.
+ */
+export interface WeekDay {
+	/** The date in YYYY-MM-DD format. */
+	date: DateString
+	/** The short name of the day (e.g., 'Mon', 'Tue'). */
+	dayName: string
+	/** Whether this day is today. */
+	isToday: boolean
+	/** Total duration tracked for this day, in seconds. */
+	totalDuration: number
+	/** Number of sessions for this day. */
+	sessionCount: number
+}
+
 export function formatDuration(milliseconds: number): string {
 	if (milliseconds <= 0) return '0:00:00'
 
