@@ -10,9 +10,9 @@ const props = defineProps<{
 	/** The week day. */
 	weekDay: WeekDay
 	/** Whether this day is selected. */
-	selected?: boolean
+	selected: boolean
 	/** Whether the card is disabled (e.g., loading). */
-	disabled?: boolean
+	disabled: boolean
 }>()
 
 const emit = defineEmits<{ selectDay: [date: DateString] }>()
@@ -35,11 +35,9 @@ function formatDateLabel(dateString: string): string {
 		:aria-disabled="props.disabled ? 'true' : 'false'"
 		@click="!props.disabled && emit('selectDay', props.weekDay.date)"
 	>
-		<div class="text-sm font-medium mb-1">
-			{{ props.weekDay.dayName }}
-		</div>
-		<div class="text-xs text-gray-500 mb-2">
-			{{ formatDateLabel(props.weekDay.date) }}
+		<div class="text-gray-500 mb-2 flex justify-center items-center gap-1">
+			<span>{{ formatDateLabel(props.weekDay.date) }}</span
+			><span class="text-xs">({{ props.weekDay.dayName }})</span>
 		</div>
 		<div class="text-lg font-semibold text-primary">
 			{{ formatDuration(props.weekDay.totalDuration) }}
