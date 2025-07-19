@@ -1,10 +1,10 @@
 <script setup lang="ts">
-import { computed } from "vue"
-import type { DateString, DayStats, WeekDay } from "~/types"
-import { formatDate, formatDuration } from "~/types"
-import AppCard from "./AppCard.vue"
-import DaySummaryCard from "./DaySummaryCard.vue"
-import WeekRangeButtons from "./WeekRangeButtons.vue"
+import { computed } from 'vue'
+import type { DateString, DayStats, WeekDay } from '~/types'
+import { formatDate, formatDuration } from '~/types'
+import AppCard from './AppCard.vue'
+import DaySummaryCard from './DaySummaryCard.vue'
+import WeekRangeButtons from './WeekRangeButtons.vue'
 
 const props = withDefaults(
 	defineProps<{
@@ -21,7 +21,7 @@ const props = withDefaults(
 	}>(),
 	{
 		loading: false,
-	}
+	},
 )
 
 defineEmits<{
@@ -46,7 +46,7 @@ const weekDays = computed<WeekDay[]>(() => {
 		days.push({
 			// biome-ignore lint/style/noNonNullAssertion: The value is guaranteed to be defined
 			date: dateString!,
-			dayName: current.toLocaleDateString("en-US", { weekday: "short" }),
+			dayName: current.toLocaleDateString('en-US', { weekday: 'short' }),
 			isToday: dateString === today,
 			totalDuration: dayStats?.totalDuration || 0,
 			sessionCount: dayStats?.sessionCount || 0,
