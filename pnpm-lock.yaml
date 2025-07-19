@@ -20,6 +20,9 @@ importers:
       '@vueuse/core':
         specifier: ^13.5.0
         version: 13.5.0(vue@3.5.17(typescript@5.8.3))
+      '@vueuse/math':
+        specifier: ^13.5.0
+        version: 13.5.0(vue@3.5.17(typescript@5.8.3))
       '@vueuse/nuxt':
         specifier: ^13.5.0
         version: 13.5.0(magicast@0.3.5)(nuxt@3.17.6(@biomejs/biome@2.1.1)(@parcel/watcher@2.5.1)(@types/node@24.0.13)(@vue/compiler-sfc@3.5.17)(db0@0.3.2)(eslint@9.31.0(jiti@2.4.2))(ioredis@5.6.1)(magicast@0.3.5)(optionator@0.9.4)(rollup@4.45.0)(terser@5.43.1)(typescript@5.8.3)(vite@6.3.5(@types/node@24.0.13)(jiti@2.4.2)(terser@5.43.1)(yaml@2.8.0))(vue-tsc@3.0.1(typescript@5.8.3))(yaml@2.8.0))(vue@3.5.17(typescript@5.8.3))
@@ -1480,6 +1483,11 @@ packages:
 
   '@vueuse/core@13.5.0':
     resolution: {integrity: sha512-wV7z0eUpifKmvmN78UBZX8T7lMW53Nrk6JP5+6hbzrB9+cJ3jr//hUlhl9TZO/03bUkMK6gGkQpqOPWoabr72g==}
+    peerDependencies:
+      vue: ^3.5.0
+
+  '@vueuse/math@13.5.0':
+    resolution: {integrity: sha512-RFmnHRW1wNfTBq0BiZeR5xuFBT611k8u2BzPRhuQvlR8lHAXcELsFao/o/O5keMSaW/rza2rzkLeCx+9OxTOQA==}
     peerDependencies:
       vue: ^3.5.0
 
@@ -6428,6 +6436,11 @@ snapshots:
     dependencies:
       '@types/web-bluetooth': 0.0.21
       '@vueuse/metadata': 13.5.0
+      '@vueuse/shared': 13.5.0(vue@3.5.17(typescript@5.8.3))
+      vue: 3.5.17(typescript@5.8.3)
+
+  '@vueuse/math@13.5.0(vue@3.5.17(typescript@5.8.3))':
+    dependencies:
       '@vueuse/shared': 13.5.0(vue@3.5.17(typescript@5.8.3))
       vue: 3.5.17(typescript@5.8.3)
 
