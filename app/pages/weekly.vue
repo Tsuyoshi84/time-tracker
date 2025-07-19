@@ -99,7 +99,7 @@ useSeoMeta({
     />
 
     <!-- Selected Day Details -->
-    <div v-if="selectedDayStats" class="mt-12">
+    <div v-if="selectedDayStats" class="mt-4">
       <div class="bg-base-100 rounded-lg p-6 shadow-sm border border-base-300">
         <h3 class="text-xl font-semibold mb-4">
           {{ formatSelectedDate(selectedDate) }} - Sessions
@@ -165,7 +165,7 @@ useSeoMeta({
     </div>
 
     <!-- Weekly Stats Summary -->
-    <div class="mt-12 grid grid-cols-1 md:grid-cols-4 gap-6">
+    <div class="mt-4 grid grid-cols-1 md:grid-cols-4 gap-6">
       <AppCard class="text-center">
         <div class="text-sm text-gray-600 mb-1">Total Hours</div>
         <div class="text-2xl font-bold text-primary">

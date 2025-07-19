@@ -1,10 +1,10 @@
 <script setup lang="ts">
-import { ChevronLeft, ChevronRight } from 'lucide-vue-next'
-import { computed } from 'vue'
-import type { DateString, DayStats, WeekDay } from '~/types'
-import { formatDate, formatDuration } from '~/types'
-import AppCard from './AppCard.vue'
-import DaySummaryCard from './DaySummaryCard.vue'
+import { computed } from "vue"
+import type { DateString, DayStats, WeekDay } from "~/types"
+import { formatDate, formatDuration } from "~/types"
+import AppCard from "./AppCard.vue"
+import DaySummaryCard from "./DaySummaryCard.vue"
+import WeekRangeButtons from "./WeekRangeButtons.vue"
 
 const props = withDefaults(
 	defineProps<{
@@ -21,7 +21,7 @@ const props = withDefaults(
 	}>(),
 	{
 		loading: false,
-	},
+	}
 )
 
 defineEmits<{
@@ -46,7 +46,7 @@ const weekDays = computed<WeekDay[]>(() => {
 		days.push({
 			// biome-ignore lint/style/noNonNullAssertion: The value is guaranteed to be defined
 			date: dateString!,
-			dayName: current.toLocaleDateString('en-US', { weekday: 'short' }),
+			dayName: current.toLocaleDateString("en-US", { weekday: "short" }),
 			isToday: dateString === today,
 			totalDuration: dayStats?.totalDuration || 0,
 			sessionCount: dayStats?.sessionCount || 0,
@@ -65,57 +65,17 @@ const weekTotal = computed<number>(() => {
 const totalSessions = computed<number>(() => {
 	return props.dailyStats.reduce((total, day) => total + day.sessionCount, 0)
 })
-
-function formatWeekRange(start: Date, end: Date): string {
-	const startStr = start.toLocaleDateString('en-US', {
-		month: 'short',
-		day: 'numeric',
-	})
-	const endStr = end.toLocaleDateString('en-US', {
-		month: 'short',
-		day: 'numeric',
-	})
-	return `${startStr} - ${endStr}`
-}
 </script>
 
 <template>
-	<div class="space-y-6">
-		<div class="flex items-center justify-between">
-			<h2 class="text-xl font-semibold">Weekly Overview</h2>
-			<div class="flex items-center space-x-2">
-				<button
-					type="button"
-					class="btn btn-sm btn-outline"
-					:disabled="loading"
-					@click="$emit('previousWeek')"
-				>
-					<ChevronLeft class="w-4 h-4" />
-				</button>
-				<span class="text-sm font-medium px-3">
-					{{ formatWeekRange(weekStart, weekEnd) }}
-				</span>
-				<button
-					type="button"
-					class="btn btn-sm btn-outline"
-					:disabled="loading"
-					@click="$emit('nextWeek')"
-				>
-					<ChevronRight class="w-4 h-4" />
-				</button>
-			</div>
-		</div>
-
-		<div class="grid grid-cols-1 sm:grid-cols-7 gap-1 sm:gap-1">
-			<DaySummaryCard
-				v-for="day in weekDays"
-				:key="day.date"
-				:week-day="day"
-				:selected="selectedDate === day.date"
-				:disabled="loading"
-				@select-day="$emit('selectDay', $event)"
-			/>
-		</div>
+	<div class="space-y-4">
+		<WeekRangeButtons
+			:loading="loading"
+			:start="weekStart"
+			:end="weekEnd"
+			@previous-week="$emit('previousWeek')"
+			@next-week="$emit('nextWeek')"
+		/>
 
 		<AppCard>
 			<div class="text-center">
@@ -128,5 +88,16 @@ function formatWeekRange(start: Date, end: Date): string {
 				</div>
 			</div>
 		</AppCard>
+
+		<div class="grid grid-cols-1 sm:grid-cols-7 gap-1 sm:gap-1">
+			<DaySummaryCard
+				v-for="day in weekDays"
+				:key="day.date"
+				:week-day="day"
+				:selected="selectedDate === day.date"
+				:disabled="loading"
+				@select-day="$emit('selectDay', $event)"
+			/>
+		</div>
 	</div>
 </template>
