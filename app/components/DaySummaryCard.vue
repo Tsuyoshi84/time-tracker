@@ -34,12 +34,10 @@ function formatDateLabel(dateString: string): string {
 		:aria-pressed="props.selected ? 'true' : 'false'"
 		:tabindex="props.disabled ? -1 : 0"
 		:aria-disabled="props.disabled ? 'true' : 'false'"
-		aria-role="button"
+		role="button"
 		@click="!props.disabled && emit('selectDay', props.weekDay.date)"
 	>
-		<div
-			class="text-gray-500 text-xs mb-2 flex justify-center items-center gap-1"
-		>
+		<div class="text-gray-500 text-xs mb-2 flex justify-center items-center gap-1">
 			{{ formatDateLabel(props.weekDay.date) }}
 			({{ props.weekDay.dayName }})
 		</div>
@@ -59,9 +57,7 @@ function formatDateLabel(dateString: string): string {
 				'text-gray-400': props.weekDay.sessionCount === 0,
 			}"
 		>
-			{{ props.weekDay.sessionCount }} session{{
-				props.weekDay.sessionCount !== 1 ? "s" : ""
-			}}
+			{{ props.weekDay.sessionCount }} session{{ props.weekDay.sessionCount !== 1 ? 's' : '' }}
 		</div>
 	</AppCard>
 </template>
