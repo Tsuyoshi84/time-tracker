@@ -1,6 +1,6 @@
 import { computed, onMounted, onUnmounted, ref } from 'vue'
-import type { DateString, DayStats, Milliseconds, TimerState, TimeSession } from '../types'
-import { convertToDateString } from '../utils/convertToDateString'
+import type { DateString, DayStats, Milliseconds, TimerState, TimeSession } from '../types/index.ts'
+import { convertToDateString } from '../utils/convertToDateString.ts'
 import {
 	checkForOverlappingSessions,
 	deleteSession as deleteSessionFromDB,
@@ -10,7 +10,7 @@ import {
 	initDatabase,
 	saveSession,
 	updateSession,
-} from '../utils/database'
+} from '../utils/database.ts'
 
 export function useTimeTracker() {
 	const timerState = ref<TimerState>({

@@ -19,6 +19,26 @@ export default defineNuxtConfig({
 		compatibilityVersion: 4,
 	},
 	compatibilityDate: '2025-05-15',
+	typescript: {
+		tsConfig: {
+			compilerOptions: {
+				allowImportingTsExtensions: true,
+				allowUnreachableCode: false,
+				erasableSyntaxOnly: true,
+				forceConsistentCasingInFileNames: true,
+				noErrorTruncation: true,
+				noFallthroughCasesInSwitch: true,
+				noImplicitOverride: true,
+				noImplicitReturns: true,
+				noUncheckedIndexedAccess: true,
+				noUnusedLocals: false,
+				noUnusedParameters: false,
+				useUnknownInCatchVariables: true,
+				strict: true,
+			},
+		},
+	},
+
 	eslint: {
 		config: {
 			nuxt: {

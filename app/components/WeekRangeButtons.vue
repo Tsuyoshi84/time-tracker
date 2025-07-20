@@ -4,7 +4,7 @@
  */
 
 import { ChevronLeft, ChevronRight } from 'lucide-vue-next'
-import { formatDate } from '~/utils/formatDate'
+import { formatDate } from '~/utils/formatDate.ts'
 
 const props = defineProps<{
 	/** Whether the component is loading. */
