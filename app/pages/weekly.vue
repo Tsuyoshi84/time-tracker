@@ -4,11 +4,11 @@ import { Calendar } from 'lucide-vue-next'
 import { computed } from 'vue'
 import AppCard from '~/components/AppCard.vue'
 import WeeklyView from '~/components/WeeklyView.vue'
-import { useTimeTracker } from '~/composables/useTimeTracker'
-import type { TimeSession } from '~/types/index'
-import { calculateDuration } from '~/utils/calculateDuration'
-import { formatDuration } from '~/utils/formatDuration'
-import { formatTime } from '~/utils/formatTime'
+import { useTimeTracker } from '~/composables/useTimeTracker.ts'
+import type { TimeSession } from '~/types/index.ts'
+import { calculateDuration } from '~/utils/calculateDuration.ts'
+import { formatDuration } from '~/utils/formatDuration.ts'
+import { formatTime } from '~/utils/formatTime.ts'
 
 const { selectedDate, weekStart, weekEnd, dailyStats, loading, navigateWeek, selectDate } =
 	useTimeTracker()

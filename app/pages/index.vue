@@ -3,8 +3,8 @@ import { computed, ref, watch } from 'vue'
 import AppCard from '~/components/AppCard.vue'
 import SessionList from '~/components/SessionList.vue'
 import TimerDisplay from '~/components/TimerDisplay.vue'
-import { useTimeTracker } from '~/composables/useTimeTracker'
-import { formatDuration } from '~/utils/formatDuration'
+import { useTimeTracker } from '~/composables/useTimeTracker.ts'
+import { formatDuration } from '~/utils/formatDuration.ts'
 
 // Use the time tracker composable
 const {

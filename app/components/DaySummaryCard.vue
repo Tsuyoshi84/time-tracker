@@ -3,9 +3,9 @@
  * DaySummaryCard displays a summary of tracked time and sessions for a single day in the week view.
  */
 
-import type { DateString, WeekDay } from '~/types/index'
-import { formatDate } from '~/utils/formatDate'
-import { formatDuration } from '~/utils/formatDuration'
+import type { DateString, WeekDay } from '~/types/index.ts'
+import { formatDate } from '~/utils/formatDate.ts'
+import { formatDuration } from '~/utils/formatDuration.ts'
 import AppCard from './AppCard.vue'
 
 const props = defineProps<{
