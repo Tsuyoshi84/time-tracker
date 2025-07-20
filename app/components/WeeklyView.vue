@@ -1,7 +1,8 @@
 <script setup lang="ts">
 import { computed } from 'vue'
 import type { DateString, DayStats, WeekDay } from '~/types'
-import { formatDate, formatDuration } from '~/types'
+import { convertToDateString } from '~/utils/convertToDateString'
+import { formatDuration } from '~/utils/formatDuration'
 import AppCard from './AppCard.vue'
 import DaySummaryCard from './DaySummaryCard.vue'
 import WeekRangeButtons from './WeekRangeButtons.vue'
@@ -21,7 +22,7 @@ const props = withDefaults(
 	}>(),
 	{
 		loading: false,
-	},
+	}
 )
 
 defineEmits<{
@@ -36,10 +37,10 @@ defineEmits<{
 const weekDays = computed<WeekDay[]>(() => {
 	const days: WeekDay[] = []
 	const current = new Date(props.weekStart)
-	const today = formatDate(new Date())
+	const today = convertToDateString(new Date())
 
 	for (let i = 0; i < 7; i++) {
-		const dateString = formatDate(current)
+		const dateString = convertToDateString(current)
 
 		const dayStats = props.dailyStats.find((stats) => stats.date === dateString)
 

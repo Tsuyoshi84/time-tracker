@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { AlertCircle, Pause, Play } from 'lucide-vue-next'
 import type { Milliseconds } from '~/types'
-import { formatDuration } from '~/types'
+import { formatDuration } from '~/utils/formatDuration'
 import AppCard from './AppCard.vue'
 
 withDefaults(
@@ -22,7 +22,7 @@ withDefaults(
 	{
 		loading: false,
 		error: '',
-	},
+	}
 )
 
 defineEmits<{

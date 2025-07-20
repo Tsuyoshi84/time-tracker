@@ -5,8 +5,10 @@ import { computed } from 'vue'
 import AppCard from '~/components/AppCard.vue'
 import WeeklyView from '~/components/WeeklyView.vue'
 import { useTimeTracker } from '~/composables/useTimeTracker'
-import { calculateDuration, formatDuration, formatTime } from '~/types'
 import type { TimeSession } from '~/types/index'
+import { calculateDuration } from '~/utils/calculateDuration'
+import { formatDuration } from '~/utils/formatDuration'
+import { formatTime } from '~/utils/formatTime'
 
 const { selectedDate, weekStart, weekEnd, dailyStats, loading, navigateWeek, selectDate } =
 	useTimeTracker()
@@ -26,7 +28,7 @@ const mostProductiveDay = computed<string>(() => {
 	if (dailyStats.value.length === 0) return 'None'
 
 	const maxDay = dailyStats.value.reduce((max, day) =>
-		day.totalDuration > max.totalDuration ? day : max,
+		day.totalDuration > max.totalDuration ? day : max
 	)
 
 	if (maxDay.totalDuration === 0) return 'None'

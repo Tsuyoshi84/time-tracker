@@ -1,13 +1,12 @@
 <script setup lang="ts">
 import { Clock, Plus, Trash2 } from 'lucide-vue-next'
-import type { TimeSession, ValidationError } from '~/types'
-import {
-	calculateDuration,
-	formatDuration,
-	formatTime,
-	parseTimeInput,
-	validateTimeRange,
-} from '~/types'
+import type { TimeSession } from '~/types'
+import { calculateDuration } from '~/utils/calculateDuration'
+import { formatDuration } from '~/utils/formatDuration'
+import { formatTime } from '~/utils/formatTime'
+import { parseTimeInput } from '~/utils/parseTimeInput'
+import type { ValidationError } from '~/utils/validateTimeRange'
+import { validateTimeRange } from '~/utils/validateTimeRange'
 import TimeInput from './TimeInput.vue'
 
 withDefaults(
@@ -17,7 +16,7 @@ withDefaults(
 	}>(),
 	{
 		loading: false,
-	},
+	}
 )
 
 const emit = defineEmits<{
