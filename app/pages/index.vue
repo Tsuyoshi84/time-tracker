@@ -4,7 +4,7 @@ import AppCard from '~/components/AppCard.vue'
 import SessionList from '~/components/SessionList.vue'
 import TimerDisplay from '~/components/TimerDisplay.vue'
 import { useTimeTracker } from '~/composables/useTimeTracker'
-import { formatDuration } from '~/types'
+import { formatDuration } from '~/utils/formatDuration'
 
 // Use the time tracker composable
 const {

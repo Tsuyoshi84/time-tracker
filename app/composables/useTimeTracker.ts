@@ -1,6 +1,6 @@
 import { computed, onMounted, onUnmounted, ref } from 'vue'
 import type { DateString, DayStats, Milliseconds, TimerState, TimeSession } from '../types'
-import { formatDate } from '../types'
+import { convertToDateString } from '../utils/convertToDateString'
 import {
 	checkForOverlappingSessions,
 	deleteSession as deleteSessionFromDB,
@@ -20,7 +20,7 @@ export function useTimeTracker() {
 	})
 
 	const sessions = ref<TimeSession[]>([])
-	const selectedDate = ref<DateString>(formatDate(new Date()))
+	const selectedDate = ref<DateString>(convertToDateString(new Date()))
 	const weekStart = ref<Date>(getStartOfWeek(new Date()))
 	const weekEnd = ref<Date>(getEndOfWeek(new Date()))
 	const dailyStats = ref<DayStats[]>([])
@@ -43,7 +43,7 @@ export function useTimeTracker() {
 	}
 
 	const todaysTotalDuration = computed<Milliseconds>(() => {
-		const today = formatDate(new Date())
+		const today = convertToDateString(new Date())
 		const todaySessions = sessions.value.filter((s) => s.date === today && s.endTime)
 		return (currentSessionDuration.value +
 			todaySessions.reduce(
@@ -54,7 +54,7 @@ export function useTimeTracker() {
 	})
 
 	const sessionCount = computed(() => {
-		const today = formatDate(new Date())
+		const today = convertToDateString(new Date())
 		return sessions.value.filter((s) => s.date === today).length
 	})
 
@@ -112,7 +112,7 @@ export function useTimeTracker() {
 		const now = new Date()
 		const sessionData = {
 			startTime: now,
-			date: formatDate(now),
+			date: convertToDateString(now),
 			isActive: true,
 			duration: 0 as Milliseconds,
 			createdAt: now,
@@ -222,7 +222,7 @@ export function useTimeTracker() {
 		const sessionData = {
 			startTime,
 			endTime,
-			date: formatDate(startTime),
+			date: convertToDateString(startTime),
 			isActive: false,
 			duration: diffInMilliseconds(startTime, endTime),
 			createdAt: now,
@@ -252,8 +252,8 @@ export function useTimeTracker() {
 
 	async function loadWeeklyStats() {
 		try {
-			const weekStartStr = formatDate(weekStart.value)
-			const weekEndStr = formatDate(weekEnd.value)
+			const weekStartStr = convertToDateString(weekStart.value)
+			const weekEndStr = convertToDateString(weekEnd.value)
 
 			const weekSessions = await getSessionsInDateRange(weekStartStr, weekEndStr)
 
@@ -272,7 +272,7 @@ export function useTimeTracker() {
 			const currentDate = new Date(weekStart.value)
 
 			for (let i = 0; i < 7; i++) {
-				const dateStr = formatDate(currentDate)
+				const dateStr = convertToDateString(currentDate)
 				const daySessions = sessionsByDate.get(dateStr) || []
 
 				const completedSessions = daySessions.filter((s) => s.endTime)

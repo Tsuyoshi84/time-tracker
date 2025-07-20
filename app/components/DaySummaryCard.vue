@@ -4,8 +4,8 @@
  */
 
 import type { DateString, WeekDay } from '~/types/index'
-import { formatDuration } from '~/types/index'
 import { formatDate } from '~/utils/formatDate'
+import { formatDuration } from '~/utils/formatDuration'
 import AppCard from './AppCard.vue'
 
 const props = defineProps<{
