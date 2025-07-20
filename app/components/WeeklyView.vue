@@ -1,9 +1,10 @@
 <script setup lang="ts">
-import { ChevronLeft, ChevronRight } from 'lucide-vue-next'
 import { computed } from 'vue'
-import type { DateString, DayStats } from '~/types'
+import type { DateString, DayStats, WeekDay } from '~/types'
 import { formatDate, formatDuration } from '~/types'
 import AppCard from './AppCard.vue'
+import DaySummaryCard from './DaySummaryCard.vue'
+import WeekRangeButtons from './WeekRangeButtons.vue'
 
 const props = withDefaults(
 	defineProps<{
@@ -31,22 +32,6 @@ defineEmits<{
 	/** Emitted when a day is selected, with the date (YYYY-MM-DD). */
 	selectDay: [date: DateString]
 }>()
-
-/**
- * Represents a single day's summary in the week view.
- */
-interface WeekDay {
-	/** The date in YYYY-MM-DD format. */
-	date: DateString
-	/** The short name of the day (e.g., 'Mon', 'Tue'). */
-	dayName: string
-	/** Whether this day is today. */
-	isToday: boolean
-	/** Total duration tracked for this day, in seconds. */
-	totalDuration: number
-	/** Number of sessions for this day. */
-	sessionCount: number
-}
 
 const weekDays = computed<WeekDay[]>(() => {
 	const days: WeekDay[] = []
@@ -80,88 +65,37 @@ const weekTotal = computed<number>(() => {
 const totalSessions = computed<number>(() => {
 	return props.dailyStats.reduce((total, day) => total + day.sessionCount, 0)
 })
-
-function formatWeekRange(start: Date, end: Date): string {
-	const startStr = start.toLocaleDateString('en-US', {
-		month: 'short',
-		day: 'numeric',
-	})
-	const endStr = end.toLocaleDateString('en-US', {
-		month: 'short',
-		day: 'numeric',
-	})
-	return `${startStr} - ${endStr}`
-}
-
-function formatDateLabel(dateString: string): string {
-	const date = new Date(dateString)
-	return date.toLocaleDateString('en-US', { month: 'numeric', day: 'numeric' })
-}
 </script>
 
 <template>
-  <div class="space-y-6">
-    <div class="flex items-center justify-between">
-      <h2 class="text-xl font-semibold">Weekly Overview</h2>
-      <div class="flex items-center space-x-2">
-        <button
-          type="button"
-          class="btn btn-sm btn-outline"
-          :disabled="loading"
-          @click="$emit('previousWeek')"
-        >
-          <ChevronLeft class="w-4 h-4" />
-        </button>
-        <span class="text-sm font-medium px-3">
-          {{ formatWeekRange(weekStart, weekEnd) }}
-        </span>
-        <button
-          type="button"
-          class="btn btn-sm btn-outline"
-          :disabled="loading"
-          @click="$emit('nextWeek')"
-        >
-          <ChevronRight class="w-4 h-4" />
-        </button>
-      </div>
-    </div>
+	<div class="space-y-4">
+		<WeekRangeButtons
+			:loading="loading"
+			:start="weekStart"
+			:end="weekEnd"
+			@previous-week="$emit('previousWeek')"
+			@next-week="$emit('nextWeek')"
+		/>
 
-    <div class="grid grid-cols-1 sm:grid-cols-7 gap-1 sm:gap-1">
-      <div
-        v-for="day in weekDays"
-        :key="day.date"
-        class="bg-base-100 border border-base-300 rounded-lg p-3 text-center hover:bg-base-200 transition-colors cursor-pointer"
-        :class="{
-          'border-primary bg-primary/10': selectedDate === day.date,
-          'border-secondary bg-secondary/10': day.isToday,
-        }"
-        @click="$emit('selectDay', day.date)"
-      >
-        <div class="text-sm font-medium mb-1">
-          {{ day.dayName }}
-        </div>
-        <div class="text-xs text-gray-500 mb-2">
-          {{ formatDateLabel(day.date) }}
-        </div>
-        <div class="text-lg font-semibold text-primary">
-          {{ formatDuration(day.totalDuration) }}
-        </div>
-        <div class="text-xs text-gray-500 mt-1">
-          {{ day.sessionCount }} session{{ day.sessionCount !== 1 ? "s" : "" }}
-        </div>
-      </div>
-    </div>
+		<AppCard>
+			<div class="text-center">
+				<div class="text-sm text-gray-600 mb-1">Week Total</div>
+				<div class="text-3xl font-bold text-primary">
+					{{ formatDuration(weekTotal) }}
+				</div>
+				<div class="text-sm text-gray-500 mt-1"> {{ totalSessions }} total sessions </div>
+			</div>
+		</AppCard>
 
-    <AppCard>
-      <div class="text-center">
-        <div class="text-sm text-gray-600 mb-1">Week Total</div>
-        <div class="text-3xl font-bold text-primary">
-          {{ formatDuration(weekTotal) }}
-        </div>
-        <div class="text-sm text-gray-500 mt-1">
-          {{ totalSessions }} total sessions
-        </div>
-      </div>
-    </AppCard>
-  </div>
+		<div class="grid grid-cols-1 sm:grid-cols-7 gap-1 sm:gap-1">
+			<DaySummaryCard
+				v-for="day in weekDays"
+				:key="day.date"
+				:week-day="day"
+				:selected="selectedDate === day.date"
+				:disabled="loading"
+				@select-day="$emit('selectDay', $event)"
+			/>
+		</div>
+	</div>
 </template>
