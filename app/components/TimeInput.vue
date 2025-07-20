@@ -54,31 +54,34 @@ function isValidTimeFormat(timeString: string): boolean {
 </script>
 
 <template>
-  <div class="inline-block">
-    <input
-      v-if="isEditing"
-      ref="inputRef"
-      v-model="editValue"
-      class="input border input-sm w-20 text-center font-mono text-lg"
-      :class="{ 'border-red-500 bg-red-50': hasError }"
-      type="text"
-      placeholder="HH:MM"
-      :disabled="disabled"
-      @blur="finishEdit"
-      @keydown.enter="finishEdit"
-      @keydown.escape="cancelEdit"
-    >
-    <span v-else-if="props.readonly" class="input border input-sm w-20 text-lg content-center grid font-mono bg-transparent border-transparent text-center">{{ value }}</span>
-    <button
-      v-else
-      class="input border input-sm w-20 text-lg content-center grid font-mono bg-transparent border-transparent hover:border-gray-300 hover:bg-gray-50 transition-all "
-      :class="{ 'cursor-not-allowed bg-transparent': disabled }"
-      :disabled="disabled"
-      type="button"
-      @click="startEdit"
-    >
-      {{ value }}
-    </button>
-  </div>
+	<div class="inline-block">
+		<input
+			v-if="isEditing"
+			ref="inputRef"
+			v-model="editValue"
+			class="input border input-sm w-20 text-center font-mono text-lg"
+			:class="{ 'border-red-500 bg-red-50': hasError }"
+			type="text"
+			placeholder="HH:MM"
+			:disabled="disabled"
+			@blur="finishEdit"
+			@keydown.enter="finishEdit"
+			@keydown.escape="cancelEdit"
+		/>
+		<span
+			v-else-if="props.readonly"
+			class="input border input-sm w-20 text-lg content-center grid font-mono bg-transparent border-transparent text-center"
+			>{{ value }}</span
+		>
+		<button
+			v-else
+			class="input border input-sm w-20 text-lg content-center grid font-mono bg-transparent border-transparent hover:border-gray-300 hover:bg-gray-50 transition-all"
+			:class="{ 'cursor-not-allowed bg-transparent': disabled }"
+			:disabled="disabled"
+			type="button"
+			@click="startEdit"
+		>
+			{{ value }}
+		</button>
+	</div>
 </template>
-

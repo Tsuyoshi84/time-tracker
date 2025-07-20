@@ -83,9 +83,7 @@ const totalSessions = computed<number>(() => {
 				<div class="text-3xl font-bold text-primary">
 					{{ formatDuration(weekTotal) }}
 				</div>
-				<div class="text-sm text-gray-500 mt-1">
-					{{ totalSessions }} total sessions
-				</div>
+				<div class="text-sm text-gray-500 mt-1"> {{ totalSessions }} total sessions </div>
 			</div>
 		</AppCard>
 

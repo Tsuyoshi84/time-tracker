@@ -27,25 +27,25 @@ useHead({
 </script>
 
 <template>
-  <div>
-    <NuxtLayout>
-      <NuxtPage />
-    </NuxtLayout>
-  </div>
+	<div>
+		<NuxtLayout>
+			<NuxtPage />
+		</NuxtLayout>
+	</div>
 </template>
 
 <style>
 html {
-  font-family: "Inter", system-ui, sans-serif;
+	font-family: 'Inter', system-ui, sans-serif;
 }
 
 body {
-  margin: 0;
-  padding: 0;
-  min-height: 100vh;
+	margin: 0;
+	padding: 0;
+	min-height: 100vh;
 }
 
 * {
-  box-sizing: border-box;
+	box-sizing: border-box;
 }
 </style>

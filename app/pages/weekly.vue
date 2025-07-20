@@ -80,11 +80,12 @@ function getSessionDuration(session: TimeSession): string {
 		/>
 
 		<!-- Selected Day Details -->
-		<div v-if="selectedDayStats" class="mt-4">
+		<div
+			v-if="selectedDayStats"
+			class="mt-4"
+		>
 			<div class="bg-base-100 rounded-lg p-6 shadow-sm border border-base-300">
-				<h3 class="text-xl font-semibold mb-4">
-					{{ formattedSelectedDate }} - Sessions
-				</h3>
+				<h3 class="text-xl font-semibold mb-4"> {{ formattedSelectedDate }} - Sessions </h3>
 
 				<div
 					v-if="selectedDayStats.sessions.length === 0"
@@ -94,7 +95,10 @@ function getSessionDuration(session: TimeSession): string {
 					<p>No sessions for this day</p>
 				</div>
 
-				<div v-else class="space-y-3">
+				<div
+					v-else
+					class="space-y-3"
+				>
 					<div
 						v-for="session in selectedDayStats.sessions"
 						:key="session.id"
@@ -109,19 +113,15 @@ function getSessionDuration(session: TimeSession): string {
 									]"
 								/>
 								<span class="ml-2 text-sm font-medium">
-									{{ session.isActive ? "Active" : "Completed" }}
+									{{ session.isActive ? 'Active' : 'Completed' }}
 								</span>
 							</div>
 
 							<div class="flex items-center space-x-2">
-								<span class="text-sm font-mono">{{
-									formatTime(session.startTime)
-								}}</span>
+								<span class="text-sm font-mono">{{ formatTime(session.startTime) }}</span>
 								<span class="text-gray-400">-</span>
 								<span class="text-sm font-mono">
-									{{
-										session.endTime ? formatTime(session.endTime) : "Running..."
-									}}
+									{{ session.endTime ? formatTime(session.endTime) : 'Running...' }}
 								</span>
 							</div>
 						</div>
@@ -133,9 +133,7 @@ function getSessionDuration(session: TimeSession): string {
 
 					<div class="pt-4 border-t border-base-300">
 						<div class="flex justify-between items-center">
-							<span class="font-semibold"
-								>Total for {{ formattedSelectedDate }}:</span
-							>
+							<span class="font-semibold">Total for {{ formattedSelectedDate }}:</span>
 							<span class="text-lg font-bold text-primary">
 								{{ formatDuration(selectedDayStats.totalDuration) }}
 							</span>
