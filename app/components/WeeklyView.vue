@@ -22,7 +22,7 @@ const props = withDefaults(
 	}>(),
 	{
 		loading: false,
-	}
+	},
 )
 
 defineEmits<{
