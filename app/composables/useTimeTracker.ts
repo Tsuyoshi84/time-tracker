@@ -1,4 +1,4 @@
-import { computed, onMounted, onUnmounted, ref } from 'vue'
+import { computed, onMounted, onUnmounted, shallowReadonly, shallowRef } from 'vue'
 import type { DateString, DayStats, Milliseconds, TimerState, TimeSession } from '../types/index.ts'
 import { convertToDateString } from '../utils/convertToDateString.ts'
 import {
@@ -13,23 +13,6 @@ import {
 } from '../utils/database.ts'
 
 export function useTimeTracker() {
-	const timerState = ref<TimerState>({
-		isRunning: false,
-		currentSession: null,
-		startTime: null,
-	})
-
-	const sessions = ref<TimeSession[]>([])
-	const selectedDate = ref<DateString>(convertToDateString(new Date()))
-	const weekStart = ref<Date>(getStartOfWeek(new Date()))
-	const weekEnd = ref<Date>(getEndOfWeek(new Date()))
-	const dailyStats = ref<DayStats[]>([])
-	const loading = ref(false)
-	const error = ref<string>('')
-
-	// Timer for real-time updates
-	let timerInterval: number | null = null
-
 	/** The duration of the current session in milliseconds. */
 	const currentSessionDuration = shallowRef<Milliseconds>(0 as Milliseconds)
 
@@ -37,11 +20,18 @@ export function useTimeTracker() {
 		updateCurrentSessionDuration()
 	}, 1000)
 
+	const timerState = shallowRef<TimerState>({
+		isRunning: false,
+		currentSession: null,
+		startTime: null,
+	})
+
 	function updateCurrentSessionDuration() {
 		if (!timerState.value.isRunning || !timerState.value.startTime) return
 		currentSessionDuration.value = diffInMilliseconds(timerState.value.startTime, new Date())
 	}
 
+	const sessions = shallowRef<TimeSession[]>([])
 	const todaysTotalDuration = computed<Milliseconds>(() => {
 		const today = convertToDateString(new Date())
 		const todaySessions = sessions.value.filter((s) => s.date === today && s.endTime)
@@ -58,7 +48,9 @@ export function useTimeTracker() {
 		return sessions.value.filter((s) => s.date === today).length
 	})
 
-	// Methods
+	const selectedDate = shallowRef<DateString>(convertToDateString(new Date()))
+	const loading = shallowRef(false)
+	const error = shallowRef<string>('')
 	async function initializeTimer() {
 		try {
 			loading.value = true
@@ -250,6 +242,10 @@ export function useTimeTracker() {
 		}
 	}
 
+	const weekStart = shallowRef<Date>(getStartOfWeek(new Date()))
+	const weekEnd = shallowRef<Date>(getEndOfWeek(new Date()))
+	const dailyStats = shallowRef<DayStats[]>([])
+
 	async function loadWeeklyStats() {
 		try {
 			const weekStartStr = convertToDateString(weekStart.value)
@@ -313,6 +309,8 @@ export function useTimeTracker() {
 		await loadWeeklyStats()
 	}
 
+	let timerInterval: number | null = null
+
 	function startTimerInterval() {
 		if (timerInterval) clearInterval(timerInterval)
 		timerInterval = window.setInterval(() => {
@@ -331,7 +329,6 @@ export function useTimeTracker() {
 		}
 	}
 
-	// Lifecycle
 	onMounted(() => {
 		initializeTimer()
 	})
@@ -342,14 +339,14 @@ export function useTimeTracker() {
 
 	return {
 		// State
-		timerState: computed(() => timerState.value),
-		sessions: computed(() => sessions.value),
-		selectedDate: computed(() => selectedDate.value),
-		weekStart: computed(() => weekStart.value),
-		weekEnd: computed(() => weekEnd.value),
-		dailyStats: computed(() => dailyStats.value),
-		loading: computed(() => loading.value),
-		error: computed(() => error.value),
+		timerState: shallowReadonly(timerState),
+		sessions: shallowReadonly(sessions),
+		selectedDate: shallowReadonly(selectedDate),
+		weekStart: shallowReadonly(weekStart),
+		weekEnd: shallowReadonly(weekEnd),
+		dailyStats: shallowReadonly(dailyStats),
+		loading: shallowReadonly(loading),
+		error: shallowReadonly(error),
 
 		// Computed
 		currentSessionDuration,
