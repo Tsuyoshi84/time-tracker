@@ -41,7 +41,6 @@ const weekDays = computed<WeekDay[]>(() => {
 
 	for (let i = 0; i < 7; i++) {
 		const dateString = convertToDateString(current)
-
 		const dayStats = props.dailyStats.find((stats) => stats.date === dateString)
 
 		days.push({

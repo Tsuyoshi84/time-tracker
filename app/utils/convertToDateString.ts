@@ -6,5 +6,5 @@ import type { DateString } from '../types/index.ts'
  * @returns A date string in YYYY-MM-DD format
  */
 export function convertToDateString(date: Date): DateString {
-	return date.toISOString().split('T')[0] as DateString
+	return `${date.getFullYear()}-${date.getMonth() + 1}-${date.getDate()}` as DateString
 }
