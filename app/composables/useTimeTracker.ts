@@ -1,9 +1,10 @@
-import { computed, onMounted, onUnmounted, shallowReadonly, shallowRef } from 'vue'
+import { useDocumentVisibility, useIntervalFn } from '@vueuse/core'
+import { computed, onMounted, onUnmounted, shallowReadonly, shallowRef, watch } from 'vue'
 import type { DateString, DayStats, Milliseconds, TimerState, TimeSession } from '../types/index.ts'
 import { convertToDateString } from '../utils/convertToDateString.ts'
 import {
 	checkForOverlappingSessions,
-	deleteSession as deleteSessionFromDB,
+	deleteSession,
 	getActiveSession,
 	getSessionsByDate,
 	getSessionsInDateRange,
@@ -20,13 +21,24 @@ export function useTimeTracker() {
 		updateCurrentSessionDuration()
 	}, 1000)
 
+	const visibility = useDocumentVisibility()
+
+	watch(visibility, () => {
+		if (visibility.value === 'hidden') {
+			pause()
+		} else {
+			updateCurrentSessionDuration()
+			resume()
+		}
+	})
+
 	const timerState = shallowRef<TimerState>({
 		isRunning: false,
 		currentSession: null,
 		startTime: null,
 	})
 
-	function updateCurrentSessionDuration() {
+	function updateCurrentSessionDuration(): void {
 		if (!timerState.value.isRunning || !timerState.value.startTime) return
 		currentSessionDuration.value = diffInMilliseconds(timerState.value.startTime, new Date())
 	}
@@ -51,14 +63,16 @@ export function useTimeTracker() {
 	const selectedDate = shallowRef<DateString>(convertToDateString(new Date()))
 	const loading = shallowRef(false)
 	const error = shallowRef<string>('')
-	async function initializeTimer() {
+
+	async function initializeTimer(): Promise<void> {
 		try {
 			loading.value = true
-			await initDatabase()
+			initDatabase()
 			await loadActiveSession()
 			await loadSessionsForDate(selectedDate.value)
 			await loadWeeklyStats()
 			startTimerInterval()
+			updateCurrentSessionDuration()
 		} catch (err) {
 			error.value = `Failed to initialize: ${err instanceof Error ? err.message : 'Unknown error'}`
 		} finally {
@@ -66,7 +80,7 @@ export function useTimeTracker() {
 		}
 	}
 
-	async function loadActiveSession() {
+	async function loadActiveSession(): Promise<void> {
 		try {
 			const activeSession = await getActiveSession()
 			if (activeSession) {
@@ -75,6 +89,8 @@ export function useTimeTracker() {
 					currentSession: activeSession,
 					startTime: activeSession.startTime,
 				}
+			} else {
+				pause()
 			}
 		} catch (err) {
 			error.value = `Failed to load active session: ${
@@ -83,7 +99,7 @@ export function useTimeTracker() {
 		}
 	}
 
-	async function toggleTimer() {
+	async function toggleTimer(): Promise<void> {
 		try {
 			loading.value = true
 			error.value = ''
@@ -100,7 +116,7 @@ export function useTimeTracker() {
 		}
 	}
 
-	async function startTimer() {
+	async function startTimer(): Promise<void> {
 		const now = new Date()
 		const sessionData = {
 			startTime: now,
@@ -123,7 +139,7 @@ export function useTimeTracker() {
 		resume()
 	}
 
-	async function pauseTimer() {
+	async function pauseTimer(): Promise<void> {
 		if (!timerState.value.currentSession) return
 
 		const endTime = new Date()
@@ -146,7 +162,7 @@ export function useTimeTracker() {
 		pause()
 	}
 
-	async function loadSessionsForDate(date: DateString) {
+	async function loadSessionsForDate(date: DateString): Promise<void> {
 		try {
 			const dateSessions = await getSessionsByDate(date)
 			sessions.value = dateSessions
@@ -155,11 +171,14 @@ export function useTimeTracker() {
 		}
 	}
 
-	async function refreshCurrentDateSessions() {
+	async function refreshCurrentDateSessions(): Promise<void> {
 		await loadSessionsForDate(selectedDate.value)
 	}
 
-	async function updateSessionData(session: TimeSession, updates: Partial<TimeSession>) {
+	async function updateSessionData(
+		session: TimeSession,
+		updates: Partial<TimeSession>,
+	): Promise<void> {
 		try {
 			loading.value = true
 			error.value = ''
@@ -189,12 +208,12 @@ export function useTimeTracker() {
 		}
 	}
 
-	async function deleteSessionData(session: TimeSession) {
+	async function deleteSessionData(session: TimeSession): Promise<void> {
 		try {
 			loading.value = true
 			error.value = ''
 
-			await deleteSessionFromDB(session.id)
+			await deleteSession(session.id)
 			await refreshCurrentDateSessions()
 			await loadWeeklyStats()
 		} catch (err) {
@@ -206,7 +225,7 @@ export function useTimeTracker() {
 		}
 	}
 
-	async function addManualSession() {
+	async function addManualSession(): Promise<void> {
 		const now = new Date()
 		const startTime = new Date(now.getTime() - 60 * 60 * 1000) // 1 hour ago
 		const endTime = now
@@ -246,7 +265,7 @@ export function useTimeTracker() {
 	const weekEnd = shallowRef<Date>(getEndOfWeek(new Date()))
 	const dailyStats = shallowRef<DayStats[]>([])
 
-	async function loadWeeklyStats() {
+	async function loadWeeklyStats(): Promise<void> {
 		try {
 			const weekStartStr = convertToDateString(weekStart.value)
 			const weekEndStr = convertToDateString(weekEnd.value)
@@ -297,12 +316,12 @@ export function useTimeTracker() {
 		}
 	}
 
-	async function selectDate(date: DateString) {
+	async function selectDate(date: DateString): Promise<void> {
 		selectedDate.value = date
 		await loadSessionsForDate(date)
 	}
 
-	async function navigateWeek(direction: 'prev' | 'next') {
+	async function navigateWeek(direction: 'prev' | 'next'): Promise<void> {
 		const days = direction === 'prev' ? -7 : 7
 		weekStart.value = new Date(weekStart.value.getTime() + days * 24 * 60 * 60 * 1000)
 		weekEnd.value = new Date(weekEnd.value.getTime() + days * 24 * 60 * 60 * 1000)
@@ -311,7 +330,7 @@ export function useTimeTracker() {
 
 	let timerInterval: number | null = null
 
-	function startTimerInterval() {
+	function startTimerInterval(): void {
 		if (timerInterval) clearInterval(timerInterval)
 		timerInterval = window.setInterval(() => {
 			// Force reactivity update for real-time timer display
@@ -322,7 +341,7 @@ export function useTimeTracker() {
 		}, 1000)
 	}
 
-	function stopTimerInterval() {
+	function stopTimerInterval(): void {
 		if (timerInterval) {
 			clearInterval(timerInterval)
 			timerInterval = null

@@ -35,7 +35,6 @@ export default defineNuxtConfig({
 			},
 		},
 	},
-
 	eslint: {
 		config: {
 			nuxt: {

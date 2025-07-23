@@ -1,5 +1,6 @@
 <script setup lang="ts">
-import { computed, ref, watch } from 'vue'
+import { useRound, useSum } from '@vueuse/math'
+import { shallowRef, watch } from 'vue'
 import AppCard from '~/components/AppCard.vue'
 import SessionList from '~/components/SessionList.vue'
 import TimerDisplay from '~/components/TimerDisplay.vue'
@@ -24,8 +25,7 @@ const {
 	selectDate,
 } = useTimeTracker()
 
-// Date input handling
-const selectedDateInput = ref(selectedDate.value)
+const selectedDateInput = shallowRef(selectedDate.value)
 
 watch(selectedDate, (newDate) => {
 	selectedDateInput.value = newDate
@@ -35,19 +35,11 @@ function handleDateChange() {
 	selectDate(selectedDateInput.value)
 }
 
-// Quick stats computations
-const weeklyTotal = computed(() => {
-	return dailyStats.value.reduce((total, day) => total + day.totalDuration, 0)
-})
+const weeklyTotal = useSum(() => dailyStats.value.map((day) => day.totalDuration))
 
-const dailyAverage = computed(() => {
-	const total = weeklyTotal.value
-	return Math.round(total / 7)
-})
+const dailyAverage = useRound(() => weeklyTotal.value / 7)
 
-const totalWeeklySessions = computed(() => {
-	return dailyStats.value.reduce((total, day) => total + day.sessionCount, 0)
-})
+const totalWeeklySessions = useSum(() => dailyStats.value.map((day) => day.sessionCount))
 
 // SEO
 useSeoMeta({
