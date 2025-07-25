@@ -27,7 +27,7 @@ export default defineNuxtConfig({
 		public: {
 			sentry: {
 				dsn: process.env.SENTRY_DSN,
-				release: process.env.SENTRY_RELEASE,
+				release: process.env.SENTRY_RELEASE ?? process.env.VERCEL_GIT_COMMIT_SHA,
 			},
 		},
 	},
