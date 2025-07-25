@@ -4,6 +4,7 @@ import * as Sentry from '@sentry/nuxt'
 if (process.env.SENTRY_DSN) {
 	Sentry.init({
 		dsn: process.env.SENTRY_DSN,
+		release: process.env.SENTRY_RELEASE,
 		// Setting this option to true will print useful information to the console while you're setting up Sentry.
 		debug: false,
 	})

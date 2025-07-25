@@ -26,14 +26,9 @@ export default defineNuxtConfig({
 	runtimeConfig: {
 		public: {
 			sentry: {
-				dsn:
-					process.env.SENTRY_DSN ||
-					'https://5119ef08fc8f0fe978212cd3e260de6e@o4509727326994432.ingest.us.sentry.io/4509727333089280',
+				dsn: process.env.SENTRY_DSN,
+				release: process.env.SENTRY_RELEASE,
 			},
-		},
-		// Server-side runtime config for Sentry
-		sentry: {
-			dsn: process.env.SENTRY_DSN,
 		},
 	},
 	srcDir: 'app/',
