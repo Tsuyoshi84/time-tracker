@@ -41,7 +41,7 @@ async function getSentryData() {
 			if (!res) {
 				hasSentError.value = true
 			}
-		}
+		},
 	)
 	throw new SentryExampleFrontendError('This error is raised on the frontend of the example page.')
 }
