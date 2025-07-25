@@ -55,8 +55,8 @@ async function getSentryData(): Promise<void> {
 
 <template>
 	<div>
-		<main>
-			<div class="flex-spacer" />
+		<main class="flex min-h-screen flex-col items-center justify-center gap-4 p-4 font-sans">
+			<div class="flex-1" />
 			<svg
 				height="40"
 				width="40"
@@ -68,186 +68,64 @@ async function getSentryData(): Promise<void> {
 					fill="currentcolor"
 				/>
 			</svg>
-			<h1> sentry-example-page </h1>
+			<h1 class="m-0 rounded bg-black/5 px-1 font-mono text-xl leading-tight dark:bg-white/5">
+				sentry-example-page
+			</h1>
 
-			<p class="description">
+			<p class="max-w-lg text-center text-lg leading-relaxed text-gray-600 dark:text-gray-400">
 				Click the button below, and view the sample error on the Sentry
 				<a
 					target="_blank"
 					href="https://tsuyoshi.sentry.io/issues/?project=4509727333089280"
-					>Issues Page</a
-				>. For more details about setting up Sentry,
+					class="text-purple-600 underline hover:text-purple-700 dark:text-purple-400 dark:hover:text-purple-300"
+				>
+					Issues Page
+				</a>
+				. For more details about setting up Sentry,
 				<a
 					target="_blank"
 					href="https://docs.sentry.io/platforms/javascript/guides/nuxt/"
-					>read our docs</a
-				>.
+					class="text-purple-600 underline hover:text-purple-700 dark:text-purple-400 dark:hover:text-purple-300"
+				>
+					read our docs
+				</a>
+				.
 			</p>
 
 			<button
 				type="button"
 				:disabled="!isConnected"
+				class="mt-1 rounded-lg border-none bg-purple-700 p-0 text-white transition-transform hover:scale-105 active:scale-95 disabled:cursor-not-allowed disabled:opacity-60 disabled:transform-none"
 				@click="getSentryData"
 			>
-				<span> Throw Sample Error </span>
+				<span
+					class="inline-block rounded-lg border border-purple-700 bg-purple-500 px-4 py-3 text-xl font-bold leading-none"
+				>
+					Throw Sample Error
+				</span>
 			</button>
 
 			<p
 				v-if="hasSentError"
-				class="success"
+				class="rounded-lg border border-green-500 bg-green-400 px-4 py-3 text-xl leading-none text-gray-900"
 			>
 				Sample error was sent to Sentry.
 			</p>
 			<div
 				v-else-if="!isConnected"
-				class="connectivity-error"
+				class="w-[500px] rounded-lg border border-red-800 bg-red-600 px-4 py-3 text-center text-white"
 			>
-				<p
-					>It looks like network requests to Sentry are being blocked, which will prevent errors
-					from being captured. Try disabling your ad-blocker to complete the test.</p
-				>
+				<p>
+					It looks like network requests to Sentry are being blocked, which will prevent errors from
+					being captured. Try disabling your ad-blocker to complete the test.
+				</p>
 			</div>
 			<div
 				v-else
-				class="success_placeholder"
+				class="h-[46px]"
 			/>
 
-			<div class="flex-spacer" />
+			<div class="flex-1" />
 		</main>
 	</div>
 </template>
-
-<style scoped>
-:global(body) {
-	margin: 0;
-
-	@media (prefers-color-scheme: dark) {
-		color: #ededed;
-		background-color: #0a0a0a;
-	}
-}
-
-main {
-	display: flex;
-	min-height: 100vh;
-	box-sizing: border-box;
-	flex-direction: column;
-	justify-content: center;
-	align-items: center;
-	gap: 16px;
-	padding: 16px;
-	font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue',
-		sans-serif;
-}
-
-h1 {
-	padding: 0px 4px;
-	margin: 0;
-	border-radius: 4px;
-	background-color: rgba(24, 20, 35, 0.03);
-	font-family: monospace;
-	font-size: 20px;
-	line-height: 1.2;
-}
-
-p {
-	margin: 0;
-	font-size: 20px;
-}
-
-a {
-	color: #6341f0;
-	text-decoration: underline;
-	cursor: pointer;
-
-	@media (prefers-color-scheme: dark) {
-		color: #b3a1ff;
-	}
-}
-
-button {
-	border-radius: 8px;
-	color: white;
-	cursor: pointer;
-	background-color: #553db8;
-	border: none;
-	padding: 0;
-	margin-top: 4px;
-
-	& > span {
-		display: inline-block;
-		padding: 12px 16px;
-		border-radius: inherit;
-		font-size: 20px;
-		font-weight: bold;
-		line-height: 1;
-		background-color: #7553ff;
-		border: 1px solid #553db8;
-		transform: translateY(-4px);
-	}
-
-	&:hover > span {
-		transform: translateY(-8px);
-	}
-
-	&:active > span {
-		transform: translateY(0);
-	}
-
-	&:disabled {
-		cursor: not-allowed;
-		opacity: 0.6;
-
-		& > span {
-			transform: translateY(0);
-			border: none;
-		}
-	}
-}
-
-.description {
-	text-align: center;
-	color: #6e6c75;
-	max-width: 500px;
-	line-height: 1.5;
-	font-size: 20px;
-
-	@media (prefers-color-scheme: dark) {
-		color: #a49fb5;
-	}
-}
-
-.flex-spacer {
-	flex: 1;
-}
-
-.success {
-	padding: 12px 16px;
-	border-radius: 8px;
-	font-size: 20px;
-	line-height: 1;
-	background-color: #00f261;
-	border: 1px solid #00bf4d;
-	color: #181423;
-}
-
-.success_placeholder {
-	height: 46px;
-}
-
-.connectivity-error {
-	padding: 12px 16px;
-	background-color: #e50045;
-	border-radius: 8px;
-	width: 500px;
-	color: #ffffff;
-	border: 1px solid #a80033;
-	text-align: center;
-	margin: 0;
-}
-
-.connectivity-error a {
-	color: #ffffff;
-	text-decoration: underline;
-}
-</style>
