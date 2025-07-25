@@ -3,20 +3,23 @@ This is just a very simple page with a button to throw an example error.
 Feel free to delete this file.
 -->
 
-<script setup>
+<script setup lang="ts">
 import * as Sentry from '@sentry/nuxt'
 
+/**
+ * Custom error class for Sentry example errors
+ */
 class SentryExampleFrontendError extends Error {
-	constructor(message) {
+	constructor(message: string) {
 		super(message)
 		this.name = 'SentryExampleFrontendError'
 	}
 }
 
-const hasSentError = ref(false)
-const isConnected = ref(true)
+const hasSentError = ref<boolean>(false)
+const isConnected = ref<boolean>(true)
 
-onMounted(async () => {
+onMounted(async (): Promise<void> => {
 	try {
 		const result = await Sentry.diagnoseSdkConnectivity()
 		isConnected.value = result !== 'sentry-unreachable'
@@ -27,13 +30,16 @@ onMounted(async () => {
 	}
 })
 
-async function getSentryData() {
+/**
+ * Fetches Sentry data and throws a sample error
+ */
+async function getSentryData(): Promise<void> {
 	await Sentry.startSpan(
 		{
 			name: 'Example Frontend Span',
 			op: 'test',
 		},
-		async () => {
+		async (): Promise<void> => {
 			const res = await $fetch('/api/sentry-example-api', {
 				method: 'GET',
 				ignoreResponseError: true,
