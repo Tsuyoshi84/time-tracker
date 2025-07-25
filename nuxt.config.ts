@@ -1,3 +1,9 @@
+/** biome-ignore-all lint/suspicious/noConsole: It's okay to use console in nuxt.config.ts */
+
+if (!process.env.SENTRY_AUTH_TOKEN) {
+	console.log('SENTRY_AUTH_TOKEN is not provided. It will not send sourcemaps to Sentry')
+}
+
 // https://nuxt.com/docs/api/configuration/nuxt-config
 export default defineNuxtConfig({
 	modules: [
@@ -10,12 +16,33 @@ export default defineNuxtConfig({
 				families: [{ name: 'Inter', provider: 'google', weights: [300, 400, 500, 600, 700] }],
 			},
 		],
+		'@sentry/nuxt/module',
 	],
+
 	ssr: false,
 	devtools: { enabled: true },
 	css: ['~/assets/css/main.css'],
+
+	runtimeConfig: {
+		public: {
+			sentry: {
+				dsn:
+					process.env.SENTRY_DSN ||
+					'https://5119ef08fc8f0fe978212cd3e260de6e@o4509727326994432.ingest.us.sentry.io/4509727333089280',
+			},
+		},
+		// Server-side runtime config for Sentry
+		sentry: {
+			dsn: process.env.SENTRY_DSN,
+		},
+	},
 	srcDir: 'app/',
+
+	sourcemap: {
+		client: 'hidden',
+	},
 	compatibilityDate: '2025-05-15',
+
 	typescript: {
 		tsConfig: {
 			compilerOptions: {
@@ -35,11 +62,24 @@ export default defineNuxtConfig({
 			},
 		},
 	},
+
 	eslint: {
 		config: {
 			nuxt: {
 				sortConfigKeys: true,
 			},
 		},
+	},
+
+	sentry: {
+		...(process.env.SENTRY_AUTH_TOKEN && {
+			sourceMapsUploadOptions: {
+				org: 'tsuyoshi',
+				project: 'time-tracker',
+				authToken: process.env.SENTRY_AUTH_TOKEN,
+			},
+		}),
+
+		autoInjectServerSentry: 'top-level-import',
 	},
 })
