@@ -1,0 +1,47 @@
+name: Upload sourcemaps
+
+on:
+  push:
+    branches: ["main"]
+    paths:
+      - "**/*.*"
+      - "!**/*.md"
+      - "!.coderabbit.yaml"
+      - "!.cursorrules"
+      - "!.cursor/**"
+      - "!.vscode/**"
+      - "!.github/dependabot.yml"
+      - "!.github/copilot-instructions.md"
+      - "!.github/PULL_REQUEST_TEMPLATE/**"
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 1
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version-file: '.tool-versions'
+          cache: 'pnpm'
+          cache-dependency-path: pnpm-lock.yaml
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Build with sourcemaps
+        run: pnpm build
+        env:
+          SENTRY_AUTH_TOKEN: ${{ secrets.SENTRY_AUTH_TOKEN }}
+          SENTRY_DSN: ${{ secrets.SENTRY_DSN }}
+          SENTRY_RELEASE: ${{ github.sha }}
+          NODE_ENV: production

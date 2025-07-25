@@ -60,3 +60,13 @@ export interface WeekDay {
 	/** Number of sessions for this day. */
 	sessionCount: number
 }
+
+// Runtime configuration types
+declare module 'nuxt/schema' {
+	interface PublicRuntimeConfig {
+		sentry: {
+			dsn: string
+			release?: string
+		}
+	}
+}
