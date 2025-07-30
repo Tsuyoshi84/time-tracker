@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { Temporal } from '@js-temporal/polyfill'
 import { computed } from 'vue'
 import type { DateString, DayStats, WeekDay } from '~/types/index.ts'
 import { convertToDateString } from '~/utils/convertToDateString.ts'
@@ -37,10 +38,11 @@ defineEmits<{
 const weekDays = computed<WeekDay[]>(() => {
 	const days: WeekDay[] = []
 	const current = new Date(props.weekStart)
-	const today = convertToDateString(new Date())
+	const today = convertToDateString(Temporal.Now.plainDateISO())
 
 	for (let i = 0; i < 7; i++) {
-		const dateString = convertToDateString(current)
+		const currentPlainDate = Temporal.PlainDate.from(current.toISOString().slice(0, 10))
+		const dateString = convertToDateString(currentPlainDate)
 		const dayStats = props.dailyStats.find((stats) => stats.date === dateString)
 
 		days.push({

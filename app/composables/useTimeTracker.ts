@@ -1,3 +1,4 @@
+import { Temporal } from '@js-temporal/polyfill'
 import { useDocumentVisibility, useIntervalFn } from '@vueuse/core'
 import { computed, onMounted, onUnmounted, shallowReadonly, shallowRef, watch } from 'vue'
 import type { DateString, DayStats, Milliseconds, TimerState, TimeSession } from '../types/index.ts'
@@ -45,7 +46,7 @@ export function useTimeTracker() {
 
 	const sessions = shallowRef<TimeSession[]>([])
 	const todaysTotalDuration = computed<Milliseconds>(() => {
-		const today = convertToDateString(new Date())
+		const today = convertToDateString(Temporal.Now.plainDateISO())
 		const todaySessions = sessions.value.filter((s) => s.date === today && s.endTime)
 		return (currentSessionDuration.value +
 			todaySessions.reduce(
@@ -56,11 +57,11 @@ export function useTimeTracker() {
 	})
 
 	const sessionCount = computed(() => {
-		const today = convertToDateString(new Date())
+		const today = convertToDateString(Temporal.Now.plainDateISO())
 		return sessions.value.filter((s) => s.date === today).length
 	})
 
-	const selectedDate = shallowRef<DateString>(convertToDateString(new Date()))
+	const selectedDate = shallowRef<DateString>(convertToDateString(Temporal.Now.plainDateISO()))
 	const loading = shallowRef(false)
 	const error = shallowRef<string>('')
 
@@ -118,9 +119,10 @@ export function useTimeTracker() {
 
 	async function startTimer(): Promise<void> {
 		const now = new Date()
+		const todayPlainDate = Temporal.PlainDate.from(now.toISOString().slice(0, 10))
 		const sessionData = {
 			startTime: now,
-			date: convertToDateString(now),
+			date: convertToDateString(todayPlainDate),
 			isActive: true,
 			duration: 0 as Milliseconds,
 			createdAt: now,
@@ -230,10 +232,11 @@ export function useTimeTracker() {
 		const startTime = new Date(now.getTime() - 60 * 60 * 1000) // 1 hour ago
 		const endTime = now
 
+		const startPlainDate = Temporal.PlainDate.from(startTime.toISOString().slice(0, 10))
 		const sessionData = {
 			startTime,
 			endTime,
-			date: convertToDateString(startTime),
+			date: convertToDateString(startPlainDate),
 			isActive: false,
 			duration: diffInMilliseconds(startTime, endTime),
 			createdAt: now,
@@ -267,8 +270,10 @@ export function useTimeTracker() {
 
 	async function loadWeeklyStats(): Promise<void> {
 		try {
-			const weekStartStr = convertToDateString(weekStart.value)
-			const weekEndStr = convertToDateString(weekEnd.value)
+			const weekStartPlainDate = Temporal.PlainDate.from(weekStart.value.toISOString().slice(0, 10))
+			const weekEndPlainDate = Temporal.PlainDate.from(weekEnd.value.toISOString().slice(0, 10))
+			const weekStartStr = convertToDateString(weekStartPlainDate)
+			const weekEndStr = convertToDateString(weekEndPlainDate)
 
 			const weekSessions = await getSessionsInDateRange(weekStartStr, weekEndStr)
 
@@ -287,7 +292,8 @@ export function useTimeTracker() {
 			const currentDate = new Date(weekStart.value)
 
 			for (let i = 0; i < 7; i++) {
-				const dateStr = convertToDateString(currentDate)
+				const currentPlainDate = Temporal.PlainDate.from(currentDate.toISOString().slice(0, 10))
+				const dateStr = convertToDateString(currentPlainDate)
 				const daySessions = sessionsByDate.get(dateStr) || []
 
 				const completedSessions = daySessions.filter((s) => s.endTime)
