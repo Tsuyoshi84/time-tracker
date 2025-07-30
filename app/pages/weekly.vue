@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { Temporal } from '@js-temporal/polyfill'
 import { useSum } from '@vueuse/math'
 import { Calendar } from 'lucide-vue-next'
 import { computed } from 'vue'
@@ -28,18 +29,19 @@ const mostProductiveDay = computed<string>(() => {
 	if (dailyStats.value.length === 0) return 'None'
 
 	const maxDay = dailyStats.value.reduce((max, day) =>
-		day.totalDuration > max.totalDuration ? day : max,
+		day.totalDuration > max.totalDuration ? day : max
 	)
 
 	if (maxDay.totalDuration === 0) return 'None'
 
-	const date = new Date(maxDay.date)
-	return date.toLocaleDateString('en-US', { weekday: 'long' })
+	const date = Temporal.PlainDate.from(maxDay.date)
+	// Use Intl.DateTimeFormat for weekday name
+	return date.toLocaleString('en-US', { weekday: 'long' })
 })
 
 const formattedSelectedDate = computed<string>(() => {
-	const date = new Date(selectedDate.value)
-	return date.toLocaleDateString('en-US', {
+	const date = Temporal.PlainDate.from(selectedDate.value)
+	return date.toLocaleString('en-US', {
 		weekday: 'long',
 		year: 'numeric',
 		month: 'long',

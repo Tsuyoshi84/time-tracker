@@ -1,3 +1,5 @@
+import { Temporal } from '@js-temporal/polyfill'
+
 export interface ValidationError {
 	field: string
 	message: string
@@ -9,10 +11,14 @@ export interface ValidationError {
  * @param endTime - The end time
  * @returns An array of validation errors, empty if valid
  */
-export function validateTimeRange(startTime: Date, endTime: Date): ValidationError[] {
+
+export function validateTimeRange(
+	startTime: Temporal.PlainDateTime,
+	endTime: Temporal.PlainDateTime,
+): ValidationError[] {
 	const errors: ValidationError[] = []
 
-	if (startTime >= endTime) {
+	if (Temporal.PlainDateTime.compare(startTime, endTime) >= 0) {
 		errors.push({
 			field: 'timeRange',
 			message: 'End time must be after start time',
@@ -20,7 +26,8 @@ export function validateTimeRange(startTime: Date, endTime: Date): ValidationErr
 	}
 
 	const maxDuration = 24 * 60 * 60 * 1000 // 24 hours in milliseconds
-	if (endTime.getTime() - startTime.getTime() > maxDuration) {
+	const durationMs = endTime.since(startTime).total({ unit: 'millisecond' })
+	if (durationMs > maxDuration) {
 		errors.push({
 			field: 'timeRange',
 			message: 'Session cannot be longer than 24 hours',

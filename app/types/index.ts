@@ -1,3 +1,4 @@
+import type { Temporal } from '@js-temporal/polyfill'
 /** The date string format. (YYYY-MM-DD) */
 export type DateString = `${number}-${number}-${number}`
 
@@ -5,13 +6,13 @@ export type Milliseconds = number & { __brand: 'Milliseconds' }
 
 export interface TimeSession {
 	id: number
-	startTime: Date
-	endTime?: Date
+	startTime: Temporal.PlainDateTime
+	endTime?: Temporal.PlainDateTime
 	duration?: Milliseconds
 	date: DateString
 	isActive: boolean
-	createdAt: Date
-	updatedAt: Date
+	createdAt: Temporal.PlainDateTime
+	updatedAt: Temporal.PlainDateTime
 }
 
 export interface DayStats {
@@ -31,7 +32,7 @@ export interface WeekStats {
 export interface TimerState {
 	isRunning: boolean
 	currentSession: TimeSession | null
-	startTime: Date | null
+	startTime: Temporal.PlainDateTime | null
 }
 
 export interface TimeInput {
@@ -41,8 +42,8 @@ export interface TimeInput {
 
 export interface SessionEdit {
 	id: number
-	startTime: Date
-	endTime: Date
+	startTime: Temporal.PlainDateTime
+	endTime: Temporal.PlainDateTime
 }
 
 /**

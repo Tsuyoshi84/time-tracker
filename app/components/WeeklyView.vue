@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { Temporal } from '@js-temporal/polyfill'
 import { computed } from 'vue'
 import type { DateString, DayStats, WeekDay } from '~/types/index.ts'
 import { convertToDateString } from '~/utils/convertToDateString.ts'
@@ -10,9 +11,9 @@ import WeekRangeButtons from './WeekRangeButtons.vue'
 const props = withDefaults(
 	defineProps<{
 		/** The start date of the week. */
-		weekStart: Date
+		weekStart: Temporal.PlainDate
 		/** The end date of the week. */
-		weekEnd: Date
+		weekEnd: Temporal.PlainDate
 		/** Array of daily statistics for the week. */
 		dailyStats: DayStats[]
 		/** The currently selected date (YYYY-MM-DD). */
@@ -22,7 +23,7 @@ const props = withDefaults(
 	}>(),
 	{
 		loading: false,
-	},
+	}
 )
 
 defineEmits<{
@@ -36,23 +37,25 @@ defineEmits<{
 
 const weekDays = computed<WeekDay[]>(() => {
 	const days: WeekDay[] = []
-	const current = new Date(props.weekStart)
-	const today = convertToDateString(new Date())
+	let current = props.weekStart
+	const today = convertToDateString(Temporal.Now.plainDateISO())
 
 	for (let i = 0; i < 7; i++) {
 		const dateString = convertToDateString(current)
 		const dayStats = props.dailyStats.find((stats) => stats.date === dateString)
 
+		// Get weekday name using Temporal.PlainDate
+		const dayName = current.toLocaleString('en-US', { weekday: 'short' })
+
 		days.push({
-			// biome-ignore lint/style/noNonNullAssertion: The value is guaranteed to be defined
-			date: dateString!,
-			dayName: current.toLocaleDateString('en-US', { weekday: 'short' }),
+			date: dateString,
+			dayName,
 			isToday: dateString === today,
 			totalDuration: dayStats?.totalDuration || 0,
 			sessionCount: dayStats?.sessionCount || 0,
 		})
 
-		current.setDate(current.getDate() + 1)
+		current = current.add({ days: 1 })
 	}
 
 	return days

@@ -55,11 +55,15 @@
 	"files.autoSave": "afterDelay",
 	"files.autoSaveDelay": 1000,
 	"files.autoSaveWhenNoErrors": true,
-	"github.copilot.chat.codeGeneration.instructions": [
-		{
-			"file": "coding-guidelines.md"
-		}
-	],
+	"github.copilot.chat.agent.terminal.allowList": {
+		"pnpm add": true,
+		"pnpm build": true,
+		"pnpm check": true,
+		"pnpm install": true,
+		"pnpm remove": true,
+		"pnpm test": true,
+		"pnpm typecheck": true
+	},
 	"javascript.preferences.importModuleSpecifierEnding": "js",
 	"typescript.preferences.importModuleSpecifierEnding": "js",
 	"typescript.preferences.preferTypeOnlyAutoImports": true,

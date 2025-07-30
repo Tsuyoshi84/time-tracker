@@ -1,3 +1,4 @@
+import { Temporal } from '@js-temporal/polyfill'
 import type { Table } from 'dexie'
 import Dexie from 'dexie'
 import type { DateString, TimeSession } from '../types/index.ts'
@@ -8,9 +9,14 @@ const DB_VERSION = 1
 /**
  * Interface for the session table schema.
  */
-interface SessionTable extends Omit<TimeSession, 'id' | 'isActive'> {
+interface SessionTable {
 	id?: number
 	isActive?: number // Store as 1 (true) or 0 (false) for index compatibility
+	startTime: string
+	endTime?: string
+	date: DateString
+	createdAt: string
+	updatedAt: string
 }
 
 /**
@@ -43,21 +49,27 @@ export function initDatabase(): Dexie {
  * @return The saved session with id
  */
 export async function saveSession(session: Omit<TimeSession, 'id'>): Promise<TimeSession> {
-	const now = new Date()
+	const now = Temporal.Now.plainDateTimeISO()
 	const sessionWithTimestamps: SessionTable = {
-		...session,
 		isActive: session.isActive ? 1 : 0,
-		createdAt: now,
-		updatedAt: now,
-		startTime: new Date(session.startTime),
-		endTime: session.endTime ? new Date(session.endTime) : undefined,
+		startTime: session.startTime.toString(),
+		endTime: session.endTime ? session.endTime.toString() : undefined,
+		date: session.date,
+		createdAt: now.toString(),
+		updatedAt: now.toString(),
 	}
 	const id = await db.sessions.add(sessionWithTimestamps)
 	return {
-		...sessionWithTimestamps,
 		id: Number(id),
 		isActive: !!sessionWithTimestamps.isActive,
-	} as TimeSession
+		startTime: Temporal.PlainDateTime.from(sessionWithTimestamps.startTime),
+		endTime: sessionWithTimestamps.endTime
+			? Temporal.PlainDateTime.from(sessionWithTimestamps.endTime)
+			: undefined,
+		date: session.date,
+		createdAt: Temporal.PlainDateTime.from(sessionWithTimestamps.createdAt),
+		updatedAt: Temporal.PlainDateTime.from(sessionWithTimestamps.updatedAt),
+	}
 }
 
 /**
@@ -72,12 +84,13 @@ export async function updateSession(id: number, updates: Partial<TimeSession>): 
 	}
 	const updatedSession: SessionTable = {
 		...existingSession,
-		...updates,
 		isActive:
 			updates.isActive !== undefined ? (updates.isActive ? 1 : 0) : existingSession.isActive,
-		updatedAt: new Date(),
-		startTime: updates.startTime ? new Date(updates.startTime) : existingSession.startTime,
-		endTime: updates.endTime ? new Date(updates.endTime) : existingSession.endTime,
+		startTime: updates.startTime ? updates.startTime.toString() : existingSession.startTime,
+		endTime: updates.endTime ? updates.endTime.toString() : existingSession.endTime,
+		date: updates.date ?? existingSession.date,
+		createdAt: existingSession.createdAt,
+		updatedAt: Temporal.Now.plainDateTimeISO().toString(),
 	}
 	await db.sessions.put({ ...updatedSession, id })
 }
@@ -100,15 +113,15 @@ export async function getSessionsByDate(date: DateString): Promise<TimeSession[]
 	const sessions = await db.sessions.where('date').equals(date).toArray()
 	return sessions
 		.map((session) => ({
-			...session,
 			id: session.id as number,
 			isActive: !!session.isActive,
-			startTime: new Date(session.startTime),
-			endTime: session.endTime ? new Date(session.endTime) : undefined,
-			createdAt: new Date(session.createdAt),
-			updatedAt: new Date(session.updatedAt),
+			startTime: Temporal.PlainDateTime.from(session.startTime),
+			endTime: session.endTime ? Temporal.PlainDateTime.from(session.endTime) : undefined,
+			date: session.date,
+			createdAt: Temporal.PlainDateTime.from(session.createdAt),
+			updatedAt: Temporal.PlainDateTime.from(session.updatedAt),
 		}))
-		.sort((a, b) => a.startTime.getTime() - b.startTime.getTime())
+		.sort((a, b) => Temporal.PlainDateTime.compare(a.startTime, b.startTime))
 }
 
 /**
@@ -121,14 +134,13 @@ export async function getActiveSession(): Promise<TimeSession | null> {
 	const activeSession = activeSessions[0]
 	if (!activeSession || typeof activeSession.date !== 'string') return null
 	return {
-		...activeSession,
 		id: activeSession.id as number,
-		date: activeSession.date,
 		isActive: !!activeSession.isActive,
-		startTime: new Date(activeSession.startTime),
-		endTime: activeSession.endTime ? new Date(activeSession.endTime) : undefined,
-		createdAt: new Date(activeSession.createdAt),
-		updatedAt: new Date(activeSession.updatedAt),
+		startTime: Temporal.PlainDateTime.from(activeSession.startTime),
+		endTime: activeSession.endTime ? Temporal.PlainDateTime.from(activeSession.endTime) : undefined,
+		date: activeSession.date,
+		createdAt: Temporal.PlainDateTime.from(activeSession.createdAt),
+		updatedAt: Temporal.PlainDateTime.from(activeSession.updatedAt),
 	}
 }
 
@@ -145,15 +157,15 @@ export async function getSessionsInDateRange(
 	const sessions = await db.sessions.where('date').between(startDate, endDate, true, true).toArray()
 	return sessions
 		.map((session) => ({
-			...session,
 			id: session.id as number,
 			isActive: !!session.isActive,
-			startTime: new Date(session.startTime),
-			endTime: session.endTime ? new Date(session.endTime) : undefined,
-			createdAt: new Date(session.createdAt),
-			updatedAt: new Date(session.updatedAt),
+			startTime: Temporal.PlainDateTime.from(session.startTime),
+			endTime: session.endTime ? Temporal.PlainDateTime.from(session.endTime) : undefined,
+			date: session.date,
+			createdAt: Temporal.PlainDateTime.from(session.createdAt),
+			updatedAt: Temporal.PlainDateTime.from(session.updatedAt),
 		}))
-		.sort((a, b) => a.startTime.getTime() - b.startTime.getTime())
+		.sort((a, b) => Temporal.PlainDateTime.compare(a.startTime, b.startTime))
 }
 
 /**
@@ -168,7 +180,7 @@ export async function calculateDayStats(
 	const completedSessions = sessions.filter((session) => session.endTime)
 	const totalDuration = completedSessions.reduce((total, session) => {
 		if (session.endTime) {
-			return total + (session.endTime.getTime() - session.startTime.getTime())
+			return total + session.endTime.since(session.startTime).total({ unit: 'millisecond' })
 		}
 		return total
 	}, 0)
@@ -193,19 +205,19 @@ export async function clearAllData(): Promise<void> {
  * @return Array of overlapping sessions
  */
 export async function checkForOverlappingSessions(
-	startTime: Date,
-	endTime: Date,
+	startTime: Temporal.PlainDateTime,
+	endTime: Temporal.PlainDateTime,
 	excludeId?: number,
 ): Promise<TimeSession[]> {
-	const date = startTime.toISOString().split('T')[0] as DateString
+	const date = startTime.toPlainDate().toString() as DateString
 	const sessions = await getSessionsByDate(date)
 	return sessions.filter((session) => {
 		if (excludeId && session.id === excludeId) return false
 		if (!session.endTime) return false
-		const sessionStart = session.startTime.getTime()
-		const sessionEnd = session.endTime.getTime()
-		const newStart = startTime.getTime()
-		const newEnd = endTime.getTime()
-		return newStart < sessionEnd && newEnd > sessionStart
+		// Overlap: newStart < sessionEnd && newEnd > sessionStart
+		return (
+			Temporal.PlainDateTime.compare(startTime, session.endTime) < 0 &&
+			Temporal.PlainDateTime.compare(endTime, session.startTime) > 0
+		)
 	})
 }

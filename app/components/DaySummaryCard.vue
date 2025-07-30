@@ -3,6 +3,7 @@
  * DaySummaryCard displays a summary of tracked time and sessions for a single day in the week view.
  */
 
+import { Temporal } from '@js-temporal/polyfill'
 import type { DateString, WeekDay } from '~/types/index.ts'
 import { formatDate } from '~/utils/formatDate.ts'
 import { formatDuration } from '~/utils/formatDuration.ts'
@@ -20,7 +21,7 @@ const props = defineProps<{
 const emit = defineEmits<{ selectDay: [date: DateString] }>()
 
 function formatDateLabel(dateString: string): string {
-	return formatDate(new Date(dateString))
+	return formatDate(Temporal.PlainDate.from(dateString))
 }
 </script>
 
