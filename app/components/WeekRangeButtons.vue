@@ -3,7 +3,7 @@
  * A component that displays a range of dates and allows the user to navigate between them.
  */
 
-import { Temporal } from '@js-temporal/polyfill'
+import type { Temporal } from '@js-temporal/polyfill'
 import { ChevronLeft, ChevronRight } from 'lucide-vue-next'
 import { formatDate } from '~/utils/formatDate.ts'
 
@@ -11,9 +11,9 @@ const props = defineProps<{
 	/** Whether the component is loading. */
 	loading?: boolean
 	/** The start date of the range. */
-	start: Date
+	start: Temporal.PlainDate
 	/** The end date of the range. */
-	end: Date
+	end: Temporal.PlainDate
 }>()
 
 defineEmits<{
@@ -24,10 +24,8 @@ defineEmits<{
 }>()
 
 const label = computed<string>(() => {
-	const startPlainDate = Temporal.PlainDate.from(props.start.toISOString().slice(0, 10))
-	const endPlainDate = Temporal.PlainDate.from(props.end.toISOString().slice(0, 10))
-	const startStr = formatDate(startPlainDate)
-	const endStr = formatDate(endPlainDate)
+	const startStr = formatDate(props.start)
+	const endStr = formatDate(props.end)
 	return `${startStr} - ${endStr}`
 })
 </script>

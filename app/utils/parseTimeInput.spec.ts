@@ -1,3 +1,4 @@
+import { Temporal } from '@js-temporal/polyfill'
 import { describe, expect, it } from 'vitest'
 import { parseTimeInput } from './parseTimeInput'
 
@@ -8,20 +9,20 @@ describe('parseTimeInput', () => {
 		const time3 = parseTimeInput('23:59')
 		const time4 = parseTimeInput('9:30') // Single digit hour is valid
 
-		expect(time1).toBeInstanceOf(Date)
-		expect(time2).toBeInstanceOf(Date)
-		expect(time3).toBeInstanceOf(Date)
-		expect(time4).toBeInstanceOf(Date)
+		expect(time1).toBeInstanceOf(Temporal.PlainDateTime)
+		expect(time2).toBeInstanceOf(Temporal.PlainDateTime)
+		expect(time3).toBeInstanceOf(Temporal.PlainDateTime)
+		expect(time4).toBeInstanceOf(Temporal.PlainDateTime)
 
 		if (time1 && time2 && time3 && time4) {
-			expect(time1.getHours()).toBe(9)
-			expect(time1.getMinutes()).toBe(30)
-			expect(time2.getHours()).toBe(14)
-			expect(time2.getMinutes()).toBe(45)
-			expect(time3.getHours()).toBe(23)
-			expect(time3.getMinutes()).toBe(59)
-			expect(time4.getHours()).toBe(9)
-			expect(time4.getMinutes()).toBe(30)
+			expect(time1.hour).toBe(9)
+			expect(time1.minute).toBe(30)
+			expect(time2.hour).toBe(14)
+			expect(time2.minute).toBe(45)
+			expect(time3.hour).toBe(23)
+			expect(time3.minute).toBe(59)
+			expect(time4.hour).toBe(9)
+			expect(time4.minute).toBe(30)
 		}
 	})
 
@@ -29,14 +30,14 @@ describe('parseTimeInput', () => {
 		const midnight = parseTimeInput('00:00')
 		const noon = parseTimeInput('12:00')
 
-		expect(midnight).toBeInstanceOf(Date)
-		expect(noon).toBeInstanceOf(Date)
+		expect(midnight).toBeInstanceOf(Temporal.PlainDateTime)
+		expect(noon).toBeInstanceOf(Temporal.PlainDateTime)
 
 		if (midnight && noon) {
-			expect(midnight.getHours()).toBe(0)
-			expect(midnight.getMinutes()).toBe(0)
-			expect(noon.getHours()).toBe(12)
-			expect(noon.getMinutes()).toBe(0)
+			expect(midnight.hour).toBe(0)
+			expect(midnight.minute).toBe(0)
+			expect(noon.hour).toBe(12)
+			expect(noon.minute).toBe(0)
 		}
 	})
 
@@ -59,14 +60,14 @@ describe('parseTimeInput', () => {
 	})
 
 	it('should set the date to today', () => {
-		const today = new Date()
+		const today = Temporal.Now.plainDateISO()
 		const parsedTime = parseTimeInput('14:30')
 
-		expect(parsedTime).toBeInstanceOf(Date)
+		expect(parsedTime).toBeInstanceOf(Temporal.PlainDateTime)
 		if (parsedTime) {
-			expect(parsedTime.getFullYear()).toBe(today.getFullYear())
-			expect(parsedTime.getMonth()).toBe(today.getMonth())
-			expect(parsedTime.getDate()).toBe(today.getDate())
+			expect(parsedTime.year).toBe(today.year)
+			expect(parsedTime.month).toBe(today.month)
+			expect(parsedTime.day).toBe(today.day)
 		}
 	})
 })

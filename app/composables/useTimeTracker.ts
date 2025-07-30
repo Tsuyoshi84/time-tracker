@@ -41,7 +41,8 @@ export function useTimeTracker() {
 
 	function updateCurrentSessionDuration(): void {
 		if (!timerState.value.isRunning || !timerState.value.startTime) return
-		currentSessionDuration.value = diffInMilliseconds(timerState.value.startTime, new Date())
+		const now = Temporal.Now.plainDateTimeISO()
+		currentSessionDuration.value = diffInMilliseconds(timerState.value.startTime, now)
 	}
 
 	const sessions = shallowRef<TimeSession[]>([])
@@ -118,8 +119,8 @@ export function useTimeTracker() {
 	}
 
 	async function startTimer(): Promise<void> {
-		const now = new Date()
-		const todayPlainDate = Temporal.PlainDate.from(now.toISOString().slice(0, 10))
+		const now = Temporal.Now.plainDateTimeISO()
+		const todayPlainDate = now.toPlainDate()
 		const sessionData = {
 			startTime: now,
 			date: convertToDateString(todayPlainDate),
@@ -144,7 +145,7 @@ export function useTimeTracker() {
 	async function pauseTimer(): Promise<void> {
 		if (!timerState.value.currentSession) return
 
-		const endTime = new Date()
+		const endTime = Temporal.Now.plainDateTimeISO()
 		const duration = diffInMilliseconds(timerState.value.currentSession.startTime, endTime)
 
 		await updateSession(timerState.value.currentSession.id, {
@@ -228,15 +229,13 @@ export function useTimeTracker() {
 	}
 
 	async function addManualSession(): Promise<void> {
-		const now = new Date()
-		const startTime = new Date(now.getTime() - 60 * 60 * 1000) // 1 hour ago
+		const now = Temporal.Now.plainDateTimeISO()
+		const startTime = now.subtract({ hours: 1 })
 		const endTime = now
-
-		const startPlainDate = Temporal.PlainDate.from(startTime.toISOString().slice(0, 10))
 		const sessionData = {
 			startTime,
 			endTime,
-			date: convertToDateString(startPlainDate),
+			date: convertToDateString(now.toPlainDate()),
 			isActive: false,
 			duration: diffInMilliseconds(startTime, endTime),
 			createdAt: now,
@@ -264,16 +263,15 @@ export function useTimeTracker() {
 		}
 	}
 
-	const weekStart = shallowRef<Date>(getStartOfWeek(new Date()))
-	const weekEnd = shallowRef<Date>(getEndOfWeek(new Date()))
+	// These should be Temporal.PlainDate
+	const weekStart = shallowRef<Temporal.PlainDate>(Temporal.Now.plainDateISO())
+	const weekEnd = shallowRef<Temporal.PlainDate>(Temporal.Now.plainDateISO())
 	const dailyStats = shallowRef<DayStats[]>([])
 
 	async function loadWeeklyStats(): Promise<void> {
 		try {
-			const weekStartPlainDate = Temporal.PlainDate.from(weekStart.value.toISOString().slice(0, 10))
-			const weekEndPlainDate = Temporal.PlainDate.from(weekEnd.value.toISOString().slice(0, 10))
-			const weekStartStr = convertToDateString(weekStartPlainDate)
-			const weekEndStr = convertToDateString(weekEndPlainDate)
+			const weekStartStr = convertToDateString(weekStart.value)
+			const weekEndStr = convertToDateString(weekEnd.value)
 
 			const weekSessions = await getSessionsInDateRange(weekStartStr, weekEndStr)
 
@@ -289,17 +287,16 @@ export function useTimeTracker() {
 
 			// Calculate daily stats
 			const stats: DayStats[] = []
-			const currentDate = new Date(weekStart.value)
+			let currentDate = weekStart.value
 
 			for (let i = 0; i < 7; i++) {
-				const currentPlainDate = Temporal.PlainDate.from(currentDate.toISOString().slice(0, 10))
-				const dateStr = convertToDateString(currentPlainDate)
+				const dateStr = convertToDateString(currentDate)
 				const daySessions = sessionsByDate.get(dateStr) || []
 
 				const completedSessions = daySessions.filter((s) => s.endTime)
 				const totalDuration = completedSessions.reduce((total, session) => {
 					if (session.endTime) {
-						return total + (session.endTime.getTime() - session.startTime.getTime())
+						return total + session.endTime.since(session.startTime).total({ unit: 'millisecond' })
 					}
 					return total
 				}, 0)
@@ -311,7 +308,7 @@ export function useTimeTracker() {
 					sessions: daySessions,
 				})
 
-				currentDate.setDate(currentDate.getDate() + 1)
+				currentDate = currentDate.add({ days: 1 })
 			}
 
 			dailyStats.value = stats
@@ -329,8 +326,8 @@ export function useTimeTracker() {
 
 	async function navigateWeek(direction: 'prev' | 'next'): Promise<void> {
 		const days = direction === 'prev' ? -7 : 7
-		weekStart.value = new Date(weekStart.value.getTime() + days * 24 * 60 * 60 * 1000)
-		weekEnd.value = new Date(weekEnd.value.getTime() + days * 24 * 60 * 60 * 1000)
+		weekStart.value = weekStart.value.add({ days })
+		weekEnd.value = weekEnd.value.add({ days })
 		await loadWeeklyStats()
 	}
 
@@ -392,24 +389,21 @@ export function useTimeTracker() {
 }
 
 // Helper functions
-function getStartOfWeek(date: Date): Date {
-	const result = new Date(date)
-	const day = result.getDay()
-	const diff = result.getDate() - day
-	result.setDate(diff)
-	result.setHours(0, 0, 0, 0)
-	return result
+function getStartOfWeek(date: Temporal.PlainDate): Temporal.PlainDate {
+	// ISO weekday: Monday = 1, Sunday = 7
+	const dayOfWeek = date.dayOfWeek ?? date.day % 7
+	return date.subtract({ days: dayOfWeek - 1 })
 }
 
-function getEndOfWeek(date: Date): Date {
-	const result = new Date(date)
-	const day = result.getDay()
-	const diff = result.getDate() - day + 6
-	result.setDate(diff)
-	result.setHours(23, 59, 59, 999)
-	return result
+function getEndOfWeek(date: Temporal.PlainDate): Temporal.PlainDate {
+	// ISO weekday: Monday = 1, Sunday = 7
+	const dayOfWeek = date.dayOfWeek ?? date.day % 7
+	return date.add({ days: 7 - dayOfWeek })
 }
 
-function diffInMilliseconds(start: Date, end: Date): Milliseconds {
-	return (end.getTime() - start.getTime()) as Milliseconds
+function diffInMilliseconds(
+	start: Temporal.PlainDateTime,
+	end: Temporal.PlainDateTime,
+): Milliseconds {
+	return end.since(start).total({ unit: 'millisecond' }) as Milliseconds
 }
