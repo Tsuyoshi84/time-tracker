@@ -20,7 +20,18 @@
 	"[vue]": {
 		"editor.defaultFormatter": "esbenp.prettier-vscode"
 	},
-	"cSpell.words": ["Dexie", "IDBP", "nums", "nuxi", "Nuxt", "nuxtjs", "vueuse"],
+	"cSpell.words": [
+		"Dexie",
+		"IDBP",
+		"nums",
+		"nuxi",
+		"Nuxt",
+		"nuxtjs",
+		"Pinia",
+		"Vite",
+		"Vitest",
+		"vueuse"
+	],
 	"editor.codeActionsOnSave": {
 		"source.fixAll.biome": "never",
 		"source.fixAll.eslint": "explicit",

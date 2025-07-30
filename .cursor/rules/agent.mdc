@@ -1,0 +1,12 @@
+---
+description: Apply these rules when generating code by the agent
+alwaysApply: false
+---
+# Code generation
+
+Follow these instructions when generating code:
+
+- Run `pnpm check` after generating code to fix them by Biome
+- Run `pnpm typecheck` to make sure the code is not violating type rules
+- Ensure all generated code follows the established patterns and conventions in this project
+- **Avoid code duplication** by reusing existing utilities and components
