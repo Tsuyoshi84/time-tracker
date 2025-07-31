@@ -21,8 +21,6 @@ import {
  * - Managing session data (CRUD operations)
  * - Loading and displaying daily/weekly statistics
  * - Handling timer state persistence and recovery
- *
- * @returns An object containing reactive state, computed values, and methods for time tracking
  */
 export function useTimeTracker() {
 	/** The duration of the current session in milliseconds. */
