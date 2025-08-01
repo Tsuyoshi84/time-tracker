@@ -1,4 +1,7 @@
 <script setup lang="ts">
+/**
+ * WeeklyView displays a comprehensive weekly overview of time tracking data including daily summaries and navigation controls.
+ */
 import { computed } from 'vue'
 import type { DateString, DayStats, WeekDay } from '~/types/index.ts'
 import { convertToDateString } from '~/utils/convertToDateString.ts'
