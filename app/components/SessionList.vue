@@ -1,4 +1,7 @@
 <script setup lang="ts">
+/**
+ * SessionList displays and manages time tracking sessions, allowing users to view, edit, and delete session entries.
+ */
 import { Clock, Plus, Trash2 } from 'lucide-vue-next'
 import type { TimeSession } from '~/types/index.ts'
 import { calculateDuration } from '~/utils/calculateDuration.ts'

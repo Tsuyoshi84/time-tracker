@@ -1,4 +1,7 @@
 <script setup lang="ts">
+/**
+ * TimerDisplay shows the current session timer, today's total time, and timer controls.
+ */
 import { AlertCircle, Pause, Play } from 'lucide-vue-next'
 import type { Milliseconds } from '~/types/index.ts'
 import { formatDuration } from '~/utils/formatDuration.ts'
