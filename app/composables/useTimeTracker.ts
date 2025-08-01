@@ -13,6 +13,15 @@ import {
 	updateSession,
 } from '../utils/database.ts'
 
+/**
+ * Composable for managing time tracking functionality.
+ *
+ * Provides state management and methods for:
+ * - Starting/stopping timer sessions
+ * - Managing session data (CRUD operations)
+ * - Loading and displaying daily/weekly statistics
+ * - Handling timer state persistence and recovery
+ */
 export function useTimeTracker() {
 	/** The duration of the current session in milliseconds. */
 	const currentSessionDuration = shallowRef<Milliseconds>(0 as Milliseconds)
