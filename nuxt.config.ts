@@ -9,6 +9,7 @@ export default defineNuxtConfig({
 	modules: [
 		'@nuxt/eslint',
 		'@nuxtjs/tailwindcss',
+		'@vue-macros/nuxt',
 		'@vueuse/nuxt',
 		[
 			'@nuxt/fonts',
