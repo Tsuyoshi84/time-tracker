@@ -9,13 +9,15 @@ Instructions for high-quality Nuxt applications with Tailwind CSS styling and Ty
 
 ## Project Context
 
-- Latest Nuxt
-- Latest Vue.js
+- Nuxt 4
+- Vue.js 3.5
+- VueUse for utility composables
 - TypeScript for type safety
+- TailwindCSS 3 for styling
 - Vitest for unit tests
 - pnpm for managing packages
 - Sentry for bug tracking
-- Biome for lint and format
+- Biome 2 for lint and format
 
 ## Directory Structure
 
@@ -144,7 +146,7 @@ Follow these instructions when writing composables or component setup functions.
 
 ## Testing
 
-The following rules should be applied to test files (*.spec.ts).
+The following rules should be applied to test files (\*.spec.ts).
 
 - Use Vitest for unit testing.
 - Write comprehensive unit tests for all business logic.

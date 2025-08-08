@@ -20,6 +20,8 @@
 	"[vue]": {
 		"editor.defaultFormatter": "esbenp.prettier-vscode"
 	},
+	"chat.agent.maxRequests": 10000,
+	"chat.todoListTool.enabled": true,
 	"cSpell.words": [
 		"Dexie",
 		"IDBP",
@@ -33,7 +35,7 @@
 		"vueuse"
 	],
 	"editor.codeActionsOnSave": {
-		"source.fixAll.biome": "never",
+		"source.fixAll.biome": "explicit",
 		"source.fixAll.eslint": "explicit",
 		"source.organizeImports": "never",
 		"source.organizeImports.biome": "explicit"
@@ -55,11 +57,7 @@
 	"files.autoSave": "afterDelay",
 	"files.autoSaveDelay": 1000,
 	"files.autoSaveWhenNoErrors": true,
-	"github.copilot.chat.codeGeneration.instructions": [
-		{
-			"file": "coding-guidelines.md"
-		}
-	],
+	"github.copilot.chat.agent.thinkingTool": true,
 	"javascript.preferences.importModuleSpecifierEnding": "js",
 	"typescript.preferences.importModuleSpecifierEnding": "js",
 	"typescript.preferences.preferTypeOnlyAutoImports": true,
