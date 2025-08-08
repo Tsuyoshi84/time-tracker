@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { Calendar, Clock, Timer } from 'lucide-vue-next'
+import ThemeToggle from '../components/ThemeToggle.vue'
 </script>
 
 <template>
@@ -12,7 +13,7 @@ import { Calendar, Clock, Timer } from 'lucide-vue-next'
 						<Timer class="w-8 h-8 text-primary" />
 						<h1 class="text-2xl font-bold text-primary">Time Tracker</h1>
 					</div>
-					<nav class="flex space-x-4">
+					<nav class="flex items-center space-x-2">
 						<ul class="menu menu-vertical lg:menu-horizontal bg-base-200 rounded-box">
 							<li>
 								<NuxtLink
@@ -33,6 +34,7 @@ import { Calendar, Clock, Timer } from 'lucide-vue-next'
 								</NuxtLink>
 							</li>
 						</ul>
+						<ThemeToggle />
 					</nav>
 				</div>
 			</div>

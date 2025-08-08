@@ -1,5 +1,6 @@
 /** @type {import('tailwindcss').Config} */
 module.exports = {
+	darkMode: 'class',
 	content: [
 		'./app/components/**/*.{js,vue,ts}',
 		'./app/layouts/**/*.vue',
@@ -31,7 +32,8 @@ module.exports = {
 					error: '#ef4444',
 				},
 			},
+			'dark',
 		],
-		darkTheme: false,
+		darkTheme: 'dark',
 	},
 }

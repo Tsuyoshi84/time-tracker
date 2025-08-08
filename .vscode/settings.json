@@ -57,6 +57,14 @@
 	"files.autoSave": "afterDelay",
 	"files.autoSaveDelay": 1000,
 	"files.autoSaveWhenNoErrors": true,
+	"github.copilot.chat.agent.terminal.allowList": {
+		"pnpm build": true,
+		"pnpm check": true,
+		"pnpm codegen": true,
+		"pnpm lint": true,
+		"pnpm test": true,
+		"pnpm typecheck": true
+	},
 	"github.copilot.chat.agent.thinkingTool": true,
 	"javascript.preferences.importModuleSpecifierEnding": "js",
 	"typescript.preferences.importModuleSpecifierEnding": "js",

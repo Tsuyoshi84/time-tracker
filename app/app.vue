@@ -15,7 +15,6 @@ useSeoMeta({
 useHead({
 	htmlAttrs: {
 		lang: 'en',
-		'data-theme': 'light',
 	},
 	meta: [
 		{ name: 'viewport', content: 'width=device-width, initial-scale=1' },
