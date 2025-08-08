@@ -29,7 +29,8 @@
 			},
 			"nursery": {
 				"useConsistentObjectDefinition": "on",
-				"useIndexOf": "on"
+				"useIndexOf": "on",
+				"useConsistentTypeDefinitions": "error"
 			},
 			"style": {
 				"noNestedTernary": "on",
