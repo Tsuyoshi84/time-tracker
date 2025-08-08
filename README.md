@@ -31,6 +31,11 @@ A professional time tracking application built for freelance engineers with flex
 - **Automatic backup** - No data loss between sessions
 - **Fast queries** - Efficient date-based data retrieval
 
+### 🌓 Theme
+
+- **Light/Dark theme toggle** in the top-right of the header
+- **Defaults to system preference**, persists explicit choice in localStorage
+
 ## Technical Stack
 
 - **Framework**: Nuxt 4 with TypeScript
@@ -112,7 +117,7 @@ All data is stored locally in your browser's IndexedDB. This means:
 
 ### File Structure
 
-```
+```text
 app/
 ├── components/          # Vue components
 ├── composables/         # Composable functions
@@ -123,13 +128,15 @@ app/
 └── assets/css/         # Stylesheets
 ```
 
+### Theme System
 
+- Managed by VueUse `useColorMode` via a small `useTheme` composable
+- DaisyUI reads the current theme from `data-theme` on `<html>`; Tailwind `dark:` utilities are synced using the `dark` class
+- Preference persists to `localStorage` under the key `theme-preference`. To follow the system again, clear this key or add an "Auto" option in the UI and call `setPreference(undefined)`
 
 ## License
 
 MIT License - feel free to use and modify for your own projects.
-
-
 
 ---
 
