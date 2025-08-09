@@ -1,7 +1,22 @@
-import { mount } from '@vue/test-utils'
-import { describe, expect, it } from 'vitest'
+import userEvent from '@testing-library/user-event'
+import { cleanup, render, screen } from '@testing-library/vue'
+import { afterEach, describe, expect, it } from 'vitest'
 import type { WeekDay } from '~/types/index.ts'
 import DaySummaryCard from './DaySummaryCard.vue'
+
+// Type augmentation for jest-dom matchers
+declare module 'vitest' {
+	interface Assertion<T = any> extends jest.Matchers<void> {
+		toBeInTheDocument(): void
+		toHaveClass(className: string): void
+		toHaveAttribute(name: string, value?: string): void
+	}
+}
+
+// Clean up after each test
+afterEach(() => {
+	cleanup()
+})
 
 describe('DaySummaryCard', () => {
 	const baseWeekDay: WeekDay = {
@@ -13,7 +28,7 @@ describe('DaySummaryCard', () => {
 	}
 
 	it('should render correctly with basic props', () => {
-		const wrapper = mount(DaySummaryCard, {
+		render(DaySummaryCard, {
 			props: {
 				weekDay: baseWeekDay,
 				selected: false,
@@ -21,11 +36,11 @@ describe('DaySummaryCard', () => {
 			},
 		})
 
-		expect(wrapper.exists()).toBe(true)
+		expect(screen.getByRole('button')).toBeInTheDocument()
 	})
 
 	it('should display formatted date and day name', () => {
-		const wrapper = mount(DaySummaryCard, {
+		const { container } = render(DaySummaryCard, {
 			props: {
 				weekDay: baseWeekDay,
 				selected: false,
@@ -33,13 +48,13 @@ describe('DaySummaryCard', () => {
 			},
 		})
 
-		const dateText = wrapper.find('.text-gray-500.text-xs').text()
-		expect(dateText).toContain('Jan 15') // formatted date
-		expect(dateText).toContain('(Mon)') // day name
+		// The text is in one element but split by spaces, so we use textContent
+		const dateElement = container.querySelector('.text-gray-500.text-xs')
+		expect(dateElement?.textContent?.trim()).toBe('Jan 15 (Mon)')
 	})
 
 	it('should display formatted duration correctly', () => {
-		const wrapper = mount(DaySummaryCard, {
+		render(DaySummaryCard, {
 			props: {
 				weekDay: { ...baseWeekDay, totalDuration: 3661000 }, // 1 hour, 1 minute, 1 second in milliseconds
 				selected: false,
@@ -47,12 +62,11 @@ describe('DaySummaryCard', () => {
 			},
 		})
 
-		const durationText = wrapper.find('.text-2xl.font-semibold').text()
-		expect(durationText).toBe('1:01:01')
+		expect(screen.getByText('1:01:01')).toBeInTheDocument()
 	})
 
 	it('should display session count correctly with singular form', () => {
-		const wrapper = mount(DaySummaryCard, {
+		render(DaySummaryCard, {
 			props: {
 				weekDay: { ...baseWeekDay, sessionCount: 1 },
 				selected: false,
@@ -60,12 +74,11 @@ describe('DaySummaryCard', () => {
 			},
 		})
 
-		const sessionText = wrapper.find('.text-xs.text-gray-500.mt-1').text()
-		expect(sessionText).toBe('1 session')
+		expect(screen.getByText('1 session')).toBeInTheDocument()
 	})
 
 	it('should display session count correctly with plural form', () => {
-		const wrapper = mount(DaySummaryCard, {
+		render(DaySummaryCard, {
 			props: {
 				weekDay: { ...baseWeekDay, sessionCount: 3 },
 				selected: false,
@@ -73,12 +86,11 @@ describe('DaySummaryCard', () => {
 			},
 		})
 
-		const sessionText = wrapper.find('.text-xs.text-gray-500.mt-1').text()
-		expect(sessionText).toBe('3 sessions')
+		expect(screen.getByText('3 sessions')).toBeInTheDocument()
 	})
 
 	it('should apply selected styling when selected prop is true', () => {
-		const wrapper = mount(DaySummaryCard, {
+		render(DaySummaryCard, {
 			props: {
 				weekDay: baseWeekDay,
 				selected: true,
@@ -86,13 +98,13 @@ describe('DaySummaryCard', () => {
 			},
 		})
 
-		const appCard = wrapper.find('[role="button"]')
-		expect(appCard.classes()).toContain('border-2')
-		expect(appCard.classes()).toContain('border-gray-400')
+		const button = screen.getByRole('button')
+		expect(button).toHaveClass('border-2')
+		expect(button).toHaveClass('border-gray-400')
 	})
 
 	it('should apply today styling when isToday is true', () => {
-		const wrapper = mount(DaySummaryCard, {
+		render(DaySummaryCard, {
 			props: {
 				weekDay: { ...baseWeekDay, isToday: true },
 				selected: false,
@@ -100,13 +112,13 @@ describe('DaySummaryCard', () => {
 			},
 		})
 
-		const appCard = wrapper.find('[role="button"]')
-		expect(appCard.classes()).toContain('border-secondary')
-		expect(appCard.classes()).toContain('bg-secondary/10')
+		const button = screen.getByRole('button')
+		expect(button).toHaveClass('border-secondary')
+		expect(button).toHaveClass('bg-secondary/10')
 	})
 
 	it('should apply primary color to duration when totalDuration > 0', () => {
-		const wrapper = mount(DaySummaryCard, {
+		const { container } = render(DaySummaryCard, {
 			props: {
 				weekDay: { ...baseWeekDay, totalDuration: 3600000 }, // 1 hour in milliseconds
 				selected: false,
@@ -114,12 +126,12 @@ describe('DaySummaryCard', () => {
 			},
 		})
 
-		const durationElement = wrapper.find('.text-2xl.font-semibold')
-		expect(durationElement.classes()).toContain('text-primary')
+		const durationElement = container.querySelector('.text-2xl.font-semibold')
+		expect(durationElement).toHaveClass('text-primary')
 	})
 
 	it('should apply gray color to duration when totalDuration is 0', () => {
-		const wrapper = mount(DaySummaryCard, {
+		const { container } = render(DaySummaryCard, {
 			props: {
 				weekDay: { ...baseWeekDay, totalDuration: 0 },
 				selected: false,
@@ -127,12 +139,12 @@ describe('DaySummaryCard', () => {
 			},
 		})
 
-		const durationElement = wrapper.find('.text-2xl.font-semibold')
-		expect(durationElement.classes()).toContain('text-gray-400')
+		const durationElement = container.querySelector('.text-2xl.font-semibold')
+		expect(durationElement).toHaveClass('text-gray-400')
 	})
 
 	it('should apply secondary color to session count when sessionCount > 0', () => {
-		const wrapper = mount(DaySummaryCard, {
+		const { container } = render(DaySummaryCard, {
 			props: {
 				weekDay: { ...baseWeekDay, sessionCount: 2 },
 				selected: false,
@@ -140,12 +152,12 @@ describe('DaySummaryCard', () => {
 			},
 		})
 
-		const sessionElement = wrapper.find('.text-xs.text-gray-500.mt-1')
-		expect(sessionElement.classes()).toContain('text-secondary')
+		const sessionElement = container.querySelector('.text-xs.text-gray-500.mt-1')
+		expect(sessionElement).toHaveClass('text-secondary')
 	})
 
 	it('should apply gray color to session count when sessionCount is 0', () => {
-		const wrapper = mount(DaySummaryCard, {
+		const { container } = render(DaySummaryCard, {
 			props: {
 				weekDay: { ...baseWeekDay, sessionCount: 0 },
 				selected: false,
@@ -153,12 +165,13 @@ describe('DaySummaryCard', () => {
 			},
 		})
 
-		const sessionElement = wrapper.find('.text-xs.text-gray-500.mt-1')
-		expect(sessionElement.classes()).toContain('text-gray-400')
+		const sessionElement = container.querySelector('.text-xs.text-gray-500.mt-1')
+		expect(sessionElement).toHaveClass('text-gray-400')
 	})
 
 	it('should emit selectDay event when clicked and not disabled', async () => {
-		const wrapper = mount(DaySummaryCard, {
+		const user = userEvent.setup()
+		const { emitted } = render(DaySummaryCard, {
 			props: {
 				weekDay: baseWeekDay,
 				selected: false,
@@ -166,14 +179,16 @@ describe('DaySummaryCard', () => {
 			},
 		})
 
-		await wrapper.find('[role="button"]').trigger('click')
+		const button = screen.getByRole('button')
+		await user.click(button)
 
-		expect(wrapper.emitted()).toHaveProperty('selectDay')
-		expect(wrapper.emitted('selectDay')).toEqual([['2024-01-15']])
+		expect(emitted()).toHaveProperty('selectDay')
+		expect(emitted('selectDay')).toEqual([['2024-01-15']])
 	})
 
 	it('should not emit selectDay event when clicked and disabled', async () => {
-		const wrapper = mount(DaySummaryCard, {
+		const user = userEvent.setup()
+		const { emitted } = render(DaySummaryCard, {
 			props: {
 				weekDay: baseWeekDay,
 				selected: false,
@@ -181,13 +196,14 @@ describe('DaySummaryCard', () => {
 			},
 		})
 
-		await wrapper.find('[role="button"]').trigger('click')
+		const button = screen.getByRole('button')
+		await user.click(button)
 
-		expect(wrapper.emitted()).not.toHaveProperty('selectDay')
+		expect(emitted()).not.toHaveProperty('selectDay')
 	})
 
 	it('should have correct accessibility attributes when selected', () => {
-		const wrapper = mount(DaySummaryCard, {
+		render(DaySummaryCard, {
 			props: {
 				weekDay: baseWeekDay,
 				selected: true,
@@ -195,14 +211,14 @@ describe('DaySummaryCard', () => {
 			},
 		})
 
-		const button = wrapper.find('[role="button"]')
-		expect(button.attributes('aria-pressed')).toBe('true')
-		expect(button.attributes('aria-disabled')).toBe('false')
-		expect(button.attributes('tabindex')).toBe('0')
+		const button = screen.getByRole('button')
+		expect(button).toHaveAttribute('aria-pressed', 'true')
+		expect(button).toHaveAttribute('aria-disabled', 'false')
+		expect(button).toHaveAttribute('tabindex', '0')
 	})
 
 	it('should have correct accessibility attributes when not selected', () => {
-		const wrapper = mount(DaySummaryCard, {
+		render(DaySummaryCard, {
 			props: {
 				weekDay: baseWeekDay,
 				selected: false,
@@ -210,14 +226,14 @@ describe('DaySummaryCard', () => {
 			},
 		})
 
-		const button = wrapper.find('[role="button"]')
-		expect(button.attributes('aria-pressed')).toBe('false')
-		expect(button.attributes('aria-disabled')).toBe('false')
-		expect(button.attributes('tabindex')).toBe('0')
+		const button = screen.getByRole('button')
+		expect(button).toHaveAttribute('aria-pressed', 'false')
+		expect(button).toHaveAttribute('aria-disabled', 'false')
+		expect(button).toHaveAttribute('tabindex', '0')
 	})
 
 	it('should have correct accessibility attributes when disabled', () => {
-		const wrapper = mount(DaySummaryCard, {
+		render(DaySummaryCard, {
 			props: {
 				weekDay: baseWeekDay,
 				selected: false,
@@ -225,13 +241,13 @@ describe('DaySummaryCard', () => {
 			},
 		})
 
-		const button = wrapper.find('[role="button"]')
-		expect(button.attributes('aria-disabled')).toBe('true')
-		expect(button.attributes('tabindex')).toBe('-1')
+		const button = screen.getByRole('button')
+		expect(button).toHaveAttribute('aria-disabled', 'true')
+		expect(button).toHaveAttribute('tabindex', '-1')
 	})
 
 	it('should display zero duration correctly', () => {
-		const wrapper = mount(DaySummaryCard, {
+		const { container } = render(DaySummaryCard, {
 			props: {
 				weekDay: { ...baseWeekDay, totalDuration: 0 },
 				selected: false,
@@ -239,12 +255,11 @@ describe('DaySummaryCard', () => {
 			},
 		})
 
-		const durationText = wrapper.find('.text-2xl.font-semibold').text()
-		expect(durationText).toBe('0:00:00')
+		expect(container.querySelector('.text-2xl')?.textContent?.trim()).toBe('0:00:00')
 	})
 
 	it('should handle zero sessions correctly', () => {
-		const wrapper = mount(DaySummaryCard, {
+		const { container } = render(DaySummaryCard, {
 			props: {
 				weekDay: { ...baseWeekDay, sessionCount: 0 },
 				selected: false,
@@ -252,7 +267,8 @@ describe('DaySummaryCard', () => {
 			},
 		})
 
-		const sessionText = wrapper.find('.text-xs.text-gray-500.mt-1').text()
-		expect(sessionText).toBe('0 sessions')
+		// Get the session count element - it's the last .text-xs element
+		const sessionElement = container.querySelector('.text-xs.text-gray-500.mt-1')
+		expect(sessionElement?.textContent?.trim()).toBe('0 sessions')
 	})
 })
