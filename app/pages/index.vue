@@ -5,6 +5,7 @@ import AppCard from '~/components/AppCard.vue'
 import SessionList from '~/components/SessionList.vue'
 import TimerDisplay from '~/components/TimerDisplay.vue'
 import { useTimeTracker } from '~/composables/useTimeTracker.ts'
+import { convertToDateString } from '~/utils/convertToDateString.ts'
 import { formatDuration } from '~/utils/formatDuration.ts'
 
 // Use the time tracker composable
@@ -35,7 +36,23 @@ function handleDateChange() {
 	selectDate(selectedDateInput.value)
 }
 
-const weeklyTotal = useSum(() => dailyStats.value.map((day) => day.totalDuration))
+const weeklyTotal = useSum(() => {
+	const baseTotal = dailyStats.value.map((day) => day.totalDuration)
+
+	// Add current session duration if timer is running and session is for today
+	if (timerState.value.isRunning && timerState.value.currentSession) {
+		const today = convertToDateString(new Date())
+		if (timerState.value.currentSession.date === today) {
+			// Find today's stats and add current session duration
+			const todayIndex = dailyStats.value.findIndex((day) => day.date === today)
+			if (todayIndex >= 0 && baseTotal[todayIndex] !== undefined) {
+				baseTotal[todayIndex] += currentSessionDuration.value
+			}
+		}
+	}
+
+	return baseTotal
+})
 
 const dailyAverage = useRound(() => weeklyTotal.value / 7)
 
