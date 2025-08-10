@@ -4,15 +4,6 @@ import { afterEach, describe, expect, it } from 'vitest'
 import type { WeekDay } from '~/types/index.ts'
 import DaySummaryCard from './DaySummaryCard.vue'
 
-// Type augmentation for jest-dom matchers
-declare module 'vitest' {
-	interface Assertion<T = any> extends jest.Matchers<void> {
-		toBeInTheDocument(): void
-		toHaveClass(className: string): void
-		toHaveAttribute(name: string, value?: string): void
-	}
-}
-
 // Clean up after each test
 afterEach(() => {
 	cleanup()
