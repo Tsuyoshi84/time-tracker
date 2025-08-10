@@ -1,6 +1,7 @@
 ---
-applyTo: "**/*.ts,app/**/*.vue"
+applyTo: '**/*.ts,app/**/*.vue'
 ---
+
 # Rules for TypeScript
 
 This rule provides standards for TypeScript.
@@ -44,8 +45,7 @@ const { load: loadEvents, loading: loadingEvents, result: resultEvents } = useLi
 - Write JSDoc comments for all exported functions, variables, and types for better readability and understanding.
 - In JSDoc, `@return` annotation can be omitted since it's self-explanatory in most cases.
 - Document complex functions with clear examples.
-- Use Japanese for JSDoc comments.
-- Don't use 丁寧語 (です, ます) in JSDoc comments.
+- JSDoc must explain the purpose and behavior of the code clearly and correctly.
 
 ## Naming Conventions
 
