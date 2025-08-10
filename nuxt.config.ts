@@ -18,6 +18,7 @@ export default defineNuxtConfig({
 			},
 		],
 		'@sentry/nuxt/module',
+		'@nuxt/test-utils/module',
 	],
 
 	ssr: false,
