@@ -43,7 +43,6 @@ const { load: loadEvents, loading: loadingEvents, result: resultEvents } = useLi
 ## Documents
 
 - Write JSDoc comments for all exported functions, variables, and types for better readability and understanding.
-- In JSDoc, `@return` annotation can be omitted since it's self-explanatory in most cases.
 - Document complex functions with clear examples.
 - JSDoc must explain the purpose and behavior of the code clearly and correctly.
 
