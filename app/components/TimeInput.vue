@@ -2,7 +2,8 @@
 /**
  * TimeInput provides an editable time input field that allows users to enter and modify time values in HH:MM format.
  */
-import { computed, nextTick, ref } from 'vue'
+
+import { computed, nextTick, ref, useTemplateRef } from 'vue'
 
 const props = withDefaults(
 	defineProps<{
@@ -17,7 +18,6 @@ const emit = defineEmits<{
 	update: [value: string]
 }>()
 
-const inputRef = ref<HTMLInputElement>()
 const isEditing = ref(false)
 const editValue = ref('')
 
@@ -25,6 +25,8 @@ const hasError = computed(() => {
 	if (!editValue.value) return false
 	return !isValidTimeFormat(editValue.value)
 })
+
+const inputRef = useTemplateRef<HTMLInputElement>('inputRef')
 
 function startEdit() {
 	if (props.disabled) return
@@ -78,7 +80,7 @@ function isValidTimeFormat(timeString: string): boolean {
 		>
 		<button
 			v-else
-			class="input border input-sm w-20 text-lg content-center grid font-mono bg-transparent border-transparent hover:border-gray-300 hover:bg-gray-50 transition-all"
+			class="input border input-sm w-20 text-lg content-center grid font-mono bg-transparent border-transparent hover:border-gray-300 hover:dark:border-gray-900 hover:bg-gray-50 hover:dark:bg-gray-800 transition-all"
 			:class="{ 'cursor-not-allowed bg-transparent': disabled }"
 			:disabled="disabled"
 			type="button"
