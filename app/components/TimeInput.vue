@@ -5,29 +5,19 @@
 
 import { computed, nextTick, ref, useTemplateRef } from 'vue'
 
-const inputRef = useTemplateRef<HTMLInputElement>('inputRef')
-
-const hasError = computed<boolean>(() => {
-  if (!editValue.value) return false
-  return !isValidTimeFormat(editValue.value)
-})
-
-// …apply `computed<boolean>` to your other computed() calls below as well.
-
 const props = withDefaults(
 	defineProps<{
 		value: string
 		disabled?: boolean
 		readonly?: boolean
 	}>(),
-	{},
+	{}
 )
 
 const emit = defineEmits<{
 	update: [value: string]
 }>()
 
-const inputRef = ref<HTMLInputElement>()
 const isEditing = ref(false)
 const editValue = ref('')
 
@@ -35,6 +25,8 @@ const hasError = computed(() => {
 	if (!editValue.value) return false
 	return !isValidTimeFormat(editValue.value)
 })
+
+const inputRef = useTemplateRef<HTMLInputElement>('inputRef')
 
 function startEdit() {
 	if (props.disabled) return
@@ -80,7 +72,7 @@ function isValidTimeFormat(timeString: string): boolean {
 			@blur="finishEdit"
 			@keydown.enter="finishEdit"
 			@keydown.escape="cancelEdit"
-		>
+		/>
 		<span
 			v-else-if="props.readonly"
 			class="input border input-sm w-20 text-lg content-center grid font-mono bg-transparent border-transparent text-center"
@@ -88,7 +80,7 @@ function isValidTimeFormat(timeString: string): boolean {
 		>
 		<button
 			v-else
-			class="input border input-sm w-20 text-lg content-center grid font-mono bg-transparent border-transparent hover:border-gray-300 hover:bg-gray-50 transition-all"
+			class="input border input-sm w-20 text-lg content-center grid font-mono bg-transparent border-transparent hover:border-gray-300 hover:dark:border-gray-900 hover:bg-gray-50 hover:dark:bg-gray-800 transition-all"
 			:class="{ 'cursor-not-allowed bg-transparent': disabled }"
 			:disabled="disabled"
 			type="button"
