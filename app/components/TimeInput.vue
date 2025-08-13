@@ -3,7 +3,16 @@
  * TimeInput provides an editable time input field that allows users to enter and modify time values in HH:MM format.
  */
 
-import { computed, nextTick, ref } from 'vue'
+import { computed, nextTick, ref, useTemplateRef } from 'vue'
+
+const inputRef = useTemplateRef<HTMLInputElement>('inputRef')
+
+const hasError = computed<boolean>(() => {
+  if (!editValue.value) return false
+  return !isValidTimeFormat(editValue.value)
+})
+
+// …apply `computed<boolean>` to your other computed() calls below as well.
 
 const props = withDefaults(
 	defineProps<{
