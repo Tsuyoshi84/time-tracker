@@ -19,6 +19,7 @@ export default defineNuxtConfig({
 		],
 		'@sentry/nuxt/module',
 		'@nuxt/test-utils/module',
+		'z-vue-scan-nuxt-module',
 	],
 
 	ssr: false,
@@ -78,5 +79,11 @@ export default defineNuxtConfig({
 		}),
 
 		autoInjectServerSentry: 'top-level-import',
+	},
+
+	vueScan: {
+		// Enable only in development mode for performance troubleshooting
+		enable: process.env.NODE_ENV === 'development',
+		hideComponentName: false,
 	},
 })

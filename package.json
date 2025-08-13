@@ -43,7 +43,8 @@
     "happy-dom": "^18.0.1",
     "typescript": "^5.8.3",
     "vitest": "^3.2.4",
-    "vue-tsc": "^3.0.1"
+    "vue-tsc": "^3.0.1",
+    "z-vue-scan-nuxt-module": "^0.0.35"
   },
   "pnpm": {
     "overrides": {
