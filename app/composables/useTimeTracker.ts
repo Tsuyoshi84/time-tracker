@@ -1,3 +1,4 @@
+import * as Sentry from '@sentry/nuxt'
 import { useDocumentVisibility, useIntervalFn } from '@vueuse/core'
 import { computed, onMounted, onUnmounted, shallowReadonly, shallowRef, watch } from 'vue'
 import type { DateString, DayStats, Milliseconds, TimerState, TimeSession } from '../types/index.ts'
@@ -146,6 +147,8 @@ export function useTimeTracker() {
 
 		await refreshCurrentDateSessions()
 		resume()
+
+		Sentry.logger.info('Timer started', { startTime: now.toISOString() })
 	}
 
 	async function pauseTimer(): Promise<void> {
@@ -169,6 +172,11 @@ export function useTimeTracker() {
 
 		await refreshCurrentDateSessions()
 		pause()
+
+		Sentry.logger.info('Timer paused', {
+			endTime: endTime.toISOString(),
+			duration,
+		})
 	}
 
 	async function loadSessionsForDate(date: DateString): Promise<void> {

@@ -23,6 +23,11 @@ useHead({
 	],
 	link: [{ rel: 'icon', type: 'image/svg+xml', href: '/favicon.svg' }],
 })
+
+onMounted(() => {
+	// biome-ignore lint/suspicious/noConsole: Logging for Sentry demo purposes
+	console.log('App mounted')
+})
 </script>
 
 <template>
