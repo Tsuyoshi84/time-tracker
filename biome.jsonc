@@ -21,15 +21,14 @@
 		"rules": {
 			"recommended": true,
 			"complexity": {
-				"noForEach": "error"
+				"noForEach": "error",
+				"useIndexOf": "on"
 			},
 			"correctness": {
 				"noUnusedImports": "warn",
 				"noUnusedVariables": "warn"
 			},
 			"nursery": {
-				"useConsistentObjectDefinition": "on",
-				"useIndexOf": "on",
 				"useConsistentTypeDefinitions": "error"
 			},
 			"style": {
@@ -38,7 +37,8 @@
 				"useExplicitLengthCheck": "error",
 				"useImportType": "warn",
 				"useNumberNamespace": "error",
-				"useCollapsedIf": "error"
+				"useCollapsedIf": "error",
+				"useConsistentObjectDefinitions": "on"
 			},
 			"suspicious": {
 				"noConsole": "warn"
@@ -84,6 +84,16 @@
 					},
 					"suspicious": {
 						"noExplicitAny": "off"
+					}
+				}
+			}
+		},
+		{
+			"includes": ["**/*.css"],
+			"linter": {
+				"rules": {
+					"suspicious": {
+						"noUnknownAtRules": "off"
 					}
 				}
 			}
