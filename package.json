@@ -17,38 +17,39 @@
     "test:run": "vitest run"
   },
   "dependencies": {
-    "@nuxt/eslint": "1.5.2",
+    "@nuxt/eslint": "1.9.0",
     "@nuxt/fonts": "^0.11.4",
     "@nuxtjs/tailwindcss": "^6.14.0",
-    "@sentry/nuxt": "^9.41.0",
-    "@vue-macros/nuxt": "3.0.0-beta.20",
-    "@vueuse/core": "^13.5.0",
-    "@vueuse/math": "^13.5.0",
-    "@vueuse/nuxt": "^13.5.0",
-    "daisyui": "^5.0.46",
-    "dexie": "^4.0.11",
-    "eslint": "^9.0.0",
+    "@sentry/nuxt": "^10.11.0",
+    "@vue-macros/nuxt": "3.0.0-beta.23",
+    "@vueuse/core": "^13.9.0",
+    "@vueuse/math": "^13.9.0",
+    "@vueuse/nuxt": "^13.9.0",
+    "daisyui": "^5.1.10",
+    "dexie": "^4.2.0",
+    "eslint": "^9.35.0",
     "import-in-the-middle": "^1.14.2",
-    "lucide-vue-next": "^0.525.0",
-    "nuxt": "^4.0.1",
-    "vue": "^3.5.17",
+    "lucide-vue-next": "^0.544.0",
+    "nuxt": "^4.1.2",
+    "vue": "^3.5.21",
     "vue-router": "^4.5.1"
   },
   "devDependencies": {
-    "@biomejs/biome": "^2.1.4",
+    "@biomejs/biome": "^2.2.4",
     "@nuxt/test-utils": "^3.19.2",
-    "@testing-library/jest-dom": "^6.6.4",
+    "@testing-library/jest-dom": "^6.8.0",
     "@testing-library/user-event": "^14.6.1",
     "@testing-library/vue": "^8.1.0",
     "happy-dom": "^18.0.1",
-    "typescript": "^5.8.3",
+    "typescript": "^5.9.2",
     "vitest": "^3.2.4",
-    "vue-tsc": "^3.0.1",
+    "vue-tsc": "^3.0.7",
     "z-vue-scan-nuxt-module": "^0.0.35"
   },
   "pnpm": {
     "overrides": {
-      "@vercel/nft": "^0.27.4"
+      "@vercel/nft": "^0.27.4",
+      "vite": "npm:rolldown-vite@latest"
     }
   }
 }
