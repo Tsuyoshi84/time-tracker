@@ -1,5 +1,6 @@
 ---
-applyTo: "**/*.ts,app/**/*.vue"
+fileMatchPattern: "**/*.ts,app/**/*.vue"
+inclusion: fileMatch
 ---
 # Rules for TypeScript
 

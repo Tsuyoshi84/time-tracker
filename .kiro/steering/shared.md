@@ -1,5 +1,6 @@
 ---
-applyTo: "shared/**/*.ts"
+fileMatchPattern: "shared/**/*.ts"
+inclusion: fileMatch
 ---
 # Shared directory
 

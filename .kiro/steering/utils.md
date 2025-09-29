@@ -1,5 +1,6 @@
 ---
-applyTo: "app/utils/**/*.ts"
+fileMatchPattern: "app/utils/**/*.ts"
+inclusion: fileMatch
 ---
 # Rules for utils functions
 

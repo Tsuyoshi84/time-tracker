@@ -1,5 +1,6 @@
 ---
-applyTo: "app/**/*.vue"
+fileMatchPattern: "app/**/*.vue"
+inclusion: fileMatch
 ---
 # Vue component rules
 

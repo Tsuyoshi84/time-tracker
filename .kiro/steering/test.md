@@ -1,5 +1,6 @@
 ---
-applyTo: "**/*.spec.ts"
+fileMatchPattern: "**/*.spec.ts"
+inclusion: fileMatch
 ---
 # Rules for tests
 
