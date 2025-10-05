@@ -54,6 +54,9 @@
 		"*.tsx": "$(capture).ts, $(capture).*.tsx, $(capture)_*.ts, $(capture)_*.tsx",
 		"*.vue": "$(capture).*.ts, $(capture).*.js, $(capture).story.vue"
 	},
+	"files.associations": {
+		"*.css": "tailwindcss"
+	},
 	"files.autoSave": "afterDelay",
 	"files.autoSaveDelay": 1000,
 	"files.autoSaveWhenNoErrors": true,
@@ -67,6 +70,8 @@
 	},
 	"github.copilot.chat.agent.thinkingTool": true,
 	"javascript.preferences.importModuleSpecifierEnding": "js",
+	"tailwindCSS.classAttributes": ["class", "ui"],
+	"tailwindCSS.experimental.classRegex": [["ui:\\s*{([^)]*)\\s*}", "(?:'|\"|`)([^']*)(?:'|\"|`)"]],
 	"typescript.preferences.importModuleSpecifierEnding": "js",
 	"typescript.preferences.preferTypeOnlyAutoImports": true,
 	"typescript.preferGoToSourceDefinition": true,

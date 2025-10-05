@@ -8,7 +8,7 @@ if (!process.env.SENTRY_AUTH_TOKEN) {
 export default defineNuxtConfig({
 	modules: [
 		'@nuxt/eslint',
-		'@nuxtjs/tailwindcss',
+		'@nuxt/ui',
 		'@vue-macros/nuxt',
 		'@vueuse/nuxt',
 		[
