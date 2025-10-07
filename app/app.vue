@@ -1,4 +1,6 @@
 <script setup lang="ts">
+import type { NavigationMenuItem } from '@nuxt/ui'
+
 // Global meta tags
 useSeoMeta({
 	title: 'Time Tracker - Freelance Time Management',
@@ -24,15 +26,45 @@ useHead({
 	link: [{ rel: 'icon', type: 'image/svg+xml', href: '/favicon.svg' }],
 })
 
-onMounted(() => {
-	// biome-ignore lint/suspicious/noConsole: Logging for Sentry demo purposes
-	console.log('App mounted')
-})
+const items: NavigationMenuItem[][] = [
+	[
+		{
+			label: 'Dashboard',
+			icon: 'i-lucide-clock',
+			to: '/',
+		},
+		{
+			label: 'Weekly',
+			icon: 'i-lucide-calendar',
+			to: '/weekly',
+		},
+	],
+]
 </script>
 
 <template>
 	<UApp>
-		<NuxtPage />
+		<UHeader title="Time Tracker">
+			<template #title>
+				<Timer class="w-8 h-8 text-primary" />
+				<h1 class="text-2xl font-bold text-primary">Time Tracker</h1>
+			</template>
+
+			<template #right>
+				<nav class="flex items-center space-x-2">
+					<UNavigationMenu
+						color="neutral"
+						variant="link"
+						:items="items"
+						class="w-full"
+					/>
+					<UColorModeButton />
+				</nav>
+			</template>
+		</UHeader>
+		<UMain>
+			<NuxtPage />
+		</UMain>
 	</UApp>
 </template>
 
