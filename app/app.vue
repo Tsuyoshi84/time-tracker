@@ -62,7 +62,7 @@ const items: NavigationMenuItem[][] = [
 				</nav>
 			</template>
 		</UHeader>
-		<UMain>
+		<UMain class="py-4">
 			<NuxtPage />
 		</UMain>
 	</UApp>

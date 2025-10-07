@@ -53,7 +53,6 @@ useSeoMeta({
 		<div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
 			<!-- Timer Section -->
 			<div class="space-y-6">
-				<h2 class="text-2xl font-bold text-center">Timer</h2>
 				<TimerDisplay
 					:is-running="timerState.isRunning"
 					:current-session-duration="currentSessionDuration"
@@ -76,7 +75,7 @@ useSeoMeta({
 							class="input input-bordered input-sm"
 							:disabled="loading"
 							@change="handleDateChange"
-						>
+						/>
 					</div>
 				</div>
 
