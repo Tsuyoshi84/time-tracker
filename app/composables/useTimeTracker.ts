@@ -1,6 +1,6 @@
 import * as Sentry from '@sentry/nuxt'
 import { useDocumentVisibility, useIntervalFn } from '@vueuse/core'
-import { computed, onMounted, onUnmounted, shallowReadonly, shallowRef, watch } from 'vue'
+import { computed, onMounted, onUnmounted, type Ref, shallowReadonly, shallowRef, watch } from 'vue'
 import type { DateString, DayStats, Milliseconds, TimerState, TimeSession } from '../types/index.ts'
 import { convertToDateString } from '../utils/convertToDateString.ts'
 import {
