@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { CalendarDate, DateFormatter, getLocalTimeZone } from '@internationalized/date'
 import type { DateString } from '~/types/index.ts'
+import { calendarDateToDateString } from '~/utils/calendarDateToDateString.ts'
 
 const dateString = defineModel<DateString>({ required: true })
 
@@ -14,7 +15,7 @@ const date = computed<CalendarDate>({
 		return new CalendarDate(year!, month!, day!)
 	},
 	set(value) {
-		dateString.value = value.toString() as DateString
+		dateString.value = calendarDateToDateString(value)
 	},
 })
 </script>
