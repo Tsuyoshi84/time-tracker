@@ -8,7 +8,7 @@ if (!process.env.SENTRY_AUTH_TOKEN) {
 export default defineNuxtConfig({
 	modules: [
 		'@nuxt/eslint',
-		'@nuxtjs/tailwindcss',
+		'@nuxt/ui',
 		'@vue-macros/nuxt',
 		'@vueuse/nuxt',
 		[
@@ -83,7 +83,7 @@ export default defineNuxtConfig({
 
 	vueScan: {
 		// Enable only in development mode for performance troubleshooting
-		enable: process.env.NODE_ENV === 'development',
+		enable: false, // process.env.NODE_ENV === 'development',
 		hideComponentName: false,
 	},
 })

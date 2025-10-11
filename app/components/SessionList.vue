@@ -2,7 +2,7 @@
 /**
  * SessionList displays and manages time tracking sessions, allowing users to view, edit, and delete session entries.
  */
-import { Clock, Plus, Trash2 } from 'lucide-vue-next'
+import { Clock } from 'lucide-vue-next'
 import type { TimeSession } from '~/types/index.ts'
 import { calculateDuration } from '~/utils/calculateDuration.ts'
 import { formatDuration } from '~/utils/formatDuration.ts'
@@ -70,15 +70,16 @@ function getSessionErrors(session: TimeSession): ValidationError[] {
 	<div class="space-y-4">
 		<div class="flex items-center justify-between">
 			<h3 class="text-lg font-semibold">Sessions</h3>
-			<button
-				class="btn btn-sm btn-primary"
+			<UButton
+				color="primary"
+				size="sm"
 				:disabled="loading"
 				type="button"
+				icon="i-lucide-plus"
 				@click="$emit('addManualSession')"
 			>
-				<Plus class="w-4 h-4 mr-1" />
 				Add Session
-			</button>
+			</UButton>
 		</div>
 
 		<div
@@ -139,15 +140,15 @@ function getSessionErrors(session: TimeSession): ValidationError[] {
 
 					<!-- Actions -->
 					<div class="flex items-center space-x-2">
-						<button
+						<UButton
 							v-if="!session.isActive"
-							type="button"
-							class="btn btn-sm btn-ghost text-red-500 hover:bg-red-50"
+							icon="i-lucide-trash-2"
+							size="md"
+							color="error"
+							variant="soft"
 							:disabled="loading"
 							@click="deleteSession(session)"
-						>
-							<Trash2 class="w-4 h-4" />
-						</button>
+						/>
 					</div>
 				</div>
 

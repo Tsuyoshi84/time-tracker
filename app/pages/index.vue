@@ -2,6 +2,7 @@
 import { useRound, useSum } from '@vueuse/math'
 import { shallowRef, watch } from 'vue'
 import AppCard from '~/components/AppCard.vue'
+import AppDateInput from '~/components/AppDateInput.vue'
 import SessionList from '~/components/SessionList.vue'
 import TimerDisplay from '~/components/TimerDisplay.vue'
 import { useTimeTracker } from '~/composables/useTimeTracker.ts'
@@ -31,9 +32,9 @@ watch(selectedDate, (newDate) => {
 	selectedDateInput.value = newDate
 })
 
-function handleDateChange() {
+watch(selectedDateInput, () => {
 	selectDate(selectedDateInput.value)
-}
+})
 
 const weeklyTotal = useSum(() => dailyStats.value.map((day) => day.totalDuration))
 
@@ -53,7 +54,6 @@ useSeoMeta({
 		<div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
 			<!-- Timer Section -->
 			<div class="space-y-6">
-				<h2 class="text-2xl font-bold text-center">Timer</h2>
 				<TimerDisplay
 					:is-running="timerState.isRunning"
 					:current-session-duration="currentSessionDuration"
@@ -70,13 +70,7 @@ useSeoMeta({
 				<div class="flex items-center justify-between">
 					<h2 class="text-2xl font-bold">Today's Sessions</h2>
 					<div class="flex items-center space-x-2">
-						<input
-							v-model="selectedDateInput"
-							type="date"
-							class="input input-bordered input-sm"
-							:disabled="loading"
-							@change="handleDateChange"
-						>
+						<AppDateInput v-model="selectedDateInput" />
 					</div>
 				</div>
 
