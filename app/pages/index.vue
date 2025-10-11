@@ -2,6 +2,7 @@
 import { useRound, useSum } from '@vueuse/math'
 import { shallowRef, watch } from 'vue'
 import AppCard from '~/components/AppCard.vue'
+import AppDateInput from '~/components/AppDateInput.vue'
 import SessionList from '~/components/SessionList.vue'
 import TimerDisplay from '~/components/TimerDisplay.vue'
 import { useTimeTracker } from '~/composables/useTimeTracker.ts'
@@ -69,13 +70,7 @@ useSeoMeta({
 				<div class="flex items-center justify-between">
 					<h2 class="text-2xl font-bold">Today's Sessions</h2>
 					<div class="flex items-center space-x-2">
-						<input
-							v-model="selectedDateInput"
-							type="date"
-							class="input input-bordered input-sm"
-							:disabled="loading"
-							@change="handleDateChange"
-						/>
+						<AppDateInput v-model="selectedDateInput" />
 					</div>
 				</div>
 
