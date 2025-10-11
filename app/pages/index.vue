@@ -32,9 +32,9 @@ watch(selectedDate, (newDate) => {
 	selectedDateInput.value = newDate
 })
 
-function handleDateChange() {
+watch(selectedDateInput, () => {
 	selectDate(selectedDateInput.value)
-}
+})
 
 const weeklyTotal = useSum(() => dailyStats.value.map((day) => day.totalDuration))
 
