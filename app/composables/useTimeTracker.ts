@@ -14,6 +14,89 @@ import {
 	updateSession,
 } from '../utils/database.ts'
 
+interface UseTimeTrackerReturnType {
+	/** Current timer state including running status, active session, and start time.  */
+	timerState: Readonly<Ref<TimerState>>
+	/** Array of time sessions for the currently selected date.  */
+	sessions: Readonly<Ref<TimeSession[]>>
+	/** Currently selected date for viewing sessions. */
+	selectedDate: Readonly<Ref<DateString>>
+	/** Start date of the current week being viewed.  */
+	weekStart: Readonly<Ref<Date>>
+	/** End date of the current week being viewed.  */
+	weekEnd: Readonly<Ref<Date>>
+	/** Daily statistics for the current week.  */
+	dailyStats: Readonly<Ref<DayStats[]>>
+	/** Loading state indicator for async operations.  */
+	loading: Readonly<Ref<boolean>>
+	/** Error message from the last failed operation.  */
+	error: Readonly<Ref<string>>
+	/** Duration of the current active session in milliseconds.  */
+	currentSessionDuration: Readonly<Ref<Milliseconds>>
+	/** Total duration of all sessions for today in milliseconds.  */
+	todaysTotalDuration: Readonly<Ref<Milliseconds>>
+	/** Number of sessions for today.  */
+	sessionCount: Readonly<Ref<number>>
+	/**
+	 * Toggle the timer between running and paused states.
+	 * Handles starting new sessions or pausing active ones.
+	 * @returns Promise that resolves when the operation completes
+	 */
+	toggleTimer(): Promise<void>
+	/**
+	 * Update an existing session with new data.
+	 * Validates for overlapping sessions and updates the database.
+	 * @param session - The session to update
+	 * @param updates - Partial session data to apply
+	 * @returns Promise that resolves when the update completes
+	 */
+	updateSessionData(session: TimeSession, updates: Partial<TimeSession>): Promise<void>
+	/**
+	 * Delete a session from the database.
+	 * Removes the session and refreshes the current view.
+	 * @param session - The session to delete
+	 * @returns Promise that resolves when the deletion completes
+	 */
+	deleteSessionData(session: TimeSession): Promise<void>
+	/**
+	 * Add a manual session with default 1-hour duration.
+	 * Creates a completed session for the current time period.
+	 * @returns Promise that resolves when the session is added
+	 */
+	addManualSession(): Promise<void>
+	/**
+	 * Select a specific date to view its sessions.
+	 * Loads sessions for the selected date and updates the view.
+	 * @param date - DateString in YYYY-MM-DD format
+	 * @returns Promise that resolves when the date is loaded
+	 */
+	selectDate(date: DateString): Promise<void>
+
+	/**
+	 * Navigation methods for weekly view.
+	 * Provides previous and next week navigation functionality.
+	 */
+	navigateWeek: {
+		/**
+		 * Navigate to the previous week.
+		 * Updates weekStart, weekEnd, and loads new statistics.
+		 *
+		 * @async
+		 * @returns Promise that resolves when navigation completes
+		 */
+		prev(): Promise<void>
+
+		/**
+		 * Navigate to the next week.
+		 * Updates weekStart, weekEnd, and loads new statistics.
+		 *
+		 * @async
+		 * @returns Promise that resolves when navigation completes
+		 */
+		next(): Promise<void>
+	}
+}
+
 /**
  * Composable for managing time tracking functionality.
  *
@@ -22,8 +105,10 @@ import {
  * - Managing session data (CRUD operations)
  * - Loading and displaying daily/weekly statistics
  * - Handling timer state persistence and recovery
+ *
+ * @returns UseTimeTrackerReturnType - Complete API for time tracking functionality
  */
-export function useTimeTracker() {
+export function useTimeTracker(): UseTimeTrackerReturnType {
 	/** The duration of the current session in milliseconds. */
 	const currentSessionDuration = shallowRef<Milliseconds>(0 as Milliseconds)
 
@@ -54,6 +139,7 @@ export function useTimeTracker() {
 	}
 
 	const sessions = shallowRef<TimeSession[]>([])
+
 	const todaysTotalDuration = computed<Milliseconds>(() => {
 		const today = convertToDateString(new Date())
 		const todaySessions = sessions.value.filter((s) => s.date === today && s.endTime)
@@ -145,7 +231,7 @@ export function useTimeTracker() {
 			startTime: now,
 		}
 
-		await refreshCurrentDateSessions()
+		await loadSessionsForDate(selectedDate.value)
 		resume()
 
 		Sentry.logger.info('Timer started', { startTime: now.toISOString() })
@@ -170,7 +256,8 @@ export function useTimeTracker() {
 		}
 		currentSessionDuration.value = 0 as Milliseconds
 
-		await refreshCurrentDateSessions()
+		await loadSessionsForDate(selectedDate.value)
+		await loadWeeklyStats()
 		pause()
 
 		Sentry.logger.info('Timer paused', {
@@ -181,16 +268,12 @@ export function useTimeTracker() {
 
 	async function loadSessionsForDate(date: DateString): Promise<void> {
 		try {
-			const dateSessions = await getSessionsByDate(date)
-			sessions.value = dateSessions
+			sessions.value = await getSessionsByDate(date)
 		} catch (err) {
 			error.value = `Failed to load sessions: ${err instanceof Error ? err.message : 'Unknown error'}`
 		}
 	}
 
-	async function refreshCurrentDateSessions(): Promise<void> {
-		await loadSessionsForDate(selectedDate.value)
-	}
 
 	async function updateSessionData(
 		session: TimeSession,
@@ -214,7 +297,7 @@ export function useTimeTracker() {
 			}
 
 			await updateSession(session.id, updates)
-			await refreshCurrentDateSessions()
+			await loadSessionsForDate(selectedDate.value)
 			await loadWeeklyStats()
 		} catch (err) {
 			error.value = `Failed to update session: ${
@@ -231,7 +314,7 @@ export function useTimeTracker() {
 			error.value = ''
 
 			await deleteSession(session.id)
-			await refreshCurrentDateSessions()
+			await loadSessionsForDate(selectedDate.value)
 			await loadWeeklyStats()
 		} catch (err) {
 			error.value = `Failed to delete session: ${
@@ -269,7 +352,7 @@ export function useTimeTracker() {
 			}
 
 			await saveSession(sessionData)
-			await refreshCurrentDateSessions()
+			await loadSessionsForDate(selectedDate.value)
 			await loadWeeklyStats()
 		} catch (err) {
 			error.value = `Failed to add session: ${err instanceof Error ? err.message : 'Unknown error'}`
@@ -308,12 +391,12 @@ export function useTimeTracker() {
 				const daySessions = sessionsByDate.get(dateStr) || []
 
 				const completedSessions = daySessions.filter((s) => s.endTime)
-				const totalDuration = completedSessions.reduce((total, session) => {
+				const totalDuration = completedSessions.reduce<Milliseconds>((total, session) => {
 					if (session.endTime) {
-						return total + (session.endTime.getTime() - session.startTime.getTime())
+						return total + (session.endTime.getTime() - session.startTime.getTime()) as Milliseconds
 					}
 					return total
-				}, 0)
+				}, 0 as Milliseconds)
 
 				stats.push({
 					date: dateStr,
