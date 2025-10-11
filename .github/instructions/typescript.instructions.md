@@ -1,5 +1,5 @@
 ---
-applyTo: "**/*.ts,app/**/*.vue"
+applyTo: "**/*.{ts,vue}"
 ---
 # Rules for TypeScript
 
@@ -10,65 +10,83 @@ Apply these rules when writing TypeScript files or Vue component setup functions
 
 - Prefer function declarations over function expressions. However, when passing a function to a parameter, prefer using a function expression.
 - Define function return types for better readability and type safety.
-- Prefer interface over type when defining an object type.
+- Prefer `interface` over `type` when defining object types.
 - Use literal union types over enums.
 - Use `unknown` over `any`.
 - Prefer `undefined` over `null` unless `null` has to be used.
+- Prefer `??` over `||` for default values. Use `||` only when you want to treat all falsy values as empty. Example: `const value = input ?? "default";` (not `input || "default"`)
 - Prefer `for...of` statement over `forEach`. However, allow use of `forEach` when chaining.
-- Avoid non-null assertion operator (`!`) unless absolutely sure the value cannot be `null` or `undefined`.
+- Use `toSorted()` instead of `[...arr].sort()`, unless `toSorted()` is not available.
+- Use `as` only when strictly necessary (DOM narrowing, branding, or literal types), and prefer type guards or proper typing otherwise. Exception: allow `as` in test files for mocking and partial objects.
+- Keep callbacks passed to `Array.prototype.map` pure; use `map` only for transformations and prefer `for...of` / `forEach` when side effects are required.
+- Avoid non-null assertion operator (`!`) unless absolutely sure the value cannot be `null` or `undefined`. (Prefer type guards / `assert()` / early return)
 - Put `as const` on constant objects.
-- Prefer the guard clause (early return) when the rest of the function can be skipped after the return.
+- If you need to keep the original array unchanged, prefer using the new immutable Array APIs such as `toSorted`, `toReversed`, and `toSpliced`.
 - Do not rely on Nuxt auto-import system. Import files explicitly.
-- Put .ts extension when importing TypeScript file.
+- Put .ts extension when importing TypeScript file defined in this codebase.
 - Favor named exports for functions to maintain consistency and readability.
+
+```ts
+const { load: loadEvents, loading: loadingEvents, result: resultEvents } = useListEventsQuery()
+```
 
 ## Code Style and Structure
 
-- Write clean, maintainable, and technically accurate TypeScript code.
-- Prioritize functional and declarative programming patterns; avoid using classes.
-- Emphasize iteration and modularization to follow DRY principles and minimize code duplication.
-- Use tabs for indentation.
-- **Use guard clauses (early returns) to improve code readability and reduce nesting.**
-  - Return early when specific conditions are not met, avoiding deep nesting.
-  - Use guard clauses when processing after a certain point is only executed if specific conditions are met.
-  - This pattern helps flatten code structure and makes it easier to read and maintain.
+- Favor functional, declarative patterns and avoid classes.
+- Extract helpers to stay DRY and keep modules focused.
+- Use guard clauses (early returns) to exit once conditions fail and keep control flow flat.
 
-## Documents
-
-- Write JSDoc comments for all exported functions, variables, and types for better readability and understanding.
-- In JSDoc, `@return` annotation can be omitted since it's self-explanatory in most cases.
-- Document complex functions with clear examples.
-- Use the same language as the existing JSDocs
-- Follow the existing JSDoc formatting patterns
-
-## Naming Conventions
+## Naming
 
 - Use UPPER_CASE for constants.
-- Use upper case for acronyms. For example, name `getURL` instead of `getUrl`.
-- Use **PascalCase** for component file names (e.g., `components/MyComponent.vue`).
-- Use 'Map' as a suffix for all variables, parameters, and properties whose value is a Map instance. For example, `const userMap = new Map<string, User>()`. This rule must be applied to ref objects too.
+- Use upper case for well‑known acronyms (ID, URL, API, HTTP, CSV, DOM, JSON). For example, `getURL` instead of `getUrl`.
+- Prefer `is`, `has`, `can`, `should`, `needs`, `will` prefix for functions that return a boolean value.
+- Use 'Map' as a suffix for all variables, parameters, and properties whose value is a Map instance. For example, `const userMap = new Map<string, User>()`. This rule must be applied to ref objects too (e.g. `const userMap = shallowRef(new Map<string, User>())`).
 - Use 'Set' as a suffix for all variables, parameters, and properties whose value is a Set instance. For example, `const userIdSet = new Set<string>()`. This rule must be applied to ref objects too.
-- **Be descriptive but concise**: Choose names that clearly describe the purpose without being overly verbose.
-- **Avoid abbreviations**: Use full words instead of abbreviations (e.g., `userProfile` instead of `usrProf`).
-- **Use domain terminology**: Use terms that are familiar to the business domain and stakeholders.
-- **Be consistent**: Use the same naming patterns throughout the codebase.
-- **Avoid reserved words**: Don't use JavaScript/TypeScript reserved words as identifiers.
-- **Consider context**: Names should make sense in the context where they're used.
-- **Inconsistent casing**: Stick to the established casing conventions.
-- **Overly long names**: While descriptive names are good, extremely long names can reduce readability.
-- **Temporary names**: Don't use placeholder names like `temp`, `foo`, `bar` in production code.
+- Be descriptive but concise: Choose names that clearly describe the purpose without being overly verbose.
+- Avoid abbreviations: Use full words instead of abbreviations (e.g., `userProfile` instead of `usrProf`).
+- Use domain terminology: Use terms that are familiar to the business domain and stakeholders.
+- Be consistent: Use the same naming patterns throughout the codebase.
+- Consider context: Names should make sense in the context where they're used.
+- Temporary names: Don't use placeholder names like `temp`, `foo`, `bar` in production code.
+- Don't use `args` / `arguments` as a parameter name. If you need to represent multiple parameters, use a more descriptive name like `params`, `options`, or `config`.
+- Do not call a parameter object `options` when all of its properties are required—use a descriptive name or destructure the argument instead.
 
 ## Nuxt
 
 Follow these instructions when writing composables or component setup functions.
 
-- Take advantage of VueUse functions to enhance reactivity and performance.
-- Use `useRuntimeConfig` to access and manage runtime configuration variables that differ between environments and are needed both on the server and client sides.
-- Pass an object to `navigateTo` for better type safety. For example, `navigateTo({ name: 'about' })` instead of `navigateTo('/about')`.
+- Group related refs, computed values, watchers, lifecycle hooks, and functions together.
+- Use `shallowRef` unless deep reactivity is required.
+- Reach for VueUse composables to boost reactivity and performance.
+- Use `useRuntimeConfig` for values shared between server and client environments.
+- Call `navigateTo({ ... })` instead of string paths.
+- Gate client/server checks with `import.meta.client` or `import.meta.server`.
 
 ## Error handling
 
-- Implement error boundaries for component error handling
-- Use try-catch blocks for async operations
-- Log errors appropriately for debugging
 - When catching an error and throwing a new Error, set the original error to the `cause` property
+
+## Documents
+
+- JSDoc every exported function, variable, and explain behavior clearly.
+- Keep terminology aligned with the Domain Terminology section and use JSDoc for variable purpose notes.
+- Add examples for complex functions or transformations.
+
+## Code Quality
+
+- Remove all spelling and grammatical errors in:
+  - Variable names, function names, and type names
+  - Comments and JSDoc documentation
+  - String literals and user-facing text
+  - Import statements and file paths
+
+## Advanced Type Safety
+
+- Mark DTO-like data `readonly` and expose composable state via `readonly(ref)` or computed derivatives to prevent external mutation.
+- Replace stacked `Omit<Pick<...>>` chains with a named helper type for clarity.
+- Export a `const` array + derived union (`as const`) and reuse it everywhere.
+- Validate external input with schemas or custom guards before treating it as trusted data.
+- Use the shared `assert(condition, message): asserts condition` to capture invariants and improve narrowing.
+- Document concurrency or ordering expectations when exporting mutable registries.
+- Add `*.test-d.ts` or `expectTypeOf` coverage to protect critical type shapes from widening.
