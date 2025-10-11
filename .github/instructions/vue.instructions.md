@@ -1,46 +1,122 @@
 ---
 applyTo: "app/**/*.vue"
 ---
-# Vue component rules
+# Vue Component Rules
 
-This rule provides standards for Vue components.
+Rules for authoring Vue SFCs in this project.
 
-## Vue SFC file
+## Component Design Principles
 
-- Use **PascalCase** for component file names (e.g., `components/MyComponent.vue`).
-- In SFC file, define each section in order: `<script setup lang="ts">`, `<template>`, `<style>`.
-- Add an import statement when using a Vue component defined in this repository.
+- Keep one responsibility per component; move reusable logic to `app/composables` or domain modules.
+- Import components explicitly; never rely on Nuxt auto-import.
+- Split components once they exceed rendering + light orchestration.
 
-## `<script setup>` in Vue SFC
+## Script Setup Essentials
 
-- Use TypeScript.
-- In SFC file, add JSDoc at the top of `<script setup lang="ts">` section to explain the component.
-- Use `defineModel` for v-model bindings.
-- Use `useTemplateRef` introduced in Vue 3.5 when you need a template reference.
-- Define `computed` type for better type safety. For example, `const nextLevel = computed<number>(() => currentLevel.value + 1)`.
-- Define prop types by specifying `defineProps` generic rather than `Props` type. For example, `defineProps<{ level: number }>()`.
-- Define emit types by specifying `defineEmits` generic rather than `Emits` type. For example, `defineEmits<{ (e: 'close'): void }>()`.
-- Prefer type-only emit declarations introduced in Vue 3.3. For example, `defineEmits<{ change: [id: number] }>()`.
-- Always add JSDoc to component props and emits.
-- Always add JSDoc to model variables defined by `defineModel`
-- For a reactive variable, use `undefined` over `null` if the default value is not known.
-- Import components explicitly when using them in the `<template>` section. Don't rely on auto-import feature provided by Nuxt.
-- Follow the "Prop Stability" performance best practice mentioned in the Vue official document
-- Follow the "Computed Stability" performance best practice mentioned in the Vue official document
+- Use TypeScript and place a JSDoc summary right under `<script setup>`.
+- Prefer `useTemplateRef(key)` over `ref(null)` for template refs.
+- Annotate computed values when inference fails: `computed<Result>(() => ...)`.
+- Invoke composables synchronously at the top level of `<script setup>`.
 
-## `<template>` in Vue SFC
+## Props
 
-- Use HTML5 semantic elements (`<header>`, `<nav>`, `<main>`, `<section>`, `<article>`, `<footer>`, `<search>`, etc.).
-- Include appropriate ARIA attributes for accessibility.
-- Ensure valid markup that passes W3C validation.
-- Include `loading="lazy"` on images where applicable.
-- Avoid using index for `key` attribute when using `v-for`.
-- Prefer v-show when toggling visibility frequently, otherwise use v-if.
-- Specify `type` attribute for `<button>` elements.
-- Pass an object to `<NuxtLink :to>` for better type safety. For example, `<NuxtLink :to="{ name: 'about' }">`.
-- Use TailwindCSS for styling.
+- Declare props with type-based `defineProps` and JSDoc every field.
+- Use `withDefaults` for optional primitives; hoist object/array defaults to constants.
+- Avoid boolean tri-state; use explicit unions when options are finite.
+- Narrow to literal unions instead of broad `string` for domain values.
 
-## CSS and Styling
+## Emits & Events
 
-- Use Tailwind CSS utility classes for styling
-- Avoid custom CSS when Tailwind utilities are available
+- Define events with typed `defineEmits`.
+- Reserve `update:propName` for prop mirroring without `defineModel`.
+- Emit lean, typed payloads (IDs over whole objects unless required).
+
+## Models (`defineModel`)
+
+- Use `defineModel` only when the component owns two-way state (e.g., `v-model:selected`).
+- Name multiple models explicitly (`defineModel<string>('query')`) and document purpose + side effects.
+- JSDoc each model variable with usage and emit timing.
+
+## Slots
+
+- Declare slots with `defineSlots` for type safety.
+- Keep slot props stable; use optional fields instead of shape changes.
+
+## Reactivity & Watchers
+
+- Prefer `computed` for derivations instead of manual assignment.
+- Use `watch(source, ...)` sparingly; reach for `watchEffect` only when dependencies are dynamic. Explain any `deep: true` usage.
+
+## Attribute Forwarding
+
+- Forward attributes by default when wrapping a single native element.
+- If filtering attributes, set `defineOptions({ inheritAttrs: false })`, bind `v-bind="attrs"`, and document anything dropped.
+
+## Template Rules
+
+- Use semantic HTML and skip redundant `role` attributes.
+- Provide stable `:key` values from domain IDs; avoid loop indices for mutable lists.
+- Use `v-show` for toggles and `v-if` when mount/unmount is desired.
+- Hoist object/array literals out of hot template paths.
+- Add `loading="lazy"` to images that are not immediately needed.
+- Use `<time>` for time data and pass route objects to `<NuxtLink :to="{ name: 'route-name' }">`.
+- Access props in templates as `props.x` for consistency.
+- Avoid `tw()` helpers in <template>; use Tailwind classes directly.
+
+## Accessibility
+
+- Ensure every interactive element has a name (`label`, `aria-label`, or `aria-labelledby`).
+- Manage focus when UI context moves (dialogs, ephemeral notifications, etc.).
+- Avoid `tabindex` > 0; rely on DOM order and mirror pointer interactions on keyboard.
+- Mark long-running regions with `aria-busy` during partial async updates.
+
+## Async & Error Handling
+
+- Wrap async flows in dedicated functions that expose `loading / error / data` states.
+- Map errors to domain-friendly messages in `try/catch`; never surface raw network errors.
+- Dispose timers and subscriptions with `onScopeDispose`.
+
+## SSR & Hydration
+
+- Keep `<script setup>` SSR-safe: no browser-only APIs unless gated by `import.meta.client` with identical output; otherwise defer to `onMounted`.
+- Fetch initial data with SSR composables (`useAsyncData`, `useFetch`, `useState`) instead of ad-hoc requests.
+- Precompute nondeterministic values via `useState('key', () => ...)` or update after mount; never inline randomness in SSR output.
+- Avoid template branches driven by client-only state; use responsive CSS or `<ClientOnly>` with an accessible fallback.
+- Wrap client-only widgets in `<ClientOnly>` and keep fallbacks semantic and non-interactive.
+- Delay DOM-mutating libraries to `onMounted` (optionally with dynamic `import()`); keep setup pure.
+- Place timers and listeners inside lifecycle hooks to prevent hydration drift.
+- Treat hydration mismatch warnings as blockers; investigate immediately.
+
+## Performance
+
+- Use `v-once` / `v-memo` for static or rarely changing fragments.
+- Hoist handlers outside `v-for` hot paths.
+- Provide stable primitive or ID keys and defer expensive computation until needed.
+- Keep prop inputs stable by hoisting object/array/function literals.
+- Lazy-load heavy children via the `Lazy` prefix and consider lazy hydration (`hydrate-on-visible`, etc.) for off-screen interactions.
+- Stage images: raise priority only for key visuals; use `loading="lazy"` on deferable media.
+- Gate third-party scripts; initialize analytics via Nuxt Scripts or in `onMounted`.
+- Revisit plugins regularly and migrate simple logic to composables.
+- Code-split large dependencies and confirm impact with `nuxi analyze`.
+
+## Styling
+
+- Prefer Tailwind utilities; only add `<style>` for third-party overrides, complex animation, or selectors unavailable in utilities. Preface with a comment.
+- Keep class lists readable; extract repeated sets into components or utilities.
+
+## Testing
+
+- Atoms: cover render, accessible name/role, primary interaction, disabled/variant logic.
+- Molecules: cover edge states (empty, large, error), slots, emitted payload shape.
+- Prefer semantic queries over snapshots; assert behavior, not internals.
+
+## Anti‑Patterns (Avoid)
+
+- Overusing `watchEffect` instead of dependency `watch`.
+- Using loop indices as keys for mutable lists.
+- Emitting events that mirror prop names without the `update:` prefix.
+
+## When In Doubt
+
+- Favor explicitness (typed props/emits, stable keys, documented intent) over clever abstractions.
+- Extract before complexity spreads; small focused composables improve reuse & testability.

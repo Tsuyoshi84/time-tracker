@@ -1,7 +1,67 @@
 ---
-applyTo: "app/utils/**/*.ts"
+applyTo: "app/utils/**/*.ts,shared/utils/**/*.ts"
 ---
-# Rules for utils functions
+# Utility Function Rules
 
-- Utility functions **must not** import from `app/composables` or `app/stores`.
-- Provide unit tests **for** every utility function.
+Guidelines for utility functions.
+
+## Scope & Dependencies
+
+- Never import from `app/composables`, `app/stores`, Vue core, or anything requiring runtime reactivity.
+
+## Purity & Determinism
+
+- Functions must be pure: no I/O, no mutation of external objects, no reading time/random/env directly.
+- If time or randomness needed, accept them as parameters (`now: () => number`, `rand: () => number`).
+
+## Side Effects (Prohibited)
+
+- No logging (`console.*`), network calls, storage access, DOM, timers, or process/env mutation.
+
+## API Design
+
+- One responsibility per function; split when a second concern appears.
+- Naming: `verb + Noun` or `noun + To + Noun` (e.g., `formatDurationMs`, `orderIdToString`).
+- Order parameters: put primary data first and end with an options object; avoid positional boolean flags.
+- Switch to an options object once you have 3+ required parameters.
+
+## Input Validation & Error Model
+
+- Validate preconditions; do not silently coerce invalid input.
+- Expected failures: prefer the shared `Result` union (`{ ok: true; value } | { ok: false; error }`) or return `undefined` with documented semantics; avoid throwing for routine domain conditions.
+- Throws reserved for programmer errors / invariant violations (use an `assert` helper pattern).
+
+## Immutability & Data Shapes
+
+- Return new objects/arrays; never leak internal mutable references.
+- Mark output collections `ReadonlyArray<T>` (or `readonly T[]`) when mutation is not part of contract.
+- Use branded types for distinct IDs or units when mixing similar primitives risks bugs.
+
+## Performance Discipline
+
+- Do not micro‑optimize without evidence (profile or bench). Add a `*.bench.ts` only for proven hot paths.
+- Memoize only when the cache contract is documented, calls stay idempotent, concurrent access is safe, and you have evidence of repeated expensive work.
+- Prefer clarity over cleverness; adopt a more complex approach only when a benchmark shows material improvement.
+
+## Documentation
+
+- JSDoc every exported function: purpose, parameter semantics, return type, and the error/Result contract.
+- Include `@example` for non-trivial transformations or formatting.
+
+## Anti-Patterns (Avoid)
+
+- Chaining multiple utility types instead of defining a named intermediate type.
+- Overloaded signatures where clearer separate functions would suffice.
+- Hiding side effects behind innocuous names (e.g., `getConfig()` that reads disk/env).
+- Returning partially valid objects (use a failure branch instead).
+
+---
+Short checklist for code review:
+
+1. Pure (no side effects, deterministic)?
+2. Clear naming & single responsibility?
+3. Input validated & error model explicit?
+4. No premature optimization / caching?
+5. Tests cover success + failure + edge cases?
+6. JSDoc covers contract + example?
+7. Suitable location (still a generic util)?
