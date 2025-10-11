@@ -28,7 +28,7 @@ const mostProductiveDay = computed<string>(() => {
 	if (dailyStats.value.length === 0) return 'None'
 
 	const maxDay = dailyStats.value.reduce((max, day) =>
-		day.totalDuration > max.totalDuration ? day : max
+		day.totalDuration > max.totalDuration ? day : max,
 	)
 
 	if (maxDay.totalDuration === 0) return 'None'

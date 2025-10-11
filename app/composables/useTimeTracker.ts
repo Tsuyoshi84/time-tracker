@@ -274,7 +274,6 @@ export function useTimeTracker(): UseTimeTrackerReturnType {
 		}
 	}
 
-
 	async function updateSessionData(
 		session: TimeSession,
 		updates: Partial<TimeSession>,
@@ -393,7 +392,8 @@ export function useTimeTracker(): UseTimeTrackerReturnType {
 				const completedSessions = daySessions.filter((s) => s.endTime)
 				const totalDuration = completedSessions.reduce<Milliseconds>((total, session) => {
 					if (session.endTime) {
-						return total + (session.endTime.getTime() - session.startTime.getTime()) as Milliseconds
+						return (total +
+							(session.endTime.getTime() - session.startTime.getTime())) as Milliseconds
 					}
 					return total
 				}, 0 as Milliseconds)

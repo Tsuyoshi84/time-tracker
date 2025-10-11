@@ -8,5 +8,5 @@
  * ```
  */
 export function sum<Number extends number>(numbers: Number[]): Number {
-	return numbers.reduce((acc, curr) => acc + curr as Number, 0 as Number)
+	return numbers.reduce((acc, curr) => (acc + curr) as Number, 0 as Number)
 }
