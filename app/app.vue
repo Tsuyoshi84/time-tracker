@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import type { NavigationMenuItem } from '@nuxt/ui'
+import { Timer } from 'lucide-vue-next'
 
 // Global meta tags
 useSeoMeta({
