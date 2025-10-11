@@ -1,0 +1,102 @@
+---
+globs: **/*.bench.ts
+alwaysApply: false
+---
+
+# Vitest Benchmark Guide
+
+## Structure
+
+```ts
+describe('feature', () => {
+  describe('scenario1', () => {
+    bench('baseline', ...)
+    bench('candidateA', ...)
+  })
+  describe('scenario2', () => {
+    bench('baseline', ...)
+    bench('candidateA', ...)
+  })
+})
+```
+
+## Setup
+
+- Import only needed Vitest helpers (`bench`, `describe`, hooks)
+- Build heavy fixtures in `beforeAll`; reset state in `beforeEach`/`afterEach`
+- Keep cases stateless—no shared globals
+- Prepare heavy inputs once (module scope or `beforeAll`), reuse them
+- Use dataset factories (`const createSmall = () => ...`) for fresh input
+
+## Bench bodies
+
+- Only the work being measured—move setup to hooks/helpers
+- Avoid generating datasets inside `bench`; prepare at module scope
+- For mutating implementations, clone in `setup`/`beforeEach`
+
+## Scenarios
+
+- Cover relevant input shapes: size, depth, ordering, edge values
+- Model best/worst cases as separate `describe`s
+- Label clearly for readable reports
+
+## Example
+
+```ts
+import { bench, describe } from 'vitest'
+
+const createSmall = () => Array.from({ length: 100 }, (_, i) => (i * 7919) % 100)
+const createLarge = () => Array.from({ length: 10_000 }, (_, i) => (i * 7919) % 10_000)
+const createWorst = (large: number[]) => [...large].reverse()
+
+const baseSmall = createSmall()
+const baseLarge = createLarge()
+const baseWorst = createWorst(baseLarge)
+
+// The original implementation, copied here for baseline comparison
+const baselineSortItems = (items: number[]) => items.toSorted((a, b) => a - b)
+
+// A candidate implementation
+const candidateSortItemsA = (items: number[]) => {
+ // A different sorting algorithm
+ const newItems = [...items]
+ newItems.sort((a, b) => a - b)
+ return newItems
+}
+
+// Another candidate implementation
+const candidateSortItemsB = (items: number[]) => {
+ // A third sorting algorithm
+ return items.slice().sort((a, b) => a - b)
+}
+
+describe('sortItems benchmark', () => {
+ describe('small dataset', () => {
+  bench('baseline', () => {
+   baselineSortItems(baseSmall)
+  })
+
+  bench('candidateA', () => {
+   candidateSortItemsA(baseSmall)
+  })
+
+  bench('candidateB', () => {
+   candidateSortItemsB(baseSmall)
+  })
+ })
+
+ describe('large dataset', () => {
+  bench('baseline', () => {
+   baselineSortItems(baseLarge)
+  })
+
+  bench('candidateA', () => {
+   candidateSortItemsA(baseLarge)
+  })
+
+  bench('candidateB', () => {
+   candidateSortItemsB(baseLarge)
+  })
+ })
+})
+```
