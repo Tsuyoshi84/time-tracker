@@ -1,7 +1,8 @@
 <script setup lang="ts">
-import { CalendarDate, DateFormatter, getLocalTimeZone } from '@internationalized/date'
+import { type CalendarDate, DateFormatter, getLocalTimeZone } from '@internationalized/date'
 import type { DateString } from '~/types/index.ts'
 import { calendarDateToDateString } from '~/utils/calendarDateToDateString.ts'
+import { dateStringToCalendarDate } from '~/utils/dateStringToCalendarDate.ts'
 
 const dateString = defineModel<DateString>({ required: true })
 
@@ -11,8 +12,7 @@ const df = new DateFormatter('en-US', {
 
 const date = computed<CalendarDate>({
 	get() {
-		const [year, month, day] = dateString.value.split('-').map(Number)
-		return new CalendarDate(year!, month!, day!)
+		return dateStringToCalendarDate(dateString.value)
 	},
 	set(value) {
 		dateString.value = calendarDateToDateString(value)
