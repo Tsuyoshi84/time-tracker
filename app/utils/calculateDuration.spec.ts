@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest'
-import { calculateDuration } from './calculateDuration'
+import { calculateDuration } from './calculateDuration.ts'
 
 describe('calculateDuration', () => {
 	it('should calculate duration correctly', () => {
