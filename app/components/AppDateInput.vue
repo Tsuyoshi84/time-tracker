@@ -22,6 +22,7 @@ const date = computed<CalendarDate>({
 <template>
 	<UPopover>
 		<UButton
+			type="button"
 			color="neutral"
 			variant="subtle"
 			icon="i-lucide-calendar"
