@@ -22,7 +22,7 @@ Apply these rules when writing TypeScript files or Vue component setup functions
 - Avoid non-null assertion operator (`!`) unless absolutely sure the value cannot be `null` or `undefined`. (Prefer type guards / `assert()` / early return)
 - Put `as const` on constant objects.
 - If you need to keep the original array unchanged, prefer using the new immutable Array APIs such as `toSorted`, `toReversed`, and `toSpliced`.
-- Do not rely on Nuxt auto-import system. Import files explicitly.
+- Do not rely on Nuxt auto-import system. Import files explicitly. Exception: Nuxt UI components can be used without explicit imports.
 - Put .ts extension when importing TypeScript file defined in this codebase.
 - Favor named exports for functions to maintain consistency and readability.
 
