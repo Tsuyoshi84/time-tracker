@@ -29,7 +29,7 @@ export interface DayStats {
 	/** The date in YYYY-MM-DD format. */
 	date: DateString
 	/** Total duration tracked for this day in milliseconds. */
-	totalDuration: number // in milliseconds
+	totalDuration: Milliseconds // in milliseconds
 	/** Number of sessions for this day. */
 	sessionCount: number
 	/** Array of all sessions for this day. */

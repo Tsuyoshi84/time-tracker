@@ -6,7 +6,9 @@ import AppDateInput from '~/components/AppDateInput.vue'
 import SessionList from '~/components/SessionList.vue'
 import TimerDisplay from '~/components/TimerDisplay.vue'
 import { useTimeTracker } from '~/composables/useTimeTracker.ts'
+import type { Milliseconds } from '~/types/index.ts'
 import { formatDuration } from '~/utils/formatDuration.ts'
+import { sum } from '~/utils/math/sum.ts'
 
 // Use the time tracker composable
 const {
@@ -36,7 +38,10 @@ watch(selectedDateInput, () => {
 	selectDate(selectedDateInput.value)
 })
 
-const weeklyTotal = useSum(() => dailyStats.value.map((day) => day.totalDuration))
+const weeklyTotal = computed<Milliseconds>(() => {
+	const durations = dailyStats.value.map((day) => day.totalDuration)
+	return (sum(durations) + currentSessionDuration.value) as Milliseconds
+})
 
 const dailyAverage = useRound(() => weeklyTotal.value / 7)
 
