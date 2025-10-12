@@ -37,11 +37,11 @@ watch(selectedDateInput, () => {
 })
 
 const totalDurationExcludingCurrentSession = useSum(() =>
-	dailyStats.value.map((day) => day.totalDuration)
+	dailyStats.value.map((day) => day.totalDuration),
 )
 
 const totalDurationIncludingCurrentSession = computed(
-	() => totalDurationExcludingCurrentSession.value + currentSessionDuration.value
+	() => totalDurationExcludingCurrentSession.value + currentSessionDuration.value,
 )
 
 // SEO
