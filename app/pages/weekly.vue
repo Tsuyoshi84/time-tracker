@@ -1,17 +1,36 @@
 <script setup lang="ts">
 import { useSum } from '@vueuse/math'
 import { Calendar } from 'lucide-vue-next'
-import { computed } from 'vue'
+import { computed, onMounted } from 'vue'
 import AppCard from '~/components/AppCard.vue'
 import WeeklyView from '~/components/WeeklyView.vue'
-import { useTimeTracker } from '~/composables/useTimeTracker.ts'
+import { useSessionManager } from '~/composables/useSessionManager.ts'
+import { useWeeklyStats } from '~/composables/useWeeklyStats.ts'
 import type { TimeSession } from '~/types/index.ts'
 import { calculateDuration } from '~/utils/calculateDuration.ts'
+import { initDatabase } from '~/utils/database.ts'
 import { formatDuration } from '~/utils/formatDuration.ts'
 import { formatTime } from '~/utils/formatTime.ts'
 
-const { selectedDate, weekStart, weekEnd, dailyStats, loading, navigateWeek, selectDate } =
-	useTimeTracker()
+// Initialize composables (no timer needed for weekly view)
+const weeklyStats = useWeeklyStats()
+const sessionManager = useSessionManager(async () => {
+	await weeklyStats.loadWeeklyStats()
+})
+
+// Initialize on mount
+onMounted(async () => {
+	initDatabase()
+	await sessionManager.loadSessionsForDate(sessionManager.selectedDate.value)
+	await weeklyStats.loadWeeklyStats()
+})
+
+// Extract values
+const { selectedDate, selectDate } = sessionManager
+const { weekStart, weekEnd, dailyStats, navigateWeek } = weeklyStats
+
+// Combined loading state
+const loading = computed(() => sessionManager.loading.value)
 
 // Selected day details
 const selectedDayStats = computed(() => {
