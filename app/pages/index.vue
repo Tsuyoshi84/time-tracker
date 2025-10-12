@@ -1,6 +1,6 @@
 <script setup lang="ts">
-import { useRound, useSum } from '@vueuse/math'
-import { shallowRef, watch } from 'vue'
+import { useSum } from '@vueuse/math'
+import { computed, shallowRef, watch } from 'vue'
 import AppCard from '~/components/AppCard.vue'
 import AppDateInput from '~/components/AppDateInput.vue'
 import SessionList from '~/components/SessionList.vue'
@@ -36,11 +36,13 @@ watch(selectedDateInput, () => {
 	selectDate(selectedDateInput.value)
 })
 
-const weeklyTotal = useSum(() => dailyStats.value.map((day) => day.totalDuration))
+const totalDurationExcludingCurrentSession = useSum(() =>
+	dailyStats.value.map((day) => day.totalDuration),
+)
 
-const dailyAverage = useRound(() => weeklyTotal.value / 7)
-
-const totalWeeklySessions = useSum(() => dailyStats.value.map((day) => day.sessionCount))
+const totalDurationIncludingCurrentSession = computed(
+	() => totalDurationExcludingCurrentSession.value + currentSessionDuration.value,
+)
 
 // SEO
 useSeoMeta({
@@ -87,21 +89,9 @@ useSeoMeta({
 		<!-- Quick Stats -->
 		<div class="mt-12 grid grid-cols-1 md:grid-cols-3 gap-6">
 			<AppCard class="text-center">
-				<div class="text-sm text-gray-600 mb-1">This Week</div>
+				<div class="text-sm text-secondary mb-1">This Week</div>
 				<div class="text-2xl font-bold text-primary">
-					{{ formatDuration(weeklyTotal) }}
-				</div>
-			</AppCard>
-			<AppCard class="text-center">
-				<div class="text-sm text-gray-600 mb-1">Average/Day</div>
-				<div class="text-2xl font-bold text-secondary">
-					{{ formatDuration(dailyAverage) }}
-				</div>
-			</AppCard>
-			<AppCard class="text-center">
-				<div class="text-sm text-gray-600 mb-1">Total Sessions</div>
-				<div class="text-2xl font-bold text-accent">
-					{{ totalWeeklySessions }}
+					{{ formatDuration(totalDurationIncludingCurrentSession) }}
 				</div>
 			</AppCard>
 		</div>
