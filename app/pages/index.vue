@@ -1,30 +1,72 @@
 <script setup lang="ts">
 import { useSum } from '@vueuse/math'
-import { computed, shallowRef, watch } from 'vue'
+import { computed, onMounted, shallowRef, watch } from 'vue'
 import AppCard from '~/components/AppCard.vue'
 import AppDateInput from '~/components/AppDateInput.vue'
 import SessionList from '~/components/SessionList.vue'
 import TimerDisplay from '~/components/TimerDisplay.vue'
-import { useTimeTracker } from '~/composables/useTimeTracker.ts'
+import { useSessionManager } from '~/composables/useSessionManager.ts'
+import { useTimerState } from '~/composables/useTimerState.ts'
+import { useWeeklyStats } from '~/composables/useWeeklyStats.ts'
+import type { Milliseconds } from '~/types/index.ts'
+import { convertToDateString } from '~/utils/convertToDateString.ts'
+import { initDatabase } from '~/utils/database.ts'
 import { formatDuration } from '~/utils/formatDuration.ts'
 
-// Use the time tracker composable
+// Initialize composables with coordination callbacks
+const weeklyStats = useWeeklyStats()
+
+const sessionManager = useSessionManager(async () => {
+	await weeklyStats.loadWeeklyStats()
+})
+
+const timerStateManager = useTimerState(async () => {
+	await sessionManager.loadSessionsForDate(sessionManager.selectedDate.value)
+	await weeklyStats.loadWeeklyStats()
+})
+
+// Initialize on mount
+onMounted(async () => {
+	initDatabase()
+	await timerStateManager.loadActiveSession()
+	await sessionManager.loadSessionsForDate(sessionManager.selectedDate.value)
+	await weeklyStats.loadWeeklyStats()
+})
+
+// Extract values from composables
+const { timerState, currentSessionDuration, toggleTimer } = timerStateManager
 const {
-	timerState,
 	sessions,
 	selectedDate,
-	dailyStats,
-	loading,
-	error,
-	currentSessionDuration,
-	todaysTotalDuration,
-	sessionCount,
-	toggleTimer,
 	updateSessionData,
 	deleteSessionData,
 	addManualSession,
 	selectDate,
-} = useTimeTracker()
+} = sessionManager
+const { dailyStats } = weeklyStats
+
+// Combined loading and error states
+const loading = computed(() => timerStateManager.loading.value || sessionManager.loading.value)
+const error = computed(
+	() => timerStateManager.error.value || sessionManager.error.value || weeklyStats.error.value,
+)
+
+// Computed values
+const todaysTotalDuration = computed<Milliseconds>(() => {
+	const today = convertToDateString(new Date())
+	const todaySessions = sessions.value.filter((s) => s.date === today && s.endTime)
+	return (currentSessionDuration.value +
+		todaySessions.reduce(
+			(total, session) =>
+				session.endTime ? total + (session.endTime.getTime() - session.startTime.getTime()) : total,
+			0,
+		)) as Milliseconds
+})
+
+const sessionCount = computed(() => {
+	const today = convertToDateString(new Date())
+	return sessions.value.filter((s) => s.date === today).length
+})
 
 const selectedDateInput = shallowRef(selectedDate.value)
 
