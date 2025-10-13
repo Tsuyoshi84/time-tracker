@@ -4,6 +4,7 @@ import { onMounted, onUnmounted, type Ref, shallowReadonly, shallowRef, watch } 
 import type { Milliseconds, TimerState } from '../types/index.ts'
 import { convertToDateString } from '../utils/convertToDateString.ts'
 import { getActiveSession, saveSession, updateSession } from '../utils/database.ts'
+import { diffInMilliseconds } from '../utils/diffInMilliseconds.ts'
 
 interface UseTimerStateReturnType {
 	/** Current timer state including running status, active session, and start time. */
@@ -200,9 +201,4 @@ export function useTimerState(onSessionEnd?: () => void | Promise<void>): UseTim
 		toggleTimer,
 		loadActiveSession,
 	}
-}
-
-// Helper function
-function diffInMilliseconds(start: Date, end: Date): Milliseconds {
-	return (end.getTime() - start.getTime()) as Milliseconds
 }

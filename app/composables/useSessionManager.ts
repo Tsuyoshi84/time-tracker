@@ -1,5 +1,5 @@
 import { type Ref, shallowReadonly, shallowRef } from 'vue'
-import type { DateString, Milliseconds, TimeSession } from '../types/index.ts'
+import type { DateString, TimeSession } from '../types/index.ts'
 import { convertToDateString } from '../utils/convertToDateString.ts'
 import {
 	checkForOverlappingSessions,
@@ -8,6 +8,7 @@ import {
 	saveSession,
 	updateSession,
 } from '../utils/database.ts'
+import { diffInMilliseconds } from '../utils/diffInMilliseconds.ts'
 
 interface UseSessionManagerReturnType {
 	/** Array of time sessions for the currently selected date. */
@@ -196,9 +197,4 @@ export function useSessionManager(
 		addManualSession,
 		selectDate,
 	}
-}
-
-// Helper function
-function diffInMilliseconds(start: Date, end: Date): Milliseconds {
-	return (end.getTime() - start.getTime()) as Milliseconds
 }
