@@ -40,17 +40,17 @@ importers:
         specifier: ^5.1.10
         version: 5.1.10
       dexie:
-        specifier: ^4.2.0
-        version: 4.2.0
+        specifier: ^4.2.1
+        version: 4.2.1
       eslint:
         specifier: ^9.35.0
         version: 9.35.0(jiti@2.5.1)
       import-in-the-middle:
-        specifier: ^1.14.2
-        version: 1.14.2
+        specifier: ^1.14.3
+        version: 1.14.3
       lucide-vue-next:
-        specifier: ^0.544.0
-        version: 0.544.0(vue@3.5.21(typescript@5.9.2))
+        specifier: ^0.546.0
+        version: 0.546.0(vue@3.5.21(typescript@5.9.2))
       nuxt:
         specifier: ^4.1.2
         version: 4.1.2(@biomejs/biome@2.2.4)(@netlify/blobs@9.1.2)(@parcel/watcher@2.5.1)(@types/node@24.4.0)(@vue/compiler-sfc@3.5.22)(db0@0.3.2)(eslint@9.35.0(jiti@2.5.1))(ioredis@5.7.0)(magicast@0.3.5)(optionator@0.9.4)(rolldown-vite@7.1.15(@types/node@24.4.0)(esbuild@0.25.9)(jiti@2.5.1)(terser@5.44.0)(yaml@2.8.1))(rollup@4.50.1)(terser@5.44.0)(typescript@5.9.2)(vue-tsc@3.0.7(typescript@5.9.2))(yaml@2.8.1)
@@ -89,8 +89,8 @@ importers:
         specifier: ^3.0.7
         version: 3.0.7(typescript@5.9.2)
       z-vue-scan-nuxt-module:
-        specifier: ^0.0.35
-        version: 0.0.35(magicast@0.3.5)(vue@3.5.21(typescript@5.9.2))
+        specifier: ^0.0.36
+        version: 0.0.36(magicast@0.3.5)(vue@3.5.21(typescript@5.9.2))
 
 packages:
 
@@ -3363,7 +3363,7 @@ packages:
   devalue@5.3.2:
     resolution: {integrity: sha512-UDsjUbpQn9kvm68slnrs+mfxwFkIflOhkanmyabZ8zOYk8SMEIbJ3TK+88g70hSIeytu4y18f0z/hYHMTrXIWw==}
 
-  dexie@4.2.0:
+  dexie@4.2.1:
     resolution: {integrity: sha512-OSeyyWOUetDy9oFWeddJgi83OnRA3hSFh3RrbltmPgqHszE9f24eUCVLI4mPg0ifsWk0lQTdnS+jyGNrPMvhDA==}
 
   dfa@1.2.0:
@@ -3999,7 +3999,7 @@ packages:
     resolution: {integrity: sha512-TR3KfrTZTYLPB6jUjfx6MF9WcWrHL9su5TObK4ZkYgBdWKPOFoSoQIdEuTuR82pmtxH2spWG9h6etwfr1pLBqQ==}
     engines: {node: '>=6'}
 
-  import-in-the-middle@1.14.2:
+  import-in-the-middle@1.14.3:
     resolution: {integrity: sha512-5tCuY9BV8ujfOpwtAGgsTx9CGUapcFMEEyByLv1B+v2+6DhAcw+Zr0nhQT7uwaZ7DiourxFEscghOR8e1aPLQw==}
 
   impound@1.0.0:
@@ -4490,7 +4490,7 @@ packages:
   lru-cache@5.1.1:
     resolution: {integrity: sha512-KpNARQA3Iwv+jTA0utUVVbrh+Jlrr1Fv0e56GGzAFOXN7dk/FviaDW8LHmK52DlcH4WP2n6gI8vN1aesBFgo9w==}
 
-  lucide-vue-next@0.544.0:
+  lucide-vue-next@0.546.0:
     resolution: {integrity: sha512-mDp/AdGOPIDkpFHnFiTWgQgCST9aBXHVaiobZfOMIvv7nrOukzF/TP+7KoOwrngdWRaH9TMiepMBIX1vsgKJ3g==}
     peerDependencies:
       vue: '>=3.0.1'
@@ -6296,10 +6296,10 @@ packages:
   youch@4.1.0-beta.11:
     resolution: {integrity: sha512-sQi6PERyO/mT8w564ojOVeAlYTtVQmC2GaktQAf+IdI75/GKIggosBuvyVXvEV+FATAT6RbLdIjFoiIId4ozoQ==}
 
-  z-vue-scan-nuxt-module@0.0.35:
+  z-vue-scan-nuxt-module@0.0.36:
     resolution: {integrity: sha512-BUMfWIc2MHTZgdAvvbeEFILvMwD4naC3s369ob2ti4xSIgAXMQb7rEByFmisDxy7LJz4O7L2aSNIJlDyXuG8ng==}
 
-  z-vue-scan@0.0.35:
+  z-vue-scan@0.0.36:
     resolution: {integrity: sha512-isWALsDyRFhvGJrWCKbZ8ORYXmrWp+ewvoaBxBQe0WWvilzyuoTLW8IG5gL2kORLdTWmyj2j1NvehaJpKavJcw==}
     peerDependencies:
       '@vue/composition-api': ^1.0.0-rc.1
@@ -7687,7 +7687,7 @@ snapshots:
     dependencies:
       '@opentelemetry/api': 1.9.0
       '@opentelemetry/api-logs': 0.203.0
-      import-in-the-middle: 1.14.2
+      import-in-the-middle: 1.14.3
       require-in-the-middle: 7.5.2
     transitivePeerDependencies:
       - supports-color
@@ -7696,7 +7696,7 @@ snapshots:
     dependencies:
       '@opentelemetry/api': 1.9.0
       '@opentelemetry/api-logs': 0.204.0
-      import-in-the-middle: 1.14.2
+      import-in-the-middle: 1.14.3
       require-in-the-middle: 7.5.2
     transitivePeerDependencies:
       - supports-color
@@ -7706,7 +7706,7 @@ snapshots:
       '@opentelemetry/api': 1.9.0
       '@opentelemetry/api-logs': 0.57.2
       '@types/shimmer': 1.2.0
-      import-in-the-middle: 1.14.2
+      import-in-the-middle: 1.14.3
       require-in-the-middle: 7.5.2
       semver: 7.7.2
       shimmer: 1.2.1
@@ -8314,7 +8314,7 @@ snapshots:
       '@opentelemetry/semantic-conventions': 1.37.0
       '@sentry/core': 10.11.0
       '@sentry/opentelemetry': 10.11.0(@opentelemetry/api@1.9.0)(@opentelemetry/context-async-hooks@2.1.0(@opentelemetry/api@1.9.0))(@opentelemetry/core@2.1.0(@opentelemetry/api@1.9.0))(@opentelemetry/sdk-trace-base@2.1.0(@opentelemetry/api@1.9.0))(@opentelemetry/semantic-conventions@1.37.0)
-      import-in-the-middle: 1.14.2
+      import-in-the-middle: 1.14.3
 
   '@sentry/node@10.11.0':
     dependencies:
@@ -8351,7 +8351,7 @@ snapshots:
       '@sentry/core': 10.11.0
       '@sentry/node-core': 10.11.0(@opentelemetry/api@1.9.0)(@opentelemetry/context-async-hooks@2.1.0(@opentelemetry/api@1.9.0))(@opentelemetry/core@2.1.0(@opentelemetry/api@1.9.0))(@opentelemetry/instrumentation@0.203.0(@opentelemetry/api@1.9.0))(@opentelemetry/resources@2.1.0(@opentelemetry/api@1.9.0))(@opentelemetry/sdk-trace-base@2.1.0(@opentelemetry/api@1.9.0))(@opentelemetry/semantic-conventions@1.37.0)
       '@sentry/opentelemetry': 10.11.0(@opentelemetry/api@1.9.0)(@opentelemetry/context-async-hooks@2.1.0(@opentelemetry/api@1.9.0))(@opentelemetry/core@2.1.0(@opentelemetry/api@1.9.0))(@opentelemetry/sdk-trace-base@2.1.0(@opentelemetry/api@1.9.0))(@opentelemetry/semantic-conventions@1.37.0)
-      import-in-the-middle: 1.14.2
+      import-in-the-middle: 1.14.3
       minimatch: 9.0.5
     transitivePeerDependencies:
       - supports-color
@@ -10015,7 +10015,7 @@ snapshots:
 
   devalue@5.3.2: {}
 
-  dexie@4.2.0: {}
+  dexie@4.2.1: {}
 
   dfa@1.2.0: {}
 
@@ -10726,7 +10726,7 @@ snapshots:
       parent-module: 1.0.1
       resolve-from: 4.0.0
 
-  import-in-the-middle@1.14.2:
+  import-in-the-middle@1.14.3:
     dependencies:
       acorn: 8.15.0
       acorn-import-attributes: 1.9.5(acorn@8.15.0)
@@ -11156,7 +11156,7 @@ snapshots:
     dependencies:
       yallist: 3.1.1
 
-  lucide-vue-next@0.544.0(vue@3.5.21(typescript@5.9.2)):
+  lucide-vue-next@0.546.0(vue@3.5.21(typescript@5.9.2)):
     dependencies:
       vue: 3.5.21(typescript@5.9.2)
 
@@ -13298,16 +13298,16 @@ snapshots:
       cookie: 1.0.2
       youch-core: 0.3.3
 
-  z-vue-scan-nuxt-module@0.0.35(magicast@0.3.5)(vue@3.5.21(typescript@5.9.2)):
+  z-vue-scan-nuxt-module@0.0.36(magicast@0.3.5)(vue@3.5.21(typescript@5.9.2)):
     dependencies:
       '@nuxt/kit': 3.19.2(magicast@0.3.5)
-      z-vue-scan: 0.0.35(vue@3.5.21(typescript@5.9.2))
+      z-vue-scan: 0.0.36(vue@3.5.21(typescript@5.9.2))
     transitivePeerDependencies:
       - '@vue/composition-api'
       - magicast
       - vue
 
-  z-vue-scan@0.0.35(vue@3.5.21(typescript@5.9.2)):
+  z-vue-scan@0.0.36(vue@3.5.21(typescript@5.9.2)):
     dependencies:
       vue: 3.5.21(typescript@5.9.2)
       vue-demi: 0.14.10(vue@3.5.21(typescript@5.9.2))
