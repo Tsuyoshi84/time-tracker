@@ -24,7 +24,7 @@ withDefaults(
 	{
 		loading: false,
 		error: '',
-	}
+	},
 )
 
 defineEmits<{

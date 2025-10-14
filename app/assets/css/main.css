@@ -1,9 +1,8 @@
 @import "tailwindcss";
 @import "@nuxt/ui";
 
-
 button {
-  &:not([disabled]) {
-    @apply cursor-pointer;
-  }
+	&:not([disabled]) {
+		@apply cursor-pointer;
+	}
 }
