@@ -23,7 +23,7 @@ withDefaults(
 	}>(),
 	{
 		loading: false,
-	}
+	},
 )
 
 defineEmits<{
