@@ -3,10 +3,8 @@
  * TimerDisplay shows the current session timer, today's total time, and timer controls.
  */
 
-import { AlertCircle } from 'lucide-vue-next'
 import type { Milliseconds } from '~/types/index.ts'
 import { formatDuration } from '~/utils/formatDuration.ts'
-import AppCard from './AppCard.vue'
 
 withDefaults(
 	defineProps<{
@@ -16,17 +14,17 @@ withDefaults(
 		currentSessionDuration: Milliseconds
 		/** Total duration for today in milliseconds. */
 		todaysTotalDuration: Milliseconds
+		/** Total duration for this week in milliseconds. */
+		weeklyTotalDuration: Milliseconds
 		/** Number of sessions for today. */
 		sessionCount: number
 		/** Whether the timer is in a loading state. */
 		loading?: boolean
-		/** Error message to display, if any. */
-		error?: string
 	}>(),
 	{
 		loading: false,
 		error: '',
-	},
+	}
 )
 
 defineEmits<{
@@ -35,41 +33,37 @@ defineEmits<{
 </script>
 
 <template>
-	<div class="text-center space-y-6">
+	<UPageGrid class="grid-cols-2 lg:grid-cols-2">
 		<!-- Current Session Timer -->
-		<AppCard>
+		<UPageCard class="col-span-2">
 			<div class="text-sm text-info mb-2">Current Session</div>
 			<div class="font-inter text-6xl tabular-nums font-bold text-primary mb-4">
 				{{ formatDuration(currentSessionDuration) }}
 			</div>
 
 			<UButton
+				class="justify-center"
 				:label="isRunning ? 'Pause' : 'Start'"
 				:icon="isRunning ? 'i-lucide-pause' : 'i-lucide-play'"
 				:color="isRunning ? 'warning' : 'primary'"
 				size="xl"
 				@click="$emit('toggleTimer')"
 			/>
-		</AppCard>
+		</UPageCard>
 
 		<!-- Today's Total -->
-		<AppCard>
-			<div class="text-sm text-info mb-2">Today's Total</div>
-			<div class="font-inter text-4xl tabular-nums font-semibold text-secondary">
+		<UPageCard class="col-span-1">
+			<div class="text-sm text-info-300 mb-2">Today's Total</div>
+			<div class="font-inter text-4xl tabular-nums font-semibold text-info">
 				{{ formatDuration(todaysTotalDuration) }}
 			</div>
-			<div class="text-sm text-info mt-1">
-				{{ sessionCount }} session{{ sessionCount !== 1 ? 's' : '' }}
-			</div>
-		</AppCard>
+		</UPageCard>
 
-		<!-- Error Messages -->
-		<div
-			v-if="error"
-			class="alert alert-error"
-		>
-			<AlertCircle class="w-5 h-5" />
-			<span>{{ error }}</span>
-		</div>
-	</div>
+		<UPageCard class="col-span-1">
+			<div class="text-sm text-warning-300 mb-2">This Week's Total</div>
+			<div class="font-inter text-4xl tabular-nums font-semibold text-warning">
+				{{ formatDuration(todaysTotalDuration) }}
+			</div>
+		</UPageCard>
+	</UPageGrid>
 </template>
