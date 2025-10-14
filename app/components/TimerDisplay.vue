@@ -23,7 +23,6 @@ withDefaults(
 	}>(),
 	{
 		loading: false,
-		error: '',
 	}
 )
 
