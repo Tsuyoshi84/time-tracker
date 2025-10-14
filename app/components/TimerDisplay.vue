@@ -24,7 +24,7 @@ withDefaults(
 	{
 		loading: false,
 		error: '',
-	},
+	}
 )
 
 defineEmits<{
@@ -62,7 +62,7 @@ defineEmits<{
 		<UPageCard class="col-span-1">
 			<div class="text-sm text-warning-300 mb-2">This Week's Total</div>
 			<div class="font-inter text-4xl tabular-nums font-semibold text-warning">
-				{{ formatDuration(todaysTotalDuration) }}
+				{{ formatDuration(weeklyTotalDuration) }}
 			</div>
 		</UPageCard>
 	</UPageGrid>
