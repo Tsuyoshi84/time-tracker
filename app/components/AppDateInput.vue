@@ -29,7 +29,7 @@ const dateFormatter = new DateFormatter('en-US', {
 /**
  * Computed property that provides two-way binding between DateString and CalendarDate.
  */
-const selectedDate = computed<CalendarDate | undefined>({
+const selectedDate = computed<CalendarDate>({
 	get() {
 		return dateStringToCalendarDate(dateString.value)
 	},
@@ -65,9 +65,10 @@ const selectedDate = computed<CalendarDate | undefined>({
 
 		<template #content>
 			<UCalendar
-				v-model="selectedDate as CalendarDate | undefined"
+				:model-value="selectedDate"
 				class="p-2"
 				aria-label="Date picker calendar"
+				@update:model-value="selectedDate = $event as CalendarDate"
 			/>
 		</template>
 	</UPopover>
