@@ -53,13 +53,8 @@ const todaysTotalDuration = computed<Milliseconds>(() => {
 		todaySessions.reduce(
 			(total, session) =>
 				session.endTime ? total + (session.endTime.getTime() - session.startTime.getTime()) : total,
-			0,
+			0
 		)) as Milliseconds
-})
-
-const sessionCount = computed(() => {
-	const today = convertToDateString(new Date())
-	return sessions.value.filter((s) => s.date === today).length
 })
 
 const selectedDateInput = shallowRef(selectedDate.value)
@@ -73,11 +68,11 @@ watch(selectedDateInput, () => {
 })
 
 const totalDurationExcludingCurrentSession = useSum(() =>
-	dailyStats.value.map((day) => day.totalDuration),
+	dailyStats.value.map((day) => day.totalDuration)
 )
 
 const weekTotalDuration = computed<Milliseconds>(
-	() => (totalDurationExcludingCurrentSession.value + currentSessionDuration.value) as Milliseconds,
+	() => (totalDurationExcludingCurrentSession.value + currentSessionDuration.value) as Milliseconds
 )
 
 // SEO
@@ -97,7 +92,6 @@ useSeoMeta({
 					:current-session-duration="currentSessionDuration"
 					:todays-total-duration="todaysTotalDuration"
 					:week-total-duration="weekTotalDuration"
-					:session-count="sessionCount"
 					:loading="loading"
 					@toggle-timer="toggleTimer"
 				/>
