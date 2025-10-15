@@ -11,28 +11,11 @@ import type { Milliseconds } from '~/types/index.ts'
 import { convertToDateString } from '~/utils/convertToDateString.ts'
 import { initDatabase } from '~/utils/database.ts'
 
-// Initialize composables with coordination callbacks
-const weeklyStats = useWeeklyStats()
+const { dailyStats, loadWeeklyStats } = useWeeklyStats()
 
-const sessionManager = useSessionManager(async () => {
-	await weeklyStats.loadWeeklyStats()
-})
+const { loadActiveSession, timerState, currentSessionDuration, toggleTimer, loading } =
+	useTimerState()
 
-const timerStateManager = useTimerState(async () => {
-	await sessionManager.loadSessionsForDate(sessionManager.selectedDate.value)
-	await weeklyStats.loadWeeklyStats()
-})
-
-// Initialize on mount
-onMounted(async () => {
-	initDatabase()
-	await timerStateManager.loadActiveSession()
-	await sessionManager.loadSessionsForDate(sessionManager.selectedDate.value)
-	await weeklyStats.loadWeeklyStats()
-})
-
-// Extract values from composables
-const { timerState, currentSessionDuration, toggleTimer } = timerStateManager
 const {
 	sessions,
 	selectedDate,
@@ -40,11 +23,26 @@ const {
 	deleteSessionData,
 	addManualSession,
 	selectDate,
-} = sessionManager
-const { dailyStats } = weeklyStats
+	loadSessionsForDate,
+} = useSessionManager(async () => {
+	await loadWeeklyStats()
+})
 
-// Combined loading and error states
-const loading = computed(() => timerStateManager.loading.value || sessionManager.loading.value)
+// Initialize on mount
+onMounted(async () => {
+	initDatabase()
+	await loadActiveSession()
+	await loadSessionsForDate(selectedDate.value)
+	await loadWeeklyStats()
+})
+
+watch(
+	() => timerState.value.isRunning,
+	async () => {
+		await loadSessionsForDate(selectedDate.value)
+		await loadWeeklyStats()
+	},
+)
 
 const todaysTotalDuration = computed<Milliseconds>(() => {
 	const today = convertToDateString(new Date())

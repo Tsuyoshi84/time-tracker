@@ -38,10 +38,9 @@ interface UseTimerStateReturnType {
  * - Handling document visibility changes
  * - Loading and restoring active sessions
  *
- * @param onSessionEnd - Callback function called when a session ends
  * @returns UseTimerStateReturnType - API for timer state management
  */
-export function useTimerState(onSessionEnd?: () => void | Promise<void>): UseTimerStateReturnType {
+export function useTimerState(): UseTimerStateReturnType {
 	const timerState = shallowRef<TimerState>({
 		isRunning: false,
 		currentSession: null,
@@ -63,14 +62,18 @@ export function useTimerState(onSessionEnd?: () => void | Promise<void>): UseTim
 
 	const visibility = useDocumentVisibility()
 
-	watch(visibility, () => {
-		if (visibility.value === 'hidden') {
-			pause()
-		} else {
-			updateCurrentSessionDuration()
-			resume()
-		}
-	})
+	watch(
+		visibility,
+		() => {
+			if (visibility.value === 'hidden') {
+				pause()
+			} else {
+				updateCurrentSessionDuration()
+				resume()
+			}
+		},
+		{ immediate: true },
+	)
 
 	async function loadActiveSession(): Promise<void> {
 		try {
@@ -81,6 +84,7 @@ export function useTimerState(onSessionEnd?: () => void | Promise<void>): UseTim
 					currentSession: activeSession,
 					startTime: activeSession.startTime,
 				}
+				updateCurrentSessionDuration()
 			} else {
 				pause()
 			}
@@ -157,11 +161,6 @@ export function useTimerState(onSessionEnd?: () => void | Promise<void>): UseTim
 			endTime: endTime.toISOString(),
 			duration,
 		})
-
-		// Notify parent that session ended
-		if (onSessionEnd) {
-			await onSessionEnd()
-		}
 	}
 
 	let timerInterval: number | null = null
