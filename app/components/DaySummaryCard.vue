@@ -6,7 +6,6 @@
 import type { DateString, WeekDay } from '~/types/index.ts'
 import { formatDate } from '~/utils/formatDate.ts'
 import { formatDuration } from '~/utils/formatDuration.ts'
-import AppCard from './AppCard.vue'
 
 const props = defineProps<{
 	/** The week day. */
@@ -25,7 +24,7 @@ function formatDateLabel(dateString: string): string {
 </script>
 
 <template>
-	<AppCard
+	<UCard
 		class="p-3 text-center transition-colors cursor-pointer"
 		:class="{
 			'border-2 border-gray-400': props.selected,
@@ -59,5 +58,5 @@ function formatDateLabel(dateString: string): string {
 		>
 			{{ props.weekDay.sessionCount }} session{{ props.weekDay.sessionCount !== 1 ? 's' : '' }}
 		</div>
-	</AppCard>
+	</UCard>
 </template>

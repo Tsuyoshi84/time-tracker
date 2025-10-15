@@ -34,7 +34,9 @@ const selectedDate = computed<CalendarDate>({
 		return dateStringToCalendarDate(dateString.value)
 	},
 	set(value) {
-		dateString.value = calendarDateToDateString(value)
+		if (value !== undefined) {
+			dateString.value = calendarDateToDateString(value)
+		}
 	},
 })
 </script>
@@ -63,9 +65,10 @@ const selectedDate = computed<CalendarDate>({
 
 		<template #content>
 			<UCalendar
-				v-model="selectedDate"
+				:model-value="selectedDate"
 				class="p-2"
 				aria-label="Date picker calendar"
+				@update:model-value="selectedDate = $event as CalendarDate"
 			/>
 		</template>
 	</UPopover>

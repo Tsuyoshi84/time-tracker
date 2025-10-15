@@ -58,6 +58,10 @@ export default defineNuxtConfig({
 				useUnknownInCatchVariables: true,
 				strict: true,
 			},
+			vueCompilerOptions: {
+				strictTemplates: true,
+				dataAttributes: ['data-*', 'aria-*'],
+			},
 		},
 	},
 
