@@ -22,7 +22,7 @@ withDefaults(
 	}>(),
 	{
 		loading: false,
-	},
+	}
 )
 
 const emit = defineEmits<{
@@ -148,6 +148,7 @@ function getSessionErrors(session: TimeSession): ValidationError[] {
 						color="error"
 						variant="soft"
 						:disabled="loading"
+						title="Delete session"
 						aria-label="Delete session"
 						@click="deleteSession(session)"
 					/>
