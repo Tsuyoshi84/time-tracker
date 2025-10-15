@@ -15,9 +15,7 @@ withDefaults(
 		/** Total duration for today in milliseconds. */
 		todaysTotalDuration: Milliseconds
 		/** Total duration for this week in milliseconds. */
-		weeklyTotalDuration: Milliseconds
-		/** Number of sessions for today. */
-		sessionCount: number
+		weekTotalDuration: Milliseconds
 		/** Whether the timer is in a loading state. */
 		loading?: boolean
 	}>(),
@@ -61,7 +59,7 @@ defineEmits<{
 		<UPageCard class="col-span-1">
 			<div class="text-sm text-warning-300 mb-2">This Week's Total</div>
 			<div class="font-inter text-4xl tabular-nums font-semibold text-warning">
-				{{ formatDuration(weeklyTotalDuration) }}
+				{{ formatDuration(weekTotalDuration) }}
 			</div>
 		</UPageCard>
 	</UPageGrid>

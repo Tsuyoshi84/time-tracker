@@ -76,7 +76,7 @@ const totalDurationExcludingCurrentSession = useSum(() =>
 	dailyStats.value.map((day) => day.totalDuration),
 )
 
-const totalDurationIncludingCurrentSession = computed<Milliseconds>(
+const weekTotalDuration = computed<Milliseconds>(
 	() => (totalDurationExcludingCurrentSession.value + currentSessionDuration.value) as Milliseconds,
 )
 
@@ -96,7 +96,7 @@ useSeoMeta({
 					:is-running="timerState.isRunning"
 					:current-session-duration="currentSessionDuration"
 					:todays-total-duration="todaysTotalDuration"
-					:weekly-total-duration="totalDurationIncludingCurrentSession"
+					:week-total-duration="weekTotalDuration"
 					:session-count="sessionCount"
 					:loading="loading"
 					@toggle-timer="toggleTimer"
