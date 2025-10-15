@@ -2,6 +2,7 @@
 /**
  * SessionList displays and manages time tracking sessions, allowing users to view, edit, and delete session entries.
  */
+
 import { Clock } from 'lucide-vue-next'
 import type { TimeSession } from '~/types/index.ts'
 import { calculateDuration } from '~/utils/calculateDuration.ts'
@@ -14,7 +15,9 @@ import TimeInput from './TimeInput.vue'
 
 withDefaults(
 	defineProps<{
+		/** Array of time sessions to display. */
 		sessions: TimeSession[]
+		/** Whether the component is loading. */
 		loading?: boolean
 	}>(),
 	{
@@ -94,10 +97,9 @@ function getSessionErrors(session: TimeSession): ValidationError[] {
 			v-else
 			class="space-y-3"
 		>
-			<div
+			<UCard
 				v-for="session in sessions"
 				:key="session.id"
-				class="bg-base-100 border border-base-300 rounded-lg p-4 shadow-sm hover:shadow-md transition-shadow"
 				:class="{ 'bg-green-100 dark:bg-green-300': session.isActive }"
 			>
 				<div class="grid grid-cols-[1fr_2rem] items-center justify-between">
@@ -106,7 +108,7 @@ function getSessionErrors(session: TimeSession): ValidationError[] {
 						<div class="flex items-center dark:text-gray-600">
 							<div
 								class="w-3 h-3 rounded-full"
-								:class="session.isActive ? 'bg-green-500 text-gray-700' : 'bg-gray-300'"
+								:class="session.isActive ? 'bg-primary text-gray-700' : 'bg-gray-300'"
 							/>
 							<span class="ml-2 text-sm font-medium">
 								{{ session.isActive ? 'Active' : 'Completed' }}
@@ -139,17 +141,16 @@ function getSessionErrors(session: TimeSession): ValidationError[] {
 					</div>
 
 					<!-- Actions -->
-					<div class="flex items-center space-x-2">
-						<UButton
-							v-if="!session.isActive"
-							icon="i-lucide-trash-2"
-							size="md"
-							color="error"
-							variant="soft"
-							:disabled="loading"
-							@click="deleteSession(session)"
-						/>
-					</div>
+					<UButton
+						v-if="!session.isActive"
+						icon="i-lucide-trash-2"
+						size="md"
+						color="error"
+						variant="soft"
+						:disabled="loading"
+						aria-label="Delete session"
+						@click="deleteSession(session)"
+					/>
 				</div>
 
 				<!-- Validation Errors -->
@@ -165,7 +166,7 @@ function getSessionErrors(session: TimeSession): ValidationError[] {
 						{{ error.message }}
 					</div>
 				</div>
-			</div>
+			</UCard>
 		</div>
 	</div>
 </template>
