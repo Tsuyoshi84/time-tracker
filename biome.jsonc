@@ -32,9 +32,7 @@
 				"noUnusedImports": "warn",
 				"noUnusedVariables": "warn"
 			},
-			"nursery": {
-				"useConsistentTypeDefinitions": "error"
-			},
+			"nursery": {},
 			"style": {
 				"noNestedTernary": "on",
 				"noParameterAssign": "error",
@@ -42,7 +40,8 @@
 				"useImportType": "warn",
 				"useNumberNamespace": "error",
 				"useCollapsedIf": "error",
-				"useConsistentObjectDefinitions": "on"
+				"useConsistentObjectDefinitions": "on",
+				"useConsistentTypeDefinitions": "error"
 			},
 			"suspicious": {
 				"noConsole": "warn"
@@ -54,6 +53,18 @@
 			"semicolons": "asNeeded",
 			"lineWidth": 100,
 			"quoteStyle": "single"
+		}
+	},
+	"css": {
+		"parser": {
+			"cssModules": false,
+			"tailwindDirectives": true
+		}
+	},
+	"html": {
+		"experimentalFullSupportEnabled": true,
+		"formatter": {
+			"indentScriptAndStyle": false
 		}
 	},
 	"overrides": [
@@ -88,16 +99,6 @@
 					},
 					"suspicious": {
 						"noExplicitAny": "off"
-					}
-				}
-			}
-		},
-		{
-			"includes": ["**/*.css"],
-			"linter": {
-				"rules": {
-					"suspicious": {
-						"noUnknownAtRules": "off"
 					}
 				}
 			}
