@@ -2,7 +2,7 @@
 
 A professional time tracking application built for freelance engineers with flexible hours and multiple work sessions per day.
 
-## Features
+## Features!!!!☀️
 
 ### 🕐 Flexible Timer System
 
