@@ -1,0 +1,78 @@
+version: 2
+updates:
+  - package-ecosystem: "npm"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+      time: "07:00"
+      timezone: "Asia/Tokyo"
+      day: 'saturday'
+    assignees:
+      - "Tsuyoshi84"
+    open-pull-requests-limit: 10
+    commit-message:
+      prefix: "chore"
+    groups:
+      lint-format-test:
+        patterns:
+          - "*eslint*"
+          - "*biome*"
+          - "oxlint"
+          - "lefthook"
+          - "*prettier*"
+          - "*vitest*"
+          - "@testing-library/*"
+          - "@nuxt/test-utils"
+          - "@vue/test-utils"
+          - "happy-dom"
+      nuxt:
+        patterns:
+          - "*nuxt*"
+          - "*vue*"
+          - "*pinia*"
+          - "drizzle-*"
+          - "valibot"
+        exclude-patterns:
+          - "nuxt"
+          - "@testing-library/vue"
+          - "@nuxt/test-utils"
+          - "eslint-plugin-vue"
+          - "@nuxt/eslint"
+          - "vue-tsc"
+      typescript:
+        patterns:
+          - "typescript"
+          - "type-fest"
+          - "vue-tsc"
+
+  - package-ecosystem: "github-actions"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+      time: "07:00"
+      timezone: "Asia/Tokyo"
+      day: 'saturday'
+    labels:
+      - "github_actions"
+    commit-message:
+      prefix: "chore"
+    open-pull-requests-limit: 30
+
+  - package-ecosystem: "docker"
+    directory: ".devcontainer"
+    schedule:
+      interval: "weekly"
+      time: "07:00"
+      timezone: "Asia/Tokyo"
+      day: 'saturday'
+    open-pull-requests-limit: 10
+    target-branch: "main"
+    allow:
+      - dependency-type: "all"
+    commit-message:
+      prefix: "chore"
+      include: "scope"
+    labels:
+      - "dependencies"
+    assignees:
+      - "Tsuyoshi84"
