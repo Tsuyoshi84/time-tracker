@@ -20,6 +20,7 @@ export default defineNuxtConfig({
 		'@sentry/nuxt/module',
 		'@nuxt/test-utils/module',
 		'z-vue-scan-nuxt-module',
+		'@nuxt/hints',
 	],
 
 	ssr: false,
