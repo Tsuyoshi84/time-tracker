@@ -1,5 +1,4 @@
 <script setup lang="ts">
-import { Calendar } from 'lucide-vue-next'
 import { computed, onMounted } from 'vue'
 import AppCard from '~/components/AppCard.vue'
 import { useMonthlyStats } from '~/composables/useMonthlyStats.ts'
@@ -42,7 +41,7 @@ useSeoMeta({
 			v-if="loading"
 			class="text-center py-12"
 		>
-			<div class="inline-block animate-spin rounded-full h-8 w-8 border-b-2 border-primary"/>
+			<div class="inline-block animate-spin rounded-full h-8 w-8 border-b-2 border-primary" />
 			<p class="mt-4 text-gray-600">Loading monthly statistics...</p>
 		</div>
 
@@ -52,15 +51,6 @@ useSeoMeta({
 			class="text-center py-12"
 		>
 			<p class="text-red-600">{{ error }}</p>
-		</div>
-
-		<!-- Empty State -->
-		<div
-			v-else-if="stats.length === 0"
-			class="text-center py-12"
-		>
-			<Calendar class="w-12 h-12 mx-auto mb-2 opacity-50" />
-			<p class="text-gray-600">No monthly data available</p>
 		</div>
 
 		<!-- Monthly Stats Grid -->
@@ -84,4 +74,3 @@ useSeoMeta({
 		</div>
 	</div>
 </template>
-
