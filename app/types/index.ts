@@ -92,6 +92,20 @@ export interface WeekDay {
 	sessionCount: number
 }
 
+/** Statistics for a single month's time tracking. */
+export interface MonthStats {
+	/** The month label (e.g., 'January 2024'). */
+	monthLabel: string
+	/** The start date of the month in YYYY-MM-DD format. */
+	startDate: DateString
+	/** The end date of the month in YYYY-MM-DD format. */
+	endDate: DateString
+	/** Total duration tracked for this month in milliseconds. */
+	totalDuration: Milliseconds
+	/** Number of sessions for this month. */
+	sessionCount: number
+}
+
 // Runtime configuration types
 declare module 'nuxt/schema' {
 	interface PublicRuntimeConfig {
