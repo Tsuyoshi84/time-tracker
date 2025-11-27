@@ -40,7 +40,7 @@ describe('DaySummaryCard', () => {
 		})
 
 		// The text is in one element but split by spaces, so we use textContent
-		const dateElement = container.querySelector('.text-gray-500.text-xs')
+		const dateElement = container.querySelector('.text-muted.text-xs')
 		expect(dateElement?.textContent?.trim()).toBe('Jan 15 (Mon)')
 	})
 
@@ -131,7 +131,7 @@ describe('DaySummaryCard', () => {
 		})
 
 		const durationElement = container.querySelector('.text-2xl.font-semibold')
-		expect(durationElement).toHaveClass('text-gray-400')
+		expect(durationElement).toHaveClass('text-dimmed')
 	})
 
 	it('should apply secondary color to session count when sessionCount > 0', () => {
@@ -143,7 +143,7 @@ describe('DaySummaryCard', () => {
 			},
 		})
 
-		const sessionElement = container.querySelector('.text-xs.text-gray-500.mt-1')
+		const sessionElement = container.querySelector('.text-xs.text-muted.mt-1')
 		expect(sessionElement).toHaveClass('text-secondary')
 	})
 
@@ -156,8 +156,8 @@ describe('DaySummaryCard', () => {
 			},
 		})
 
-		const sessionElement = container.querySelector('.text-xs.text-gray-500.mt-1')
-		expect(sessionElement).toHaveClass('text-gray-400')
+		const sessionElement = container.querySelector('.text-xs.text-muted.mt-1')
+		expect(sessionElement).toHaveClass('text-dimmed')
 	})
 
 	it('should emit selectDay event when clicked and not disabled', async () => {
@@ -259,7 +259,7 @@ describe('DaySummaryCard', () => {
 		})
 
 		// Get the session count element - it's the last .text-xs element
-		const sessionElement = container.querySelector('.text-xs.text-gray-500.mt-1')
+		const sessionElement = container.querySelector('.text-xs.text-muted.mt-1')
 		expect(sessionElement?.textContent?.trim()).toBe('0 sessions')
 	})
 })

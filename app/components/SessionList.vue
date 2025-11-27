@@ -22,7 +22,7 @@ withDefaults(
 	}>(),
 	{
 		loading: false,
-	},
+	}
 )
 
 const emit = defineEmits<{
@@ -87,7 +87,7 @@ function getSessionErrors(session: TimeSession): ValidationError[] {
 
 		<div
 			v-if="sessions.length === 0"
-			class="text-center py-8 text-gray-500"
+			class="text-center py-8 text-muted"
 		>
 			<Clock class="w-12 h-12 mx-auto mb-2 opacity-50" />
 			<p>No sessions for this day</p>
@@ -105,10 +105,10 @@ function getSessionErrors(session: TimeSession): ValidationError[] {
 				<div class="grid grid-cols-[1fr_2rem] items-center justify-between">
 					<div class="grid grid-cols-[6rem_1fr_6rem] items-center gap-4">
 						<!-- Session Status -->
-						<div class="flex items-center dark:text-gray-600">
+						<div class="flex items-center text-toned">
 							<div
 								class="w-3 h-3 rounded-full"
-								:class="session.isActive ? 'bg-primary text-gray-700' : 'bg-gray-300'"
+								:class="session.isActive ? 'bg-primary text-default' : 'bg-gray-300'"
 							/>
 							<span class="ml-2 text-sm font-medium">
 								{{ session.isActive ? 'Active' : 'Completed' }}
@@ -118,16 +118,16 @@ function getSessionErrors(session: TimeSession): ValidationError[] {
 						<!-- Time Range -->
 						<div class="flex items-center space-x-2">
 							<TimeInput
-								:class="{ 'text-gray-600': session.isActive }"
+								:class="{ 'text-toned': session.isActive }"
 								:value="formatTime(session.startTime)"
 								:disabled="loading"
 								:readonly="session.isActive"
 								@update="(value) => updateStartTime(session, value)"
 							/>
-							<span class="text-gray-400">-</span>
+							<span class="text-dimmed">-</span>
 							<TimeInput
 								v-if="session.endTime"
-								:class="{ 'text-gray-700': session.isActive }"
+								:class="{ 'text-default': session.isActive }"
 								:value="formatTime(session.endTime)"
 								:disabled="loading"
 								@update="(value) => updateEndTime(session, value)"
@@ -135,7 +135,7 @@ function getSessionErrors(session: TimeSession): ValidationError[] {
 						</div>
 
 						<!-- Duration -->
-						<div class="text-sm font-mono text-gray-600">
+						<div class="text-sm font-mono text-toned">
 							{{ getDurationDisplay(session) }}
 						</div>
 					</div>
@@ -162,7 +162,7 @@ function getSessionErrors(session: TimeSession): ValidationError[] {
 					<div
 						v-for="error in getSessionErrors(session)"
 						:key="error.field"
-						class="text-sm text-red-600"
+						class="text-sm text-error"
 					>
 						{{ error.message }}
 					</div>

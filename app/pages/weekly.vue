@@ -84,7 +84,7 @@ function getSessionDuration(session: TimeSession): string {
 	<div class="max-w-6xl mx-auto">
 		<div class="mb-8">
 			<h1 class="text-3xl font-bold text-center mb-2">Weekly Overview</h1>
-			<p class="text-center text-gray-600">
+			<p class="text-center text-toned">
 				Track your weekly progress and analyze your work patterns
 			</p>
 		</div>
@@ -110,7 +110,7 @@ function getSessionDuration(session: TimeSession): string {
 
 				<div
 					v-if="selectedDayStats.sessions.length === 0"
-					class="text-center py-8 text-gray-500"
+					class="text-center py-8 text-muted"
 				>
 					<Calendar class="w-12 h-12 mx-auto mb-2 opacity-50" />
 					<p>No sessions for this day</p>
@@ -140,14 +140,14 @@ function getSessionDuration(session: TimeSession): string {
 
 							<div class="flex items-center space-x-2">
 								<span class="text-sm font-mono">{{ formatTime(session.startTime) }}</span>
-								<span class="text-gray-400">-</span>
+								<span class="text-dimmed">-</span>
 								<span class="text-sm font-mono">
 									{{ session.endTime ? formatTime(session.endTime) : 'Running...' }}
 								</span>
 							</div>
 						</div>
 
-						<div class="text-sm font-mono text-gray-600">
+						<div class="text-sm font-mono text-toned">
 							{{ getSessionDuration(session) }}
 						</div>
 					</div>
@@ -167,25 +167,25 @@ function getSessionDuration(session: TimeSession): string {
 		<!-- Weekly Stats Summary -->
 		<div class="mt-4 grid grid-cols-1 md:grid-cols-4 gap-6">
 			<AppCard class="text-center">
-				<div class="text-sm text-gray-600 mb-1">Total Hours</div>
+				<div class="text-sm text-toned mb-1">Total Hours</div>
 				<div class="text-2xl font-bold text-primary">
 					{{ formatDuration(weeklyTotal) }}
 				</div>
 			</AppCard>
 			<AppCard class="text-center">
-				<div class="text-sm text-gray-600 mb-1">Daily Average</div>
+				<div class="text-sm text-toned mb-1">Daily Average</div>
 				<div class="text-2xl font-bold text-secondary">
 					{{ formatDuration(dailyAverage) }}
 				</div>
 			</AppCard>
 			<AppCard class="text-center">
-				<div class="text-sm text-gray-600 mb-1">Most Productive Day</div>
+				<div class="text-sm text-toned mb-1">Most Productive Day</div>
 				<div class="text-lg font-bold text-accent">
 					{{ mostProductiveDay }}
 				</div>
 			</AppCard>
 			<AppCard class="text-center">
-				<div class="text-sm text-gray-600 mb-1">Total Sessions</div>
+				<div class="text-sm text-toned mb-1">Total Sessions</div>
 				<div class="text-2xl font-bold text-warning">
 					{{ totalWeeklySessions }}
 				</div>

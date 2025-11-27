@@ -31,7 +31,7 @@ useSeoMeta({
 	<div class="max-w-6xl mx-auto">
 		<div class="mb-8">
 			<h1 class="text-3xl font-bold text-center mb-2">Monthly Overview</h1>
-			<p class="text-center text-gray-600">
+			<p class="text-center text-toned">
 				Track your monthly progress and analyze your work patterns over time
 			</p>
 		</div>
@@ -42,7 +42,7 @@ useSeoMeta({
 			class="text-center py-12"
 		>
 			<div class="inline-block animate-spin rounded-full h-8 w-8 border-b-2 border-primary" />
-			<p class="mt-4 text-gray-600">Loading monthly statistics...</p>
+			<p class="mt-4 text-toned">Loading monthly statistics...</p>
 		</div>
 
 		<!-- Error State -->
@@ -50,7 +50,7 @@ useSeoMeta({
 			v-else-if="error"
 			class="text-center py-12"
 		>
-			<p class="text-red-600">{{ error }}</p>
+			<p class="text-error">{{ error }}</p>
 		</div>
 
 		<!-- Monthly Stats Grid -->
@@ -63,11 +63,11 @@ useSeoMeta({
 				:key="month.startDate"
 				class="text-center"
 			>
-				<div class="text-sm text-gray-600 mb-2">{{ month.monthLabel }}</div>
+				<div class="text-sm text-toned mb-2">{{ month.monthLabel }}</div>
 				<div class="text-2xl font-bold text-primary mb-2">
 					{{ formatDuration(month.totalDuration) }}
 				</div>
-				<div class="text-sm text-gray-500">
+				<div class="text-sm text-muted">
 					{{ month.sessionCount }} {{ month.sessionCount === 1 ? 'session' : 'sessions' }}
 				</div>
 			</AppCard>

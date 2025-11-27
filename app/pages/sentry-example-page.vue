@@ -72,7 +72,7 @@ async function getSentryData(): Promise<void> {
 				sentry-example-page
 			</h1>
 
-			<p class="max-w-lg text-center text-lg leading-relaxed text-gray-600 dark:text-gray-400">
+			<p class="max-w-lg text-center text-lg leading-relaxed text-toned">
 				Click the button below, and view the sample error on the Sentry
 				<a
 					target="_blank"
@@ -95,7 +95,7 @@ async function getSentryData(): Promise<void> {
 			<button
 				type="button"
 				:disabled="!isConnected"
-				class="mt-1 rounded-lg border-none bg-purple-700 p-0 text-white transition-transform hover:scale-105 active:scale-95 disabled:cursor-not-allowed disabled:opacity-60 disabled:transform-none"
+				class="mt-1 rounded-lg border-none bg-purple-700 p-0 text-inverted transition-transform hover:scale-105 active:scale-95 disabled:cursor-not-allowed disabled:opacity-60 disabled:transform-none"
 				@click="getSentryData"
 			>
 				<span
@@ -107,13 +107,13 @@ async function getSentryData(): Promise<void> {
 
 			<p
 				v-if="hasSentError"
-				class="rounded-lg border border-green-500 bg-green-400 px-4 py-3 text-xl leading-none text-gray-900"
+				class="rounded-lg border border-green-500 bg-green-400 px-4 py-3 text-xl leading-none text-highlighted"
 			>
 				Sample error was sent to Sentry.
 			</p>
 			<div
 				v-else-if="!isConnected"
-				class="w-[500px] rounded-lg border border-red-800 bg-red-600 px-4 py-3 text-center text-white"
+				class="w-[500px] rounded-lg border border-red-800 bg-red-600 px-4 py-3 text-center text-inverted"
 			>
 				<p>
 					It looks like network requests to Sentry are being blocked, which will prevent errors from
