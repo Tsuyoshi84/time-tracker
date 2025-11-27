@@ -39,6 +39,11 @@ const items: NavigationMenuItem[][] = [
 			icon: 'i-lucide-calendar',
 			to: '/weekly',
 		},
+		{
+			label: 'Monthly',
+			icon: 'i-lucide-calendar-days',
+			to: '/monthly',
+		},
 	],
 ]
 </script>
