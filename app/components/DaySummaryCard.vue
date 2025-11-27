@@ -36,7 +36,7 @@ function formatDateLabel(dateString: string): string {
 		role="button"
 		@click="!props.disabled && emit('selectDay', props.weekDay.date)"
 	>
-		<div class="text-gray-500 text-xs mb-2 flex justify-center items-center gap-1">
+		<div class="text-muted text-xs mb-2 flex justify-center items-center gap-1">
 			{{ formatDateLabel(props.weekDay.date) }}
 			({{ props.weekDay.dayName }})
 		</div>
@@ -44,16 +44,16 @@ function formatDateLabel(dateString: string): string {
 			class="text-2xl font-semibold"
 			:class="{
 				'text-primary': props.weekDay.totalDuration > 0,
-				'text-gray-400': props.weekDay.totalDuration === 0,
+				'text-dimmed': props.weekDay.totalDuration === 0,
 			}"
 		>
 			{{ formatDuration(props.weekDay.totalDuration) }}
 		</div>
 		<div
-			class="text-xs text-gray-500 mt-1"
+			class="text-xs text-muted mt-1"
 			:class="{
 				'text-secondary': props.weekDay.sessionCount > 0,
-				'text-gray-400': props.weekDay.sessionCount === 0,
+				'text-dimmed': props.weekDay.sessionCount === 0,
 			}"
 		>
 			{{ props.weekDay.sessionCount }} session{{ props.weekDay.sessionCount !== 1 ? 's' : '' }}
