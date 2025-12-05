@@ -11,8 +11,8 @@ import {
 import { diffInMilliseconds } from '../utils/diffInMilliseconds.ts'
 
 interface UseSessionManagerReturnType {
-		/** Currently selected date for viewing sessions. */
-		selectedDate: Ref<DateString>
+	/** Currently selected date for viewing sessions. */
+	selectedDate: Ref<DateString>
 	/** Array of time sessions for the currently selected date. */
 	sessions: Readonly<Ref<TimeSession[]>>
 	/** Loading state indicator for async operations. */
@@ -191,14 +191,12 @@ export function useSessionManager(
 		}
 	}
 
-	
-
 	watch(selectedDate, async (newDate) => {
 		await loadSessionsForDate(newDate)
 	})
 
 	return {
-		selectedDate: selectedDate,
+		selectedDate,
 		sessions: shallowReadonly(sessions),
 		loading: shallowReadonly(loading),
 		error: shallowReadonly(error),

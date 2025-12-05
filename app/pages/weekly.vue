@@ -26,7 +26,7 @@ onMounted(async () => {
 })
 
 // Extract values
-const { selectedDate, selectDate } = sessionManager
+const { selectedDate } = sessionManager
 const { weekStart, weekEnd, dailyStats, navigateWeek } = weeklyStats
 
 // Combined loading state
@@ -47,7 +47,7 @@ const mostProductiveDay = computed<string>(() => {
 	if (dailyStats.value.length === 0) return 'None'
 
 	const maxDay = dailyStats.value.reduce((max, day) =>
-		day.totalDuration > max.totalDuration ? day : max,
+		day.totalDuration > max.totalDuration ? day : max
 	)
 
 	if (maxDay.totalDuration === 0) return 'None'
@@ -97,7 +97,7 @@ function getSessionDuration(session: TimeSession): string {
 			:loading="loading"
 			@previous-week="navigateWeek.prev"
 			@next-week="navigateWeek.next"
-			@select-day="selectDate"
+			@select-day="(date) => (selectedDate = date)"
 		/>
 
 		<!-- Selected Day Details -->
