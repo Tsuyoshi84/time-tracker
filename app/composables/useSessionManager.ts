@@ -11,10 +11,10 @@ import {
 import { diffInMilliseconds } from '../utils/diffInMilliseconds.ts'
 
 interface UseSessionManagerReturnType {
+	/** Currently selected date for viewing sessions. */
+	selectedDate: Ref<DateString>
 	/** Array of time sessions for the currently selected date. */
 	sessions: Readonly<Ref<TimeSession[]>>
-	/** Currently selected date for viewing sessions. */
-	selectedDate: Readonly<Ref<DateString>>
 	/** Loading state indicator for async operations. */
 	loading: Readonly<Ref<boolean>>
 	/** Error message from the last failed operation. */
@@ -46,13 +46,6 @@ interface UseSessionManagerReturnType {
 	 * @returns Promise that resolves when the session is added
 	 */
 	addManualSession(): Promise<void>
-	/**
-	 * Select a specific date to view its sessions.
-	 * Loads sessions for the selected date and updates the view.
-	 * @param date - DateString in YYYY-MM-DD format
-	 * @returns Promise that resolves when the date is loaded
-	 */
-	selectDate(date: DateString): Promise<void>
 }
 
 /**
@@ -143,8 +136,25 @@ export function useSessionManager(
 
 	async function addManualSession(): Promise<void> {
 		const now = new Date()
-		const startTime = new Date(now.getTime() - 60 * 60 * 1000) // 1 hour ago
-		const endTime = now
+		const selectedDateObj = new Date(selectedDate.value)
+
+		// Check if selected date is today
+		const isToday = convertToDateString(now) === selectedDate.value
+
+		// Set endTime: use current time if today, otherwise use noon (12:00) of the selected date
+		const endTime = isToday
+			? now
+			: new Date(
+					selectedDateObj.getFullYear(),
+					selectedDateObj.getMonth(),
+					selectedDateObj.getDate(),
+					12,
+					0,
+					0,
+				)
+
+		// Set startTime: 1 hour before endTime
+		const startTime = new Date(endTime.getTime() - 60 * 60 * 1000)
 
 		const sessionData = {
 			startTime,
@@ -181,20 +191,18 @@ export function useSessionManager(
 		}
 	}
 
-	async function selectDate(date: DateString): Promise<void> {
-		selectedDate.value = date
-		await loadSessionsForDate(date)
-	}
+	watch(selectedDate, async (newDate) => {
+		await loadSessionsForDate(newDate)
+	})
 
 	return {
+		selectedDate,
 		sessions: shallowReadonly(sessions),
-		selectedDate: shallowReadonly(selectedDate),
 		loading: shallowReadonly(loading),
 		error: shallowReadonly(error),
 		loadSessionsForDate,
 		updateSessionData,
 		deleteSessionData,
 		addManualSession,
-		selectDate,
 	}
 }

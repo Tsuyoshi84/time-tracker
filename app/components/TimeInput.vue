@@ -11,7 +11,7 @@ const props = withDefaults(
 		disabled?: boolean
 		readonly?: boolean
 	}>(),
-	{},
+	{}
 )
 
 const emit = defineEmits<{
@@ -65,7 +65,7 @@ function isValidTimeFormat(timeString: string): boolean {
 			ref="inputRef"
 			v-model="editValue"
 			class="input border input-sm w-20 text-center font-mono text-lg"
-			:class="{ 'border-red-500 bg-red-50': hasError }"
+			:class="{ 'border-red-500': hasError }"
 			type="text"
 			placeholder="HH:MM"
 			:disabled="disabled"

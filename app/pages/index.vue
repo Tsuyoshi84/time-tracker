@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { useSum } from '@vueuse/math'
-import { computed, onMounted, shallowRef, watch } from 'vue'
+import { computed, onMounted, watch } from 'vue'
 import AppDateInput from '~/components/AppDateInput.vue'
 import SessionList from '~/components/SessionList.vue'
 import TimerDisplay from '~/components/TimerDisplay.vue'
@@ -22,7 +22,6 @@ const {
 	updateSessionData,
 	deleteSessionData,
 	addManualSession,
-	selectDate,
 	loadSessionsForDate,
 } = useSessionManager(async () => {
 	await loadWeeklyStats()
@@ -41,7 +40,7 @@ watch(
 	async () => {
 		await loadSessionsForDate(selectedDate.value)
 		await loadWeeklyStats()
-	},
+	}
 )
 
 const todaysTotalDuration = computed<Milliseconds>(() => {
@@ -51,26 +50,16 @@ const todaysTotalDuration = computed<Milliseconds>(() => {
 		todaySessions.reduce(
 			(total, session) =>
 				session.endTime ? total + (session.endTime.getTime() - session.startTime.getTime()) : total,
-			0,
+			0
 		)) as Milliseconds
 })
 
-const selectedDateInput = shallowRef(selectedDate.value)
-
-watch(selectedDate, (newDate) => {
-	selectedDateInput.value = newDate
-})
-
-watch(selectedDateInput, () => {
-	selectDate(selectedDateInput.value)
-})
-
 const totalDurationExcludingCurrentSession = useSum(() =>
-	dailyStats.value.map((day) => day.totalDuration),
+	dailyStats.value.map((day) => day.totalDuration)
 )
 
 const weekTotalDuration = computed<Milliseconds>(
-	() => (totalDurationExcludingCurrentSession.value + currentSessionDuration.value) as Milliseconds,
+	() => (totalDurationExcludingCurrentSession.value + currentSessionDuration.value) as Milliseconds
 )
 
 // SEO
@@ -98,7 +87,7 @@ useSeoMeta({
 			<!-- Daily Sessions Section -->
 			<div class="space-y-6">
 				<div class="flex items-center justify-between">
-					<AppDateInput v-model="selectedDateInput" />
+					<AppDateInput v-model="selectedDate" />
 				</div>
 
 				<SessionList

@@ -100,7 +100,7 @@ function getSessionErrors(session: TimeSession): ValidationError[] {
 			<UCard
 				v-for="session in sessions"
 				:key="session.id"
-				:class="{ 'bg-green-100 dark:bg-green-300': session.isActive }"
+				:class="{ 'bg-primary ': session.isActive }"
 			>
 				<div class="grid grid-cols-[1fr_2rem] items-center justify-between">
 					<div class="grid grid-cols-[6rem_1fr_6rem] items-center gap-4">
@@ -108,9 +108,9 @@ function getSessionErrors(session: TimeSession): ValidationError[] {
 						<div class="flex items-center text-toned">
 							<div
 								class="w-3 h-3 rounded-full"
-								:class="session.isActive ? 'bg-primary text-default' : 'bg-gray-300'"
+								:class="session.isActive ? 'bg-primary text-default' : 'bg-secondary'"
 							/>
-							<span class="ml-2 text-sm font-medium">
+							<span class="ml-2 text-sm font-medium text-inverted">
 								{{ session.isActive ? 'Active' : 'Completed' }}
 							</span>
 						</div>
@@ -118,16 +118,16 @@ function getSessionErrors(session: TimeSession): ValidationError[] {
 						<!-- Time Range -->
 						<div class="flex items-center space-x-2">
 							<TimeInput
-								:class="{ 'text-toned': session.isActive }"
+								:class="{ 'text-inverted': session.isActive }"
 								:value="formatTime(session.startTime)"
 								:disabled="loading"
 								:readonly="session.isActive"
 								@update="(value) => updateStartTime(session, value)"
 							/>
-							<span class="text-dimmed">-</span>
+							<span class="text-inverted">-</span>
 							<TimeInput
 								v-if="session.endTime"
-								:class="{ 'text-default': session.isActive }"
+								:class="{ 'text-inverted': session.isActive }"
 								:value="formatTime(session.endTime)"
 								:disabled="loading"
 								@update="(value) => updateEndTime(session, value)"
@@ -135,7 +135,7 @@ function getSessionErrors(session: TimeSession): ValidationError[] {
 						</div>
 
 						<!-- Duration -->
-						<div class="text-sm font-mono text-toned">
+						<div class="text-sm font-mono text-inverted">
 							{{ getDurationDisplay(session) }}
 						</div>
 					</div>
