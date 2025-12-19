@@ -124,7 +124,7 @@ function getSessionErrors(session: TimeSession): ValidationError[] {
 								:readonly="session.isActive"
 								@update="(value) => updateStartTime(session, value)"
 							/>
-							<span class="text-inverted">-</span>
+							<span>-</span>
 							<TimeInput
 								v-if="session.endTime"
 								:class="{ 'text-inverted': session.isActive }"
@@ -135,7 +135,7 @@ function getSessionErrors(session: TimeSession): ValidationError[] {
 						</div>
 
 						<!-- Duration -->
-						<div class="text-sm font-mono text-inverted">
+						<div class="text-sm font-mono">
 							{{ getDurationDisplay(session) }}
 						</div>
 					</div>
