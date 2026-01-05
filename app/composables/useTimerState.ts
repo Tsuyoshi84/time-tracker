@@ -14,7 +14,7 @@ interface UseTimerStateReturnType {
 	/** Loading state indicator for async operations. */
 	loading: Readonly<Ref<boolean>>
 	/** Error message from the last failed operation. */
-	error: Readonly<Ref<string>>
+	errorMessage: Readonly<Ref<string>>
 	/**
 	 * Toggle the timer between running and paused states.
 	 * Handles starting new sessions or pausing active ones.
@@ -49,7 +49,7 @@ export function useTimerState(): UseTimerStateReturnType {
 
 	const currentSessionDuration = shallowRef<Milliseconds>(0 as Milliseconds)
 	const loading = shallowRef(false)
-	const error = shallowRef<string>('')
+	const errorMessage = shallowRef<string>('')
 
 	function updateCurrentSessionDuration(): void {
 		if (!timerState.value.isRunning || !timerState.value.startTime) return
@@ -89,7 +89,7 @@ export function useTimerState(): UseTimerStateReturnType {
 				pause()
 			}
 		} catch (err) {
-			error.value = `Failed to load active session: ${
+			errorMessage.value = `Failed to load active session: ${
 				err instanceof Error ? err.message : 'Unknown error'
 			}`
 		}
@@ -98,7 +98,7 @@ export function useTimerState(): UseTimerStateReturnType {
 	async function toggleTimer(): Promise<void> {
 		try {
 			loading.value = true
-			error.value = ''
+			errorMessage.value = ''
 
 			if (timerState.value.isRunning) {
 				await pauseTimer()
@@ -106,7 +106,7 @@ export function useTimerState(): UseTimerStateReturnType {
 				await startTimer()
 			}
 		} catch (err) {
-			error.value = `Timer error: ${err instanceof Error ? err.message : 'Unknown error'}`
+			errorMessage.value = `Timer error: ${err instanceof Error ? err.message : 'Unknown error'}`
 		} finally {
 			loading.value = false
 		}
@@ -196,7 +196,7 @@ export function useTimerState(): UseTimerStateReturnType {
 		timerState: shallowReadonly(timerState),
 		currentSessionDuration: shallowReadonly(currentSessionDuration),
 		loading: shallowReadonly(loading),
-		error: shallowReadonly(error),
+		errorMessage: shallowReadonly(errorMessage),
 		toggleTimer,
 		loadActiveSession,
 	}

@@ -7,7 +7,7 @@ interface UseMonthlyStatsReturnType {
 	/** Monthly statistics for the last 6 months. */
 	monthlyStats: Readonly<Ref<MonthStats[]>>
 	/** Error message from the last failed operation. */
-	error: Readonly<Ref<string>>
+	errorMessage: Readonly<Ref<string>>
 	/**
 	 * Load statistics for the last 6 months.
 	 * Calculates monthly totals and session counts.
@@ -27,7 +27,7 @@ interface UseMonthlyStatsReturnType {
  */
 export function useMonthlyStats(): UseMonthlyStatsReturnType {
 	const monthlyStats = shallowRef<MonthStats[]>([])
-	const error = shallowRef<string>('')
+	const errorMessage = shallowRef<string>('')
 
 	async function loadMonthlyStats(): Promise<void> {
 		try {
@@ -70,7 +70,7 @@ export function useMonthlyStats(): UseMonthlyStatsReturnType {
 
 			monthlyStats.value = stats
 		} catch (err) {
-			error.value = `Failed to load monthly stats: ${
+			errorMessage.value = `Failed to load monthly stats: ${
 				err instanceof Error ? err.message : 'Unknown error'
 			}`
 		}
@@ -78,7 +78,7 @@ export function useMonthlyStats(): UseMonthlyStatsReturnType {
 
 	return {
 		monthlyStats: shallowReadonly(monthlyStats),
-		error: shallowReadonly(error),
+		errorMessage: shallowReadonly(errorMessage),
 		loadMonthlyStats,
 	}
 }

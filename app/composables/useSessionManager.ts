@@ -18,7 +18,7 @@ interface UseSessionManagerReturnType {
 	/** Loading state indicator for async operations. */
 	loading: Readonly<Ref<boolean>>
 	/** Error message from the last failed operation. */
-	error: Readonly<Ref<string>>
+	errorMessage: Readonly<Ref<string>>
 	/**
 	 * Load sessions for a specific date.
 	 * @param date - DateString in YYYY-MM-DD format
@@ -66,13 +66,13 @@ export function useSessionManager(
 	const sessions = shallowRef<TimeSession[]>([])
 	const selectedDate = shallowRef<DateString>(convertToDateString(new Date()))
 	const loading = shallowRef(false)
-	const error = shallowRef<string>('')
+	const errorMessage = shallowRef<string>('')
 
 	async function loadSessionsForDate(date: DateString): Promise<void> {
 		try {
 			sessions.value = await getSessionsByDate(date)
 		} catch (err) {
-			error.value = `Failed to load sessions: ${err instanceof Error ? err.message : 'Unknown error'}`
+			errorMessage.value = `Failed to load sessions: ${err instanceof Error ? err.message : 'Unknown error'}`
 		}
 	}
 
@@ -82,7 +82,7 @@ export function useSessionManager(
 	): Promise<void> {
 		try {
 			loading.value = true
-			error.value = ''
+			errorMessage.value = ''
 
 			// Validate overlapping sessions if updating times
 			if (updates.startTime || updates.endTime) {
@@ -105,7 +105,7 @@ export function useSessionManager(
 				await onSessionsChanged()
 			}
 		} catch (err) {
-			error.value = `Failed to update session: ${
+			errorMessage.value = `Failed to update session: ${
 				err instanceof Error ? err.message : 'Unknown error'
 			}`
 		} finally {
@@ -116,7 +116,7 @@ export function useSessionManager(
 	async function deleteSessionData(session: TimeSession): Promise<void> {
 		try {
 			loading.value = true
-			error.value = ''
+			errorMessage.value = ''
 
 			await deleteSession(session.id)
 			await loadSessionsForDate(selectedDate.value)
@@ -126,7 +126,7 @@ export function useSessionManager(
 				await onSessionsChanged()
 			}
 		} catch (err) {
-			error.value = `Failed to delete session: ${
+			errorMessage.value = `Failed to delete session: ${
 				err instanceof Error ? err.message : 'Unknown error'
 			}`
 		} finally {
@@ -168,7 +168,7 @@ export function useSessionManager(
 
 		try {
 			loading.value = true
-			error.value = ''
+			errorMessage.value = ''
 
 			const overlapping = await checkForOverlappingSessions(startTime, endTime)
 			if (overlapping.length > 0) {
@@ -185,7 +185,7 @@ export function useSessionManager(
 				await onSessionsChanged()
 			}
 		} catch (err) {
-			error.value = `Failed to add session: ${err instanceof Error ? err.message : 'Unknown error'}`
+			errorMessage.value = `Failed to add session: ${err instanceof Error ? err.message : 'Unknown error'}`
 		} finally {
 			loading.value = false
 		}
@@ -199,7 +199,7 @@ export function useSessionManager(
 		selectedDate,
 		sessions: shallowReadonly(sessions),
 		loading: shallowReadonly(loading),
-		error: shallowReadonly(error),
+		errorMessage: shallowReadonly(errorMessage),
 		loadSessionsForDate,
 		updateSessionData,
 		deleteSessionData,

@@ -11,7 +11,7 @@ interface UseWeeklyStatsReturnType {
 	/** Daily statistics for the current week. */
 	dailyStats: Readonly<Ref<DayStats[]>>
 	/** Error message from the last failed operation. */
-	error: Readonly<Ref<string>>
+	errorMessage: Readonly<Ref<string>>
 	/**
 	 * Load statistics for the current week.
 	 * Calculates daily totals and session counts.
@@ -57,7 +57,7 @@ export function useWeeklyStats(): UseWeeklyStatsReturnType {
 	const weekStart = shallowRef<Date>(getStartOfWeek(new Date()))
 	const weekEnd = shallowRef<Date>(getEndOfWeek(new Date()))
 	const dailyStats = shallowRef<DayStats[]>([])
-	const error = shallowRef<string>('')
+	const errorMessage = shallowRef<string>('')
 
 	async function loadWeeklyStats(): Promise<void> {
 		try {
@@ -105,7 +105,7 @@ export function useWeeklyStats(): UseWeeklyStatsReturnType {
 
 			dailyStats.value = stats
 		} catch (err) {
-			error.value = `Failed to load weekly stats: ${
+			errorMessage.value = `Failed to load weekly stats: ${
 				err instanceof Error ? err.message : 'Unknown error'
 			}`
 		}
@@ -122,7 +122,7 @@ export function useWeeklyStats(): UseWeeklyStatsReturnType {
 		weekStart: shallowReadonly(weekStart),
 		weekEnd: shallowReadonly(weekEnd),
 		dailyStats: shallowReadonly(dailyStats),
-		error: shallowReadonly(error),
+		errorMessage: shallowReadonly(errorMessage),
 		loadWeeklyStats,
 		navigateWeek: {
 			prev: () => navigateWeek('prev'),
