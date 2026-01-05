@@ -35,7 +35,8 @@
 				"vitest/require-to-throw-message": "off",
 				"vitest/valid-describe-callback": "error",
 				"vitest/valid-expect": "error",
-				"vitest/valid-title": "error"
+				"vitest/valid-title": "error",
+				"typescript/unbound-method": "off"
 			}
 		},
 		{
