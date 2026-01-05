@@ -7,30 +7,30 @@
 			"app/**/*.*",
 			"server/**/*.*",
 			".vscode/**/*.*",
-			"!package.json"
-		]
+			"!package.json",
+		],
 	},
 	"formatter": {
 		"enabled": true,
 		"formatWithErrors": false,
 		"indentStyle": "tab",
-		"lineWidth": 100
+		"lineWidth": 100,
 	},
 	"linter": {
 		"enabled": true,
 		"domains": {
 			"vue": "recommended",
-			"test": "recommended"
+			"test": "recommended",
 		},
 		"rules": {
 			"recommended": true,
 			"complexity": {
 				"noForEach": "error",
-				"useIndexOf": "on"
+				"useIndexOf": "on",
 			},
 			"correctness": {
 				"noUnusedImports": "warn",
-				"noUnusedVariables": "warn"
+				"noUnusedVariables": "warn",
 			},
 			"nursery": {},
 			"style": {
@@ -41,31 +41,31 @@
 				"useNumberNamespace": "error",
 				"useCollapsedIf": "error",
 				"useConsistentObjectDefinitions": "on",
-				"useConsistentTypeDefinitions": "error"
+				"useConsistentTypeDefinitions": "error",
 			},
 			"suspicious": {
-				"noConsole": "warn"
-			}
-		}
+				"noConsole": "warn",
+			},
+		},
 	},
 	"javascript": {
 		"formatter": {
 			"semicolons": "asNeeded",
 			"lineWidth": 100,
-			"quoteStyle": "single"
-		}
+			"quoteStyle": "single",
+		},
 	},
 	"css": {
 		"parser": {
 			"cssModules": false,
-			"tailwindDirectives": true
-		}
+			"tailwindDirectives": true,
+		},
 	},
 	"html": {
 		"experimentalFullSupportEnabled": true,
 		"formatter": {
-			"indentScriptAndStyle": false
-		}
+			"indentScriptAndStyle": false,
+		},
 	},
 	"overrides": [
 		{
@@ -74,34 +74,34 @@
 				"rules": {
 					"correctness": {
 						"noUnusedVariables": "off",
-						"noUnusedImports": "off"
+						"noUnusedImports": "off",
 					},
-					"style": { "useConst": "off", "useImportType": "off" }
-				}
-			}
+					"style": { "useConst": "off", "useImportType": "off" },
+				},
+			},
 		},
 		{
 			"includes": [".vscode/settings.json"],
 			"assist": {
 				"actions": {
 					"source": {
-						"useSortedKeys": "on"
-					}
-				}
-			}
+						"useSortedKeys": "on",
+					},
+				},
+			},
 		},
 		{
 			"includes": ["**/*.spec.ts"],
 			"linter": {
 				"rules": {
 					"style": {
-						"noNonNullAssertion": "off"
+						"noNonNullAssertion": "off",
 					},
 					"suspicious": {
-						"noExplicitAny": "off"
-					}
-				}
-			}
-		}
-	]
+						"noExplicitAny": "off",
+					},
+				},
+			},
+		},
+	],
 }

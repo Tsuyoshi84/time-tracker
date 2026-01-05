@@ -11,7 +11,7 @@ const props = withDefaults(
 		disabled?: boolean
 		readonly?: boolean
 	}>(),
-	{}
+	{},
 )
 
 const emit = defineEmits<{
@@ -72,7 +72,7 @@ function isValidTimeFormat(timeString: string): boolean {
 			@blur="finishEdit"
 			@keydown.enter="finishEdit"
 			@keydown.escape="cancelEdit"
-		>
+		/>
 		<span
 			v-else-if="props.readonly"
 			class="input border input-sm w-20 text-lg content-center grid font-mono bg-transparent border-transparent text-center"

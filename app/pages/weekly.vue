@@ -47,7 +47,7 @@ const mostProductiveDay = computed<string>(() => {
 	if (dailyStats.value.length === 0) return 'None'
 
 	const maxDay = dailyStats.value.reduce((max, day) =>
-		day.totalDuration > max.totalDuration ? day : max
+		day.totalDuration > max.totalDuration ? day : max,
 	)
 
 	if (maxDay.totalDuration === 0) return 'None'
@@ -106,7 +106,7 @@ function getSessionDuration(session: TimeSession): string {
 			class="mt-4"
 		>
 			<div class="bg-base-100 rounded-lg p-6 shadow-sm border border-base-300">
-				<h3 class="text-xl font-semibold mb-4"> {{ formattedSelectedDate }} - Sessions </h3>
+				<h3 class="text-xl font-semibold mb-4">{{ formattedSelectedDate }} - Sessions</h3>
 
 				<div
 					v-if="selectedDayStats.sessions.length === 0"

@@ -1,0 +1,46 @@
+{
+	"ignorePatterns": ["**/graphql/generated/**"],
+	"plugins": ["oxc", "eslint", "typescript", "unicorn", "import", "jsdoc"],
+	"rules": {
+		"unicorn/better-regex": "error",
+		"unicorn/catch-error-name": "error",
+		"unicorn/prefer-array-some": "error",
+		"unicorn/prefer-optional-catch-binding": "error",
+		"unicorn/prefer-set-has": "error",
+		"unicorn/prefer-switch": "error",
+		"unicorn/prefer-ternary": "error",
+		"unicorn/no-object-as-default-parameter": "warn",
+		"unicorn/no-useless-fallback-in-spread": "error",
+		"unicorn/no-useless-promise-resolve-reject": "error",
+		"unicorn/no-useless-spread": "error",
+
+		"jsdoc/check-param-names": "error",
+		"jsdoc/check-property-names": "error",
+		"jsdoc/check-tag-names": "error"
+	},
+	"overrides": [
+		{
+			"files": ["**/*.spec.ts"],
+			"plugins": ["vitest"],
+			"rules": {
+				"vitest/consistent-test-it": ["error", { "fn": "it" }],
+				"vitest/expect-expect": "off", // Testing Library などを使う場合は、必ずしも expect() を使わないのでoffにする
+				"vitest/no-commented-out-tests": "error",
+				"vitest/no-conditional-expect": "error",
+				"vitest/no-conditional-in-test": "error",
+				"vitest/no-identical-title": "error",
+				"vitest/no-import-node-test": "error",
+				"vitest/prefer-each": "error",
+				"vitest/require-local-test-context-for-concurrent-snapshots": "error",
+				"vitest/require-to-throw-message": "off",
+				"vitest/valid-describe-callback": "error",
+				"vitest/valid-expect": "error",
+				"vitest/valid-title": "error"
+			}
+		},
+		{
+			"files": ["**/*.vue"],
+			"plugins": ["vue"]
+		}
+	]
+}
