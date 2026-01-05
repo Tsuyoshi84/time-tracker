@@ -31,7 +31,7 @@ const db = new TimeTrackerDexie()
 
 /**
  * Initializes the Dexie database instance.
- * @return Dexie database instance
+ * @returns Dexie database instance
  */
 export function initDatabase(): Dexie {
 	return db
@@ -40,7 +40,7 @@ export function initDatabase(): Dexie {
 /**
  * Saves a new session to the database.
  * @param session Session data without id
- * @return The saved session with id
+ * @returns The saved session with id
  */
 export async function saveSession(session: Omit<TimeSession, 'id'>): Promise<TimeSession> {
 	const now = new Date()
@@ -93,7 +93,7 @@ export async function deleteSession(id: number): Promise<void> {
 /**
  * Gets all sessions for a specific date.
  * @param date Date string (YYYY-MM-DD)
- * @return Array of sessions for the date
+ * @returns Array of sessions for the date
  */
 export async function getSessionsByDate(date: DateString): Promise<TimeSession[]> {
 	if (!date) return []
@@ -113,7 +113,7 @@ export async function getSessionsByDate(date: DateString): Promise<TimeSession[]
 
 /**
  * Gets the currently active session, if any.
- * @return The active session or null
+ * @returns The active session or null
  */
 export async function getActiveSession(): Promise<TimeSession | null> {
 	const activeSessions = await db.sessions.where('isActive').equals(1).toArray()
@@ -136,7 +136,7 @@ export async function getActiveSession(): Promise<TimeSession | null> {
  * Gets all sessions in a date range.
  * @param startDate Start date string (YYYY-MM-DD)
  * @param endDate End date string (YYYY-MM-DD)
- * @return Array of sessions in the range
+ * @returns Array of sessions in the range
  */
 export async function getSessionsInDateRange(
 	startDate: string,
@@ -159,7 +159,7 @@ export async function getSessionsInDateRange(
 /**
  * Calculates total duration and session count for a day.
  * @param date Date string (YYYY-MM-DD)
- * @return Object with totalDuration and sessionCount
+ * @returns Object with totalDuration and sessionCount
  */
 export async function calculateDayStats(
 	date: DateString,
@@ -190,7 +190,7 @@ export async function clearAllData(): Promise<void> {
  * @param startTime Start time of the new/edited session
  * @param endTime End time of the new/edited session
  * @param excludeId Optional session id to exclude
- * @return Array of overlapping sessions
+ * @returns Array of overlapping sessions
  */
 export async function checkForOverlappingSessions(
 	startTime: Date,
