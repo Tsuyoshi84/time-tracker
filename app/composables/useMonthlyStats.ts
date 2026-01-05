@@ -69,9 +69,9 @@ export function useMonthlyStats(): UseMonthlyStatsReturnType {
 			}
 
 			monthlyStats.value = stats
-		} catch (err) {
+		} catch (error) {
 			errorMessage.value = `Failed to load monthly stats: ${
-				err instanceof Error ? err.message : 'Unknown error'
+				error instanceof Error ? error.message : 'Unknown error'
 			}`
 		}
 	}

@@ -104,9 +104,9 @@ export function useWeeklyStats(): UseWeeklyStatsReturnType {
 			}
 
 			dailyStats.value = stats
-		} catch (err) {
+		} catch (error) {
 			errorMessage.value = `Failed to load weekly stats: ${
-				err instanceof Error ? err.message : 'Unknown error'
+				error instanceof Error ? error.message : 'Unknown error'
 			}`
 		}
 	}

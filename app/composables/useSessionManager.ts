@@ -71,8 +71,8 @@ export function useSessionManager(
 	async function loadSessionsForDate(date: DateString): Promise<void> {
 		try {
 			sessions.value = await getSessionsByDate(date)
-		} catch (err) {
-			errorMessage.value = `Failed to load sessions: ${err instanceof Error ? err.message : 'Unknown error'}`
+		} catch (error) {
+			errorMessage.value = `Failed to load sessions: ${error instanceof Error ? error.message : 'Unknown error'}`
 		}
 	}
 
@@ -104,9 +104,9 @@ export function useSessionManager(
 			if (onSessionsChanged) {
 				await onSessionsChanged()
 			}
-		} catch (err) {
+		} catch (error) {
 			errorMessage.value = `Failed to update session: ${
-				err instanceof Error ? err.message : 'Unknown error'
+				error instanceof Error ? error.message : 'Unknown error'
 			}`
 		} finally {
 			loading.value = false
@@ -125,9 +125,9 @@ export function useSessionManager(
 			if (onSessionsChanged) {
 				await onSessionsChanged()
 			}
-		} catch (err) {
+		} catch (error) {
 			errorMessage.value = `Failed to delete session: ${
-				err instanceof Error ? err.message : 'Unknown error'
+				error instanceof Error ? error.message : 'Unknown error'
 			}`
 		} finally {
 			loading.value = false
@@ -184,8 +184,8 @@ export function useSessionManager(
 			if (onSessionsChanged) {
 				await onSessionsChanged()
 			}
-		} catch (err) {
-			errorMessage.value = `Failed to add session: ${err instanceof Error ? err.message : 'Unknown error'}`
+		} catch (error) {
+			errorMessage.value = `Failed to add session: ${error instanceof Error ? error.message : 'Unknown error'}`
 		} finally {
 			loading.value = false
 		}

@@ -88,9 +88,9 @@ export function useTimerState(): UseTimerStateReturnType {
 			} else {
 				pause()
 			}
-		} catch (err) {
+		} catch (error) {
 			errorMessage.value = `Failed to load active session: ${
-				err instanceof Error ? err.message : 'Unknown error'
+				error instanceof Error ? error.message : 'Unknown error'
 			}`
 		}
 	}
@@ -105,8 +105,8 @@ export function useTimerState(): UseTimerStateReturnType {
 			} else {
 				await startTimer()
 			}
-		} catch (err) {
-			errorMessage.value = `Timer error: ${err instanceof Error ? err.message : 'Unknown error'}`
+		} catch (error) {
+			errorMessage.value = `Timer error: ${error instanceof Error ? error.message : 'Unknown error'}`
 		} finally {
 			loading.value = false
 		}
