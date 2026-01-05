@@ -24,7 +24,7 @@
 			"plugins": ["vitest"],
 			"rules": {
 				"vitest/consistent-test-it": ["error", { "fn": "it" }],
-				"vitest/expect-expect": "off", // Testing Library などを使う場合は、必ずしも expect() を使わないのでoffにする
+				"vitest/expect-expect": "off",
 				"vitest/no-commented-out-tests": "error",
 				"vitest/no-conditional-expect": "error",
 				"vitest/no-conditional-in-test": "error",
