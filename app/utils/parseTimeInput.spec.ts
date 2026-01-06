@@ -13,16 +13,14 @@ describe('parseTimeInput', () => {
 		expect(time3).toBeInstanceOf(Date)
 		expect(time4).toBeInstanceOf(Date)
 
-		if (time1 && time2 && time3 && time4) {
-			expect(time1.getHours()).toBe(9)
-			expect(time1.getMinutes()).toBe(30)
-			expect(time2.getHours()).toBe(14)
-			expect(time2.getMinutes()).toBe(45)
-			expect(time3.getHours()).toBe(23)
-			expect(time3.getMinutes()).toBe(59)
-			expect(time4.getHours()).toBe(9)
-			expect(time4.getMinutes()).toBe(30)
-		}
+		expect(time1?.getHours()).toBe(9)
+		expect(time1?.getMinutes()).toBe(30)
+		expect(time2?.getHours()).toBe(14)
+		expect(time2?.getMinutes()).toBe(45)
+		expect(time3?.getHours()).toBe(23)
+		expect(time3?.getMinutes()).toBe(59)
+		expect(time4?.getHours()).toBe(9)
+		expect(time4?.getMinutes()).toBe(30)
 	})
 
 	it('should handle midnight and noon', () => {
@@ -32,12 +30,10 @@ describe('parseTimeInput', () => {
 		expect(midnight).toBeInstanceOf(Date)
 		expect(noon).toBeInstanceOf(Date)
 
-		if (midnight && noon) {
-			expect(midnight.getHours()).toBe(0)
-			expect(midnight.getMinutes()).toBe(0)
-			expect(noon.getHours()).toBe(12)
-			expect(noon.getMinutes()).toBe(0)
-		}
+		expect(midnight?.getHours()).toBe(0)
+		expect(midnight?.getMinutes()).toBe(0)
+		expect(noon?.getHours()).toBe(12)
+		expect(noon?.getMinutes()).toBe(0)
 	})
 
 	it('should return null for invalid formats', () => {
@@ -63,10 +59,8 @@ describe('parseTimeInput', () => {
 		const parsedTime = parseTimeInput('14:30')
 
 		expect(parsedTime).toBeInstanceOf(Date)
-		if (parsedTime) {
-			expect(parsedTime.getFullYear()).toBe(today.getFullYear())
-			expect(parsedTime.getMonth()).toBe(today.getMonth())
-			expect(parsedTime.getDate()).toBe(today.getDate())
-		}
+		expect(parsedTime?.getFullYear()).toBe(today.getFullYear())
+		expect(parsedTime?.getMonth()).toBe(today.getMonth())
+		expect(parsedTime?.getDate()).toBe(today.getDate())
 	})
 })

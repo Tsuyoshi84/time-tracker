@@ -35,6 +35,9 @@ jobs:
       - name: Install dependencies
         run: pnpm install --no-save
 
+      - name: Format
+        run: pnpm format
+
       - name: Type Check
         run: pnpm typecheck
 
@@ -46,6 +49,9 @@ jobs:
 
       - name: Biome Check
         run: pnpm check
+
+      - name: Oxlint
+        run: pnpm oxlint:fix
 
       - name: Commit changes
         uses: stefanzweifel/git-auto-commit-action@v7

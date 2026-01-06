@@ -1,0 +1,9 @@
+{
+	"$schema": "./node_modules/oxfmt/configuration_schema.json",
+	"ignorePatterns": ["package.json", "**/*.yml", "**/*.yaml", ".vscode/*.code-snippets", "**/*.md"],
+	"useTabs": true,
+	"singleQuote": true,
+	"semi": false,
+	"printWidth": 100,
+	"singleAttributePerLine": true,
+}

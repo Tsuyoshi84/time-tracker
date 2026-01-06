@@ -40,7 +40,7 @@ watch(
 	async () => {
 		await loadSessionsForDate(selectedDate.value)
 		await loadWeeklyStats()
-	}
+	},
 )
 
 const todaysTotalDuration = computed<Milliseconds>(() => {
@@ -50,16 +50,16 @@ const todaysTotalDuration = computed<Milliseconds>(() => {
 		todaySessions.reduce(
 			(total, session) =>
 				session.endTime ? total + (session.endTime.getTime() - session.startTime.getTime()) : total,
-			0
+			0,
 		)) as Milliseconds
 })
 
 const totalDurationExcludingCurrentSession = useSum(() =>
-	dailyStats.value.map((day) => day.totalDuration)
+	dailyStats.value.map((day) => day.totalDuration),
 )
 
 const weekTotalDuration = computed<Milliseconds>(
-	() => (totalDurationExcludingCurrentSession.value + currentSessionDuration.value) as Milliseconds
+	() => (totalDurationExcludingCurrentSession.value + currentSessionDuration.value) as Milliseconds,
 )
 
 // SEO

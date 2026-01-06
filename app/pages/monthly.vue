@@ -15,10 +15,10 @@ onMounted(async () => {
 })
 
 // Extract values
-const { monthlyStats: stats, error } = monthlyStats
+const { monthlyStats: stats, errorMessage } = monthlyStats
 
 // Loading state
-const loading = computed(() => stats.value.length === 0 && !error.value)
+const loading = computed(() => stats.value.length === 0 && !errorMessage.value)
 
 // SEO
 useSeoMeta({
@@ -47,10 +47,10 @@ useSeoMeta({
 
 		<!-- Error State -->
 		<div
-			v-else-if="error"
+			v-else-if="errorMessage"
 			class="text-center py-12"
 		>
-			<p class="text-error">{{ error }}</p>
+			<p class="text-error">{{ errorMessage }}</p>
 		</div>
 
 		<!-- Monthly Stats Grid -->
