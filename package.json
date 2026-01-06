@@ -15,7 +15,7 @@
 		"lint": "eslint .",
 		"lint:fix": "eslint . --fix",
 		"oxlint": "oxlint --type-aware",
-    "oxlint:fix": "oxlint --type-aware --fix",
+		"oxlint:fix": "oxlint --type-aware --fix",
 		"format": "oxfmt --write .",
 		"test": "vitest",
 		"test:run": "vitest run"
