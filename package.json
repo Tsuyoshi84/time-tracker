@@ -22,9 +22,9 @@
 	},
 	"dependencies": {
 		"@nuxt/eslint": "1.12.1",
-		"@nuxt/fonts": "^0.12.1",
-		"@nuxt/ui": "^4.3.0",
-		"@sentry/nuxt": "^10.34.0",
+		"@nuxt/fonts": "^0.13.0",
+		"@nuxt/ui": "^4.4.0",
+		"@sentry/nuxt": "^10.36.0",
 		"@vue-macros/nuxt": "3.1.2",
 		"@vueuse/core": "^14.1.0",
 		"@vueuse/math": "^14.1.0",
@@ -33,9 +33,9 @@
 		"dexie": "^4.2.1",
 		"eslint": "^9.39.2",
 		"import-in-the-middle": "^2.0.4",
-		"lucide-vue-next": "^0.562.0",
+		"lucide-vue-next": "^0.563.0",
 		"nuxt": "^4.2.2",
-		"vue": "^3.5.26",
+		"vue": "^3.5.27",
 		"vue-router": "^4.6.4"
 	},
 	"devDependencies": {
