@@ -42,8 +42,8 @@ importers:
         specifier: ^9.39.2
         version: 9.39.2(jiti@2.6.1)
       import-in-the-middle:
-        specifier: ^2.0.4
-        version: 2.0.4
+        specifier: ^2.0.5
+        version: 2.0.5
       lucide-vue-next:
         specifier: ^0.563.0
         version: 0.563.0(vue@3.5.27(typescript@5.9.3))
@@ -4508,8 +4508,8 @@ packages:
     resolution: {integrity: sha512-TR3KfrTZTYLPB6jUjfx6MF9WcWrHL9su5TObK4ZkYgBdWKPOFoSoQIdEuTuR82pmtxH2spWG9h6etwfr1pLBqQ==}
     engines: {node: '>=6'}
 
-  import-in-the-middle@2.0.4:
-    resolution: {integrity: sha512-Al0kMpa0BqfvDnxjxGlab9vdQ0vTDs82TBKrD59X9jReUoPAzSGBb6vGDzMUMFBGyyDF03RpLT4oxGn6BpASzQ==}
+  import-in-the-middle@2.0.5:
+    resolution: {integrity: sha512-0InH9/4oDCBRzWXhpOqusspLBrVfK1vPvbn9Wxl8DAQ8yyx5fWJRETICSwkiAMaYntjJAMBP1R4B6cQnEUYVEA==}
 
   impound@1.0.0:
     resolution: {integrity: sha512-8lAJ+1Arw2sMaZ9HE2ZmL5zOcMnt18s6+7Xqgq2aUVy4P1nlzAyPtzCDxsk51KVFwHEEdc6OWvUyqwHwhRYaug==}
@@ -8765,7 +8765,7 @@ snapshots:
     dependencies:
       '@opentelemetry/api': 1.9.0
       '@opentelemetry/api-logs': 0.207.0
-      import-in-the-middle: 2.0.4
+      import-in-the-middle: 2.0.5
       require-in-the-middle: 8.0.1
     transitivePeerDependencies:
       - supports-color
@@ -8774,7 +8774,7 @@ snapshots:
     dependencies:
       '@opentelemetry/api': 1.9.0
       '@opentelemetry/api-logs': 0.210.0
-      import-in-the-middle: 2.0.4
+      import-in-the-middle: 2.0.5
       require-in-the-middle: 8.0.1
     transitivePeerDependencies:
       - supports-color
@@ -9408,7 +9408,7 @@ snapshots:
       '@opentelemetry/semantic-conventions': 1.39.0
       '@sentry/core': 10.36.0
       '@sentry/opentelemetry': 10.36.0(@opentelemetry/api@1.9.0)(@opentelemetry/context-async-hooks@2.5.0(@opentelemetry/api@1.9.0))(@opentelemetry/core@2.5.0(@opentelemetry/api@1.9.0))(@opentelemetry/sdk-trace-base@2.5.0(@opentelemetry/api@1.9.0))(@opentelemetry/semantic-conventions@1.39.0)
-      import-in-the-middle: 2.0.4
+      import-in-the-middle: 2.0.5
     transitivePeerDependencies:
       - supports-color
 
@@ -9447,7 +9447,7 @@ snapshots:
       '@sentry/core': 10.36.0
       '@sentry/node-core': 10.36.0(@opentelemetry/api@1.9.0)(@opentelemetry/context-async-hooks@2.5.0(@opentelemetry/api@1.9.0))(@opentelemetry/core@2.5.0(@opentelemetry/api@1.9.0))(@opentelemetry/instrumentation@0.210.0(@opentelemetry/api@1.9.0))(@opentelemetry/resources@2.5.0(@opentelemetry/api@1.9.0))(@opentelemetry/sdk-trace-base@2.5.0(@opentelemetry/api@1.9.0))(@opentelemetry/semantic-conventions@1.39.0)
       '@sentry/opentelemetry': 10.36.0(@opentelemetry/api@1.9.0)(@opentelemetry/context-async-hooks@2.5.0(@opentelemetry/api@1.9.0))(@opentelemetry/core@2.5.0(@opentelemetry/api@1.9.0))(@opentelemetry/sdk-trace-base@2.5.0(@opentelemetry/api@1.9.0))(@opentelemetry/semantic-conventions@1.39.0)
-      import-in-the-middle: 2.0.4
+      import-in-the-middle: 2.0.5
       minimatch: 9.0.5
     transitivePeerDependencies:
       - supports-color
@@ -12097,7 +12097,7 @@ snapshots:
       parent-module: 1.0.1
       resolve-from: 4.0.0
 
-  import-in-the-middle@2.0.4:
+  import-in-the-middle@2.0.5:
     dependencies:
       acorn: 8.15.0
       acorn-import-attributes: 1.9.5(acorn@8.15.0)
