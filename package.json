@@ -34,7 +34,7 @@
 		"eslint": "^9.39.2",
 		"import-in-the-middle": "^2.0.4",
 		"lucide-vue-next": "^0.563.0",
-		"nuxt": "^4.2.2",
+		"nuxt": "^4.3.0",
 		"vue": "^3.5.27",
 		"vue-router": "^4.6.4"
 	},
