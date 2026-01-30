@@ -32,7 +32,7 @@
 		"daisyui": "^5.5.14",
 		"dexie": "^4.3.0",
 		"eslint": "^9.39.2",
-		"import-in-the-middle": "^2.0.5",
+		"import-in-the-middle": "^2.0.6",
 		"lucide-vue-next": "^0.563.0",
 		"nuxt": "^4.3.0",
 		"vue": "^3.5.27",
