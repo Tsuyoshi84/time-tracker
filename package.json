@@ -26,9 +26,9 @@
 		"@nuxt/ui": "^4.4.0",
 		"@sentry/nuxt": "^10.38.0",
 		"@vue-macros/nuxt": "3.1.2",
-		"@vueuse/core": "^14.1.0",
-		"@vueuse/math": "^14.1.0",
-		"@vueuse/nuxt": "^14.1.0",
+		"@vueuse/core": "^14.2.0",
+		"@vueuse/math": "^14.2.0",
+		"@vueuse/nuxt": "^14.2.0",
 		"daisyui": "^5.5.14",
 		"dexie": "^4.3.0",
 		"eslint": "^9.39.2",
@@ -36,7 +36,7 @@
 		"lucide-vue-next": "^0.563.0",
 		"nuxt": "^4.3.0",
 		"vue": "^3.5.27",
-		"vue-router": "^5.0.1"
+		"vue-router": "^5.0.2"
 	},
 	"devDependencies": {
 		"@biomejs/biome": "^2.3.10",
