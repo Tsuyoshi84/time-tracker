@@ -29,7 +29,7 @@
 		"@vueuse/core": "^14.2.0",
 		"@vueuse/math": "^14.2.0",
 		"@vueuse/nuxt": "^14.2.0",
-		"daisyui": "^5.5.14",
+		"daisyui": "^5.5.18",
 		"dexie": "^4.3.0",
 		"eslint": "^9.39.2",
 		"import-in-the-middle": "^3.0.0",
