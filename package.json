@@ -51,7 +51,7 @@
 		"oxlint-tsgolint": "^0.15.0",
 		"typescript": "^5.9.3",
 		"vitest": "^4.0.16",
-		"vue-tsc": "^3.2.4",
+		"vue-tsc": "^3.2.5",
 		"z-vue-scan-nuxt-module": "^0.0.35"
 	},
 	"pnpm": {
