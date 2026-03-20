@@ -24,7 +24,7 @@
 		"@nuxt/eslint": "1.12.1",
 		"@nuxt/fonts": "^0.14.0",
 		"@nuxt/ui": "^4.5.1",
-		"@sentry/nuxt": "^10.43.0",
+		"@sentry/nuxt": "^10.45.0",
 		"@vue-macros/nuxt": "3.1.2",
 		"@vueuse/core": "^14.2.1",
 		"@vueuse/math": "^14.2.1",
@@ -36,7 +36,7 @@
 		"lucide-vue-next": "^0.577.0",
 		"nuxt": "^4.4.2",
 		"vue": "^3.5.30",
-		"vue-router": "^5.0.3"
+		"vue-router": "^5.0.4"
 	},
 	"devDependencies": {
 		"@biomejs/biome": "^2.3.10",
@@ -52,7 +52,7 @@
 		"typescript": "^5.9.3",
 		"vitest": "^4.0.16",
 		"vue-tsc": "^3.2.5",
-		"z-vue-scan-nuxt-module": "^0.0.35"
+		"z-vue-scan-nuxt-module": "^0.0.37"
 	},
 	"pnpm": {
 		"ignoredBuiltDependencies": [
