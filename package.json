@@ -23,8 +23,8 @@
 	"dependencies": {
 		"@nuxt/eslint": "1.12.1",
 		"@nuxt/fonts": "^0.14.0",
-		"@nuxt/ui": "^4.5.1",
-		"@sentry/nuxt": "^10.45.0",
+		"@nuxt/ui": "^4.6.0",
+		"@sentry/nuxt": "^10.46.0",
 		"@vue-macros/nuxt": "3.1.2",
 		"@vueuse/core": "^14.2.1",
 		"@vueuse/math": "^14.2.1",
@@ -33,9 +33,9 @@
 		"dexie": "^4.3.0",
 		"eslint": "^9.39.2",
 		"import-in-the-middle": "^3.0.0",
-		"lucide-vue-next": "^0.577.0",
+		"lucide-vue-next": "^1.0.0",
 		"nuxt": "^4.4.2",
-		"vue": "^3.5.30",
+		"vue": "^3.5.31",
 		"vue-router": "^5.0.4"
 	},
 	"devDependencies": {
