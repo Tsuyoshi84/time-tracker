@@ -1,5 +1,4 @@
 blockExoticSubdeps: true
-enableGlobalVirtualStore: true
 enablePrePostScripts: false
 ignorePatchFailures: false
 minimumReleaseAge: 1440
