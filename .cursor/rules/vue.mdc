@@ -15,7 +15,6 @@ Rules for authoring Vue SFCs in this project.
 ## Script Setup Essentials
 
 - Use TypeScript and place a JSDoc summary right under `<script setup>`.
-- Prefer `useTemplateRef(key)` over `ref(null)` for template refs.
 - Annotate computed values when inference fails: `computed<Result>(() => ...)`.
 - Invoke composables synchronously at the top level of `<script setup>`.
 
@@ -62,7 +61,6 @@ Rules for authoring Vue SFCs in this project.
 - Add `loading="lazy"` to images that are not immediately needed.
 - Use `<time>` for time data and pass route objects to `<NuxtLink :to="{ name: 'route-name' }">`.
 - Access props in templates as `props.x` for consistency.
-- Avoid `tw()` helpers in <template>; use Tailwind classes directly.
 
 ## Accessibility
 
@@ -107,8 +105,6 @@ Rules for authoring Vue SFCs in this project.
 
 ## Testing
 
-- Atoms: cover render, accessible name/role, primary interaction, disabled/variant logic.
-- Molecules: cover edge states (empty, large, error), slots, emitted payload shape.
 - Prefer semantic queries over snapshots; assert behavior, not internals.
 
 ## Anti‑Patterns (Avoid)
