@@ -39,7 +39,7 @@ export default defineConfig({
 							domEnvironment: 'happy-dom',
 						},
 					},
-					setupFiles: ['test/setup.ts'],
+					setupFiles: ['app/test/setup.ts'],
 				},
 			}),
 		],
