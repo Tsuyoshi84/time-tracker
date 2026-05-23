@@ -1,3 +1,10 @@
+allowBuilds:
+  '@parcel/watcher': true
+  '@sentry/cli': true
+  esbuild: true
+  lefthook: true
+  unrs-resolver: true
+  vue-demi: true
 blockExoticSubdeps: true
 enablePrePostScripts: false
 ignorePatchFailures: false

@@ -2,7 +2,7 @@
 	"name": "time-tracker",
 	"private": true,
 	"type": "module",
-	"packageManager": "pnpm@10.18.3",
+	"packageManager": "pnpm@11.2.1",
 	"scripts": {
 		"build": "nuxt build",
 		"dev": "nuxt dev",
