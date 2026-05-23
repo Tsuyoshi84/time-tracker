@@ -21,6 +21,7 @@
 		"test:run": "vitest run"
 	},
 	"dependencies": {
+		"@internationalized/date": "^3.12.1",
 		"@nuxt/eslint": "1.15.2",
 		"@nuxt/fonts": "^0.14.0",
 		"@nuxt/ui": "^4.8.0",
