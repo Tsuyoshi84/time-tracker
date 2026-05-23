@@ -31,7 +31,6 @@ export default defineConfig({
 					name: 'nuxt',
 					include: ['app/**/*.spec.ts', 'server/**/*.spec.ts'],
 					exclude: [...unitTestPaths, 'sentry.client.config.ts'],
-					includeSource: ['**/*.{ts,vue}'],
 					globals: true,
 					environment: 'nuxt',
 					environmentOptions: {
