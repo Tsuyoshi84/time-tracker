@@ -100,11 +100,7 @@ export function useTimerState(): UseTimerStateReturnType {
 			loading.value = true
 			errorMessage.value = ''
 
-			if (timerState.value.isRunning) {
-				await pauseTimer()
-			} else {
-				await startTimer()
-			}
+			await (timerState.value.isRunning ? pauseTimer() : startTimer())
 		} catch (error) {
 			errorMessage.value = `Timer error: ${error instanceof Error ? error.message : 'Unknown error'}`
 		} finally {
@@ -170,8 +166,7 @@ export function useTimerState(): UseTimerStateReturnType {
 		timerInterval = window.setInterval(() => {
 			// Force reactivity update for real-time timer display
 			if (timerState.value.isRunning) {
-				// biome-ignore lint/correctness/noSelfAssign: This triggers reactivity
-				timerState.value.startTime = timerState.value.startTime
+				timerState.value = { ...timerState.value }
 			}
 		}, 1000)
 	}

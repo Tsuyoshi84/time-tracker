@@ -70,11 +70,14 @@ export async function updateSession(id: number, updates: Partial<TimeSession>): 
 	if (!existingSession) {
 		throw new Error(`Session with id ${id} not found`)
 	}
+	let isActive = existingSession.isActive
+	if (updates.isActive !== undefined) {
+		isActive = updates.isActive ? 1 : 0
+	}
 	const updatedSession: SessionTable = {
 		...existingSession,
 		...updates,
-		isActive:
-			updates.isActive !== undefined ? (updates.isActive ? 1 : 0) : existingSession.isActive,
+		isActive,
 		updatedAt: new Date(),
 		startTime: updates.startTime ? new Date(updates.startTime) : existingSession.startTime,
 		endTime: updates.endTime ? new Date(updates.endTime) : existingSession.endTime,
