@@ -8,6 +8,7 @@
 			"server/**/*.*",
 			".vscode/**/*.*",
 			"!package.json",
+			"!.worktrees",
 		],
 	},
 	"formatter": {
