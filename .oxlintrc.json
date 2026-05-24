@@ -2,19 +2,16 @@
 	"ignorePatterns": ["**/graphql/generated/**"],
 	"plugins": ["oxc", "eslint", "typescript", "unicorn", "import", "jsdoc"],
 	"rules": {
-		"unicorn/better-regex": "error",
 		"unicorn/catch-error-name": "error",
 		"unicorn/prefer-array-some": "error",
 		"unicorn/prefer-optional-catch-binding": "error",
 		"unicorn/prefer-set-has": "error",
-		"unicorn/prefer-switch": "error",
 		"unicorn/prefer-ternary": "error",
 		"unicorn/no-object-as-default-parameter": "warn",
 		"unicorn/no-useless-fallback-in-spread": "error",
 		"unicorn/no-useless-promise-resolve-reject": "error",
 		"unicorn/no-useless-spread": "error",
 
-		"jsdoc/check-param-names": "error",
 		"jsdoc/check-property-names": "error",
 		"jsdoc/check-tag-names": "error"
 	},

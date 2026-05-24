@@ -21,6 +21,7 @@ const isConnected = ref<boolean>(true)
 
 onMounted(async (): Promise<void> => {
 	try {
+		// oxlint-disable-next-line namespace
 		const result = await Sentry.diagnoseSdkConnectivity()
 		isConnected.value = result !== 'sentry-unreachable'
 	} catch (error) {
