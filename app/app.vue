@@ -1,6 +1,18 @@
 <script setup lang="ts">
 import type { NavigationMenuItem } from '@nuxt/ui'
 import { Timer } from 'lucide-vue-next'
+import { onMounted } from 'vue'
+import { useTimerFavicon } from '~/composables/useTimerFavicon.ts'
+import { useTimerState } from '~/composables/useTimerState.ts'
+import { initDatabase } from '~/utils/database.ts'
+
+const { loadActiveSession } = useTimerState()
+useTimerFavicon()
+
+onMounted(async () => {
+	initDatabase()
+	await loadActiveSession()
+})
 
 // Global meta tags
 useSeoMeta({
@@ -24,7 +36,6 @@ useHead({
 		{ name: 'format-detection', content: 'telephone=no' },
 		{ name: 'theme-color', content: '#3b82f6' },
 	],
-	link: [{ rel: 'icon', type: 'image/svg+xml', href: '/favicon.svg' }],
 })
 
 const items: NavigationMenuItem[][] = [

@@ -1,5 +1,5 @@
 import * as Sentry from '@sentry/nuxt'
-import { useDocumentVisibility, useIntervalFn } from '@vueuse/core'
+import { createSharedComposable, useDocumentVisibility, useIntervalFn } from '@vueuse/core'
 import { onMounted, onUnmounted, type Ref, shallowReadonly, shallowRef, watch } from 'vue'
 import type { Milliseconds, TimerState } from '../types/index.ts'
 import { convertToDateString } from '../utils/convertToDateString.ts'
@@ -40,7 +40,7 @@ interface UseTimerStateReturnType {
  *
  * @returns UseTimerStateReturnType - API for timer state management
  */
-export function useTimerState(): UseTimerStateReturnType {
+function useTimerStateImpl(): UseTimerStateReturnType {
 	const timerState = shallowRef<TimerState>({
 		isRunning: false,
 		currentSession: null,
@@ -196,3 +196,5 @@ export function useTimerState(): UseTimerStateReturnType {
 		loadActiveSession,
 	}
 }
+
+export const useTimerState = createSharedComposable(useTimerStateImpl)
