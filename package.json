@@ -31,7 +31,7 @@
 		"@vueuse/math": "^14.3.0",
 		"@vueuse/nuxt": "^14.3.0",
 		"daisyui": "^5.5.23",
-		"dexie": "^4.4.2",
+		"dexie": "^4.4.3",
 		"eslint": "^10.4.1",
 		"import-in-the-middle": "^3.0.1",
 		"lucide-vue-next": "^1.0.0",
