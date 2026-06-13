@@ -1,6 +1,11 @@
 {
-	"ignorePatterns": ["**/graphql/generated/**"],
+	"ignorePatterns": ["app/components/**/*.spec.ts", "server/api/sentry-example-api.ts"],
 	"plugins": ["oxc", "eslint", "typescript", "unicorn", "import", "jsdoc"],
+	"options": {
+		"typeAware": true,
+		"typeCheck": true,
+		"reportUnusedDisableDirectives": "error"
+	},
 	"rules": {
 		"unicorn/catch-error-name": "error",
 		"unicorn/prefer-array-some": "error",

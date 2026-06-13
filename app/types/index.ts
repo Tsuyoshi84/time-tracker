@@ -105,13 +105,3 @@ export interface MonthStats {
 	/** Number of sessions for this month. */
 	sessionCount: number
 }
-
-// Runtime configuration types
-declare module 'nuxt/schema' {
-	interface PublicRuntimeConfig {
-		sentry: {
-			dsn: string
-			release?: string
-		}
-	}
-}
