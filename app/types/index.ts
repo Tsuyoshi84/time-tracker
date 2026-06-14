@@ -36,18 +36,6 @@ export interface DayStats {
 	sessions: TimeSession[]
 }
 
-/** Statistics for a week's time tracking. */
-export interface WeekStats {
-	/** The start date of the week in YYYY-MM-DD format. */
-	weekStart: DateString
-	/** The end date of the week in YYYY-MM-DD format. */
-	weekEnd: DateString
-	/** Total duration tracked for the week in milliseconds. */
-	totalDuration: number // in milliseconds
-	/** Array of daily statistics for each day in the week. */
-	dailyStats: DayStats[]
-}
-
 /** Represents the current state of the timer. */
 export interface TimerState {
 	/** Whether the timer is currently running. */
@@ -56,24 +44,6 @@ export interface TimerState {
 	currentSession: TimeSession | null
 	/** The start time of the current session, if any. */
 	startTime: Date | null
-}
-
-/** Represents time input for manual session creation. */
-export interface TimeInput {
-	/** Number of hours. */
-	hours: number
-	/** Number of minutes. */
-	minutes: number
-}
-
-/** Represents data for editing an existing session. */
-export interface SessionEdit {
-	/** The unique identifier of the session to edit. */
-	id: number
-	/** The new start time for the session. */
-	startTime: Date
-	/** The new end time for the session. */
-	endTime: Date
 }
 
 /**

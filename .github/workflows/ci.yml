@@ -37,6 +37,11 @@ jobs:
       - name: Install dependencies
         run: pnpm install --no-save
 
+      - uses: fallow-rs/fallow@c36e7746273b0eb5f2887836f8af2a7a34a4e245 # v2.90.0
+        with:
+          command: audit
+          artifacts-dir: .fallow
+
       - name: Format
         run: pnpm format
 
