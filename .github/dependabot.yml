@@ -12,6 +12,8 @@ updates:
     open-pull-requests-limit: 10
     commit-message:
       prefix: "chore"
+    ignore:
+      - dependency-name: "nuxt"
     groups:
       lint-format-test:
         patterns:
@@ -44,19 +46,6 @@ updates:
           - "typescript"
           - "type-fest"
           - "vue-tsc"
-
-  - package-ecosystem: "github-actions"
-    directory: "/"
-    schedule:
-      interval: "weekly"
-      time: "07:00"
-      timezone: "Asia/Tokyo"
-      day: 'saturday'
-    labels:
-      - "github_actions"
-    commit-message:
-      prefix: "chore"
-    open-pull-requests-limit: 30
 
   - package-ecosystem: "docker"
     directory: ".devcontainer"
