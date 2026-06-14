@@ -7,7 +7,6 @@
  */
 
 import { useColorMode } from '@vueuse/core'
-import { computed } from 'vue'
 
 const STORAGE_KEY = 'theme-preference'
 

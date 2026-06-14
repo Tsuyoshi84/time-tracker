@@ -8,7 +8,6 @@
  */
 
 import { Moon, Sun } from 'lucide-vue-next'
-import { computed } from 'vue'
 
 import { useTheme } from '../composables/useTheme.ts'
 

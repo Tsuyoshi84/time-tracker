@@ -1,5 +1,3 @@
-import { type Ref, shallowReadonly, shallowRef } from 'vue'
-
 import type { Milliseconds, MonthStats } from '../types/index.ts'
 import { convertToDateString } from '../utils/convertToDateString.ts'
 import { getSessionsInDateRange } from '../utils/database.ts'
