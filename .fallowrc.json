@@ -1,0 +1,11 @@
+{
+	"$schema": "https://raw.githubusercontent.com/fallow-rs/fallow/main/schema.json",
+	"entry": ["app/test/setup.ts"],
+	"ignorePatterns": ["**/*.d.ts"],
+	"ignoreDependencies": ["@typescript-eslint/parser", "@nuxt/fonts"],
+	"rules": {
+		"unresolved-imports": "error",
+		"unlisted-dependencies": "error",
+		"unused-exports": "warn"
+	}
+}
