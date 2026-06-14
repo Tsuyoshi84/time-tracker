@@ -25,7 +25,8 @@ function formatDateLabel(dateString: string): string {
 
 <template>
 	<UCard
-		class="p-3 text-center transition-colors cursor-pointer"
+		as="button"
+		class="p-3 text-center transition-colors cursor-pointer w-full"
 		:class="{
 			'border-2 border-gray-400': props.selected,
 			'border-secondary bg-secondary/10': props.weekDay.isToday,
