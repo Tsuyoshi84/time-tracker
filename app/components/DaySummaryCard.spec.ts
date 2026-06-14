@@ -1,7 +1,9 @@
 import userEvent from '@testing-library/user-event'
 import { cleanup, render, screen } from '@testing-library/vue'
 import { afterEach, describe, expect, it } from 'vitest'
+
 import type { WeekDay } from '~/types/index.ts'
+
 import DaySummaryCard from './DaySummaryCard.vue'
 
 // Clean up after each test

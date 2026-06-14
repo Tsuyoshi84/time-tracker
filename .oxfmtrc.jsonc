@@ -6,4 +6,5 @@
 	"semi": false,
 	"printWidth": 100,
 	"singleAttributePerLine": true,
+	"sortImports": true,
 }

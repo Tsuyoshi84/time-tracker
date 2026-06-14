@@ -2,6 +2,7 @@
  * Eagerly initialize color mode on client to avoid attribute/class mismatch and FOUC.
  */
 import { defineNuxtPlugin } from '#app'
+
 import { useTheme } from '../composables/useTheme.ts'
 
 export default defineNuxtPlugin(() => {

@@ -1,5 +1,6 @@
 import type { Table } from 'dexie'
 import Dexie from 'dexie'
+
 import type { DateString, TimeSession } from '../types/index.ts'
 
 const DB_NAME = 'timeTracker'

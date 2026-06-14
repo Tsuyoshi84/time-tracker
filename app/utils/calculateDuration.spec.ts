@@ -1,4 +1,5 @@
 import { describe, expect, it } from 'vitest'
+
 import { calculateDuration } from './calculateDuration.ts'
 
 describe('calculateDuration', () => {

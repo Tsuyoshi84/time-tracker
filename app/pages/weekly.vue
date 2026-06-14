@@ -2,6 +2,7 @@
 import { useSum } from '@vueuse/math'
 import { Calendar } from 'lucide-vue-next'
 import { computed, onMounted } from 'vue'
+
 import AppCard from '~/components/AppCard.vue'
 import WeeklyView from '~/components/WeeklyView.vue'
 import { useSessionManager } from '~/composables/useSessionManager.ts'

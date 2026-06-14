@@ -1,4 +1,5 @@
 import { describe, expect, it } from 'vitest'
+
 import { convertToDateString } from './convertToDateString'
 
 describe('convertToDateString', () => {

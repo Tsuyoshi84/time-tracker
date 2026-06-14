@@ -1,4 +1,5 @@
 import { describe, expect, it } from 'vitest'
+
 import { validateTimeRange } from './validateTimeRange'
 
 describe('validateTimeRange', () => {

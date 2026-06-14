@@ -1,4 +1,5 @@
 import { describe, expect, it } from 'vitest'
+
 import { diffInMilliseconds } from './diffInMilliseconds.ts'
 
 describe('diffInMilliseconds', () => {

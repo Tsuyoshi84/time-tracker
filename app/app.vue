@@ -2,6 +2,7 @@
 import type { NavigationMenuItem } from '@nuxt/ui'
 import { Timer } from 'lucide-vue-next'
 import { onMounted } from 'vue'
+
 import { useTimerFavicon } from '~/composables/useTimerFavicon.ts'
 import { useTimerState } from '~/composables/useTimerState.ts'
 import { initDatabase } from '~/utils/database.ts'

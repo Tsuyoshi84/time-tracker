@@ -3,9 +3,11 @@
  * WeeklyView displays a comprehensive weekly overview of time tracking data including daily summaries and navigation controls.
  */
 import { computed } from 'vue'
+
 import type { DateString, DayStats, WeekDay } from '~/types/index.ts'
 import { convertToDateString } from '~/utils/convertToDateString.ts'
 import { formatDuration } from '~/utils/formatDuration.ts'
+
 import AppCard from './AppCard.vue'
 import DaySummaryCard from './DaySummaryCard.vue'
 import WeekRangeButtons from './WeekRangeButtons.vue'

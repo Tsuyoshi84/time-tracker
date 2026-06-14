@@ -1,6 +1,8 @@
 import { CalendarDate } from '@internationalized/date'
 import { describe, expect, it } from 'vitest'
+
 import type { DateString } from '~/types/index.ts'
+
 import { dateStringToCalendarDate } from './dateStringToCalendarDate.ts'
 
 describe('dateStringToCalendarDate', () => {

@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { computed, onMounted } from 'vue'
+
 import AppCard from '~/components/AppCard.vue'
 import { useMonthlyStats } from '~/composables/useMonthlyStats.ts'
 import { initDatabase } from '~/utils/database.ts'
