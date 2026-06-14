@@ -14,6 +14,8 @@ After creating or editing any `.ts` or `.vue` file, run from the repository root
 pnpm lint:fix
 
 pnpm lint-vue:fix
+
+pnpm check
 ```
 
 If the command reports errors or warnings:

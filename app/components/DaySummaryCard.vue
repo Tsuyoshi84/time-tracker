@@ -33,7 +33,6 @@ function formatDateLabel(dateString: string): string {
 		:aria-pressed="props.selected ? 'true' : 'false'"
 		:tabindex="props.disabled ? -1 : 0"
 		:aria-disabled="props.disabled ? 'true' : 'false'"
-		role="button"
 		@click="!props.disabled && emit('selectDay', props.weekDay.date)"
 	>
 		<div class="text-muted text-xs mb-2 flex justify-center items-center gap-1">
