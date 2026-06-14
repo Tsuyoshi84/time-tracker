@@ -23,6 +23,10 @@ export default defineNuxtConfig({
 	],
 
 	ssr: false,
+
+	imports: {
+		scan: false,
+	},
 	devtools: { enabled: true },
 	css: ['~/assets/css/main.css'],
 

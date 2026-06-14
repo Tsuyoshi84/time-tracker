@@ -3,8 +3,6 @@
  * TimeInput provides an editable time input field that allows users to enter and modify time values in HH:MM format.
  */
 
-import { computed, nextTick, ref, useTemplateRef } from 'vue'
-
 const props = withDefaults(
 	defineProps<{
 		value: string
@@ -72,7 +70,7 @@ function isValidTimeFormat(timeString: string): boolean {
 			@blur="finishEdit"
 			@keydown.enter="finishEdit"
 			@keydown.escape="cancelEdit"
-		/>
+		>
 		<span
 			v-else-if="props.readonly"
 			class="input border input-sm w-20 text-lg content-center grid font-mono bg-transparent border-transparent text-center"

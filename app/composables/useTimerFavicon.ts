@@ -1,5 +1,4 @@
 import { useFavicon } from '@vueuse/core'
-import { computed } from 'vue'
 
 import { useTimerState } from '~/composables/useTimerState.ts'
 import { buildTimerFaviconUrl } from '~/utils/buildTimerFaviconUrl.ts'
