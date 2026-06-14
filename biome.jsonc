@@ -104,5 +104,15 @@
 				},
 			},
 		},
+		{
+			"includes": ["app/pages/**/*.vue"],
+			"linter": {
+				"rules": {
+					"style": {
+						"useVueMultiWordComponentNames": "off",
+					},
+				},
+			},
+		},
 	],
 }
