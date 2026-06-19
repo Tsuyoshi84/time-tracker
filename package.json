@@ -24,7 +24,7 @@
 		"@internationalized/date": "^3.12.2",
 		"@nuxt/eslint": "1.16.0",
 		"@nuxt/fonts": "^0.14.0",
-		"@nuxt/ui": "^4.8.2",
+		"@nuxt/ui": "^4.9.0",
 		"@sentry/nuxt": "^10.57.0",
 		"@vue-macros/nuxt": "3.1.2",
 		"@vueuse/core": "^14.3.0",
