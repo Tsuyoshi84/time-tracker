@@ -6,11 +6,6 @@ alwaysApply: false
 
 Project-specific Vue SFC conventions. Linting (ESLint Vue plugin, Oxlint) and `typescript.mdc` cover the rest.
 
-## Component Design
-
-- Keep one responsibility per component; move reusable logic to `app/composables` or domain modules.
-- Split components once they exceed rendering + light orchestration.
-
 ## Script Setup
 
 - Place a JSDoc summary right under `<script setup>`.
@@ -18,7 +13,6 @@ Project-specific Vue SFC conventions. Linting (ESLint Vue plugin, Oxlint) and `t
 
 ## Props
 
-- JSDoc every prop field.
 - Avoid boolean tri-state; use explicit unions when options are finite.
 - Narrow to literal unions instead of broad `string` for domain values.
 
@@ -31,7 +25,6 @@ Project-specific Vue SFC conventions. Linting (ESLint Vue plugin, Oxlint) and `t
 
 - Use `defineModel` only when the component owns two-way state (e.g., `v-model:selected`).
 - Name multiple models explicitly (`defineModel<string>('query')`) and document purpose + side effects.
-- JSDoc each model variable with usage and emit timing.
 
 ## Slots
 
@@ -44,33 +37,12 @@ Project-specific Vue SFC conventions. Linting (ESLint Vue plugin, Oxlint) and `t
 
 ## Template
 
-- Use `<time>` for time data and pass route objects to `<NuxtLink :to="{ name: 'route-name' }">`.
 - Access props in templates as `props.x` for consistency.
 
 ## Async & Error Handling
 
 - Map errors to domain-friendly messages in `try/catch`; never surface raw network errors.
 
-## SSR & Hydration
-
-- Keep `<script setup>` SSR-safe: no browser-only APIs unless gated by `import.meta.client` with identical output; otherwise defer to `onMounted`.
-- Fetch initial data with SSR composables (`useAsyncData`, `useFetch`, `useState`) instead of ad-hoc requests.
-- Precompute nondeterministic values via `useState('key', () => ...)` or update after mount; never inline randomness in SSR output.
-- Avoid template branches driven by client-only state; use responsive CSS or `<ClientOnly>` with an accessible fallback.
-- Wrap client-only widgets in `<ClientOnly>` and keep fallbacks semantic and non-interactive.
-- Delay DOM-mutating libraries to `onMounted` (optionally with dynamic `import()`); keep setup pure.
-- Place timers and listeners inside lifecycle hooks to prevent hydration drift.
-
-## Performance
-
-- Lazy-load heavy children via the `Lazy` prefix and consider lazy hydration (`hydrate-on-visible`, etc.) for off-screen interactions.
-- Gate third-party scripts; initialize analytics via Nuxt Scripts or in `onMounted`.
-
 ## Styling
 
 - Prefer Tailwind utilities; only add `<style>` for third-party overrides, complex animation, or selectors unavailable in utilities. Preface with a comment.
-
-## When In Doubt
-
-- Favor explicitness (typed props/emits, stable keys, documented intent) over clever abstractions.
-- Extract before complexity spreads; small focused composables improve reuse & testability.
