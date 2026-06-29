@@ -13,14 +13,7 @@ const model = defineModel<Date>({ required: true })
 withDefaults(
 	defineProps<{
 		size?: 'xs' | 'sm' | 'md' | 'lg' | 'xl'
-		color?:
-			| 'primary'
-			| 'secondary'
-			| 'success'
-			| 'info'
-			| 'warning'
-			| 'error'
-			| 'neutral'
+		color?: 'primary' | 'secondary' | 'success' | 'info' | 'warning' | 'error' | 'neutral'
 		variant?: 'outline' | 'soft' | 'subtle' | 'ghost' | 'none'
 		disabled?: boolean
 	}>(),

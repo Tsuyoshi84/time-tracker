@@ -41,9 +41,7 @@ const isCreateMode = computed(() => !props.session)
 
 const modalTitle = computed(() => (isCreateMode.value ? 'Add session' : 'Edit session'))
 
-const validationErrors = computed(() =>
-	validateTimeRange(startDateTime.value, endDateTime.value),
-)
+const validationErrors = computed(() => validateTimeRange(startDateTime.value, endDateTime.value))
 
 const durationDisplay = computed(() => {
 	if (validationErrors.value.length > 0) return '--:--:--'
