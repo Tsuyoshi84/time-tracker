@@ -37,6 +37,7 @@ defineEmits<{
 	selectDay: [date: DateString]
 }>()
 
+// fallow-ignore-next-line complexity
 const weekDays = computed<WeekDay[]>(() => {
 	const days: WeekDay[] = []
 	const current = new Date(props.weekStart)

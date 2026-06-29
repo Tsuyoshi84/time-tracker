@@ -21,11 +21,25 @@ const {
 	selectedDate,
 	updateSessionData,
 	deleteSessionData,
-	addManualSession,
+	createSession,
+	errorMessage,
+	clearError,
 	loadSessionsForDate,
+	loading: sessionLoading,
 } = useSessionManager(async () => {
 	await loadWeeklyStats()
 })
+
+async function handleCreateSession(payload: { startTime: Date; endTime: Date }): Promise<void> {
+	await createSession(payload.startTime, payload.endTime)
+}
+
+async function handleUpdateSession(
+	session: Parameters<typeof updateSessionData>[0],
+	updates: Parameters<typeof updateSessionData>[1],
+): Promise<void> {
+	await updateSessionData(session, updates)
+}
 
 // Initialize on mount
 onMounted(async () => {
@@ -92,10 +106,13 @@ useSeoMeta({
 
 				<SessionList
 					:sessions="sessions"
-					:loading="loading"
-					@update-session="updateSessionData"
+					:selected-date="selectedDate"
+					:loading="sessionLoading"
+					:save-error="errorMessage"
+					@update-session="handleUpdateSession"
+					@create-session="handleCreateSession"
 					@delete-session="deleteSessionData"
-					@add-manual-session="addManualSession"
+					@clear-save-error="clearError"
 				/>
 			</div>
 		</div>

@@ -1,13 +1,13 @@
 import type { DateString, TimeSession } from '../types/index.ts'
 import { convertToDateString } from '../utils/convertToDateString.ts'
+import { formatOperationError } from '../utils/formatOperationError.ts'
 import {
-	checkForOverlappingSessions,
-	deleteSession,
-	getSessionsByDate,
-	saveSession,
-	updateSession,
-} from '../utils/database.ts'
-import { diffInMilliseconds } from '../utils/diffInMilliseconds.ts'
+	loadSessionsForSelectedDate,
+	persistNewSession,
+	persistSessionDeletion,
+	persistSessionUpdate,
+	refreshSessionsAfterMutation,
+} from '../utils/sessionMutations.ts'
 
 interface UseSessionManagerReturnType {
 	/** Currently selected date for viewing sessions. */
@@ -18,6 +18,8 @@ interface UseSessionManagerReturnType {
 	loading: Readonly<Ref<boolean>>
 	/** Error message from the last failed operation. */
 	errorMessage: Readonly<Ref<string>>
+	/** Clears the current error message. */
+	clearError(): void
 	/**
 	 * Load sessions for a specific date.
 	 * @param date - DateString in YYYY-MM-DD format
@@ -40,11 +42,12 @@ interface UseSessionManagerReturnType {
 	 */
 	deleteSessionData(session: TimeSession): Promise<void>
 	/**
-	 * Add a manual session with default 1-hour duration.
-	 * Creates a completed session for the current time period.
-	 * @returns Promise that resolves when the session is added
+	 * Create a completed session with the given start and end times.
+	 * @param startTime - Session start
+	 * @param endTime - Session end
+	 * @returns Promise that resolves when the session is created
 	 */
-	addManualSession(): Promise<void>
+	createSession(startTime: Date, endTime: Date): Promise<void>
 }
 
 /**
@@ -68,10 +71,31 @@ export function useSessionManager(
 	const errorMessage = shallowRef<string>('')
 
 	async function loadSessionsForDate(date: DateString): Promise<void> {
+		await loadSessionsForSelectedDate(
+			date,
+			(loadedSessions) => {
+				sessions.value = loadedSessions
+			},
+			(message) => {
+				errorMessage.value = message
+			},
+		)
+	}
+
+	async function runMutation(action: string, mutate: () => Promise<void>): Promise<void> {
 		try {
-			sessions.value = await getSessionsByDate(date)
+			loading.value = true
+			errorMessage.value = ''
+			await mutate()
+			await refreshSessionsAfterMutation({
+				selectedDate: selectedDate.value,
+				loadSessionsForDate: (date) => loadSessionsForDate(date),
+				onSessionsChanged,
+			})
 		} catch (error) {
-			errorMessage.value = `Failed to load sessions: ${error instanceof Error ? error.message : 'Unknown error'}`
+			errorMessage.value = formatOperationError(action, error)
+		} finally {
+			loading.value = false
 		}
 	}
 
@@ -79,115 +103,19 @@ export function useSessionManager(
 		session: TimeSession,
 		updates: Partial<TimeSession>,
 	): Promise<void> {
-		try {
-			loading.value = true
-			errorMessage.value = ''
-
-			// Validate overlapping sessions if updating times
-			if (updates.startTime || updates.endTime) {
-				const startTime = updates.startTime || session.startTime
-				const endTime = updates.endTime || session.endTime
-
-				if (endTime) {
-					const overlapping = await checkForOverlappingSessions(startTime, endTime, session.id)
-					if (overlapping.length > 0) {
-						throw new Error('This time range overlaps with existing sessions')
-					}
-				}
-			}
-
-			await updateSession(session.id, updates)
-			await loadSessionsForDate(selectedDate.value)
-
-			// Notify parent that sessions changed
-			if (onSessionsChanged) {
-				await onSessionsChanged()
-			}
-		} catch (error) {
-			errorMessage.value = `Failed to update session: ${
-				error instanceof Error ? error.message : 'Unknown error'
-			}`
-		} finally {
-			loading.value = false
-		}
+		await runMutation('update session', () => persistSessionUpdate(session, updates))
 	}
 
 	async function deleteSessionData(session: TimeSession): Promise<void> {
-		try {
-			loading.value = true
-			errorMessage.value = ''
-
-			await deleteSession(session.id)
-			await loadSessionsForDate(selectedDate.value)
-
-			// Notify parent that sessions changed
-			if (onSessionsChanged) {
-				await onSessionsChanged()
-			}
-		} catch (error) {
-			errorMessage.value = `Failed to delete session: ${
-				error instanceof Error ? error.message : 'Unknown error'
-			}`
-		} finally {
-			loading.value = false
-		}
+		await runMutation('delete session', () => persistSessionDeletion(session.id))
 	}
 
-	async function addManualSession(): Promise<void> {
-		const now = new Date()
-		const selectedDateObj = new Date(selectedDate.value)
+	async function createSession(startTime: Date, endTime: Date): Promise<void> {
+		await runMutation('add session', () => persistNewSession(startTime, endTime))
+	}
 
-		// Check if selected date is today
-		const isToday = convertToDateString(now) === selectedDate.value
-
-		// Set endTime: use current time if today, otherwise use noon (12:00) of the selected date
-		const endTime = isToday
-			? now
-			: new Date(
-					selectedDateObj.getFullYear(),
-					selectedDateObj.getMonth(),
-					selectedDateObj.getDate(),
-					12,
-					0,
-					0,
-				)
-
-		// Set startTime: 1 hour before endTime
-		const startTime = new Date(endTime.getTime() - 60 * 60 * 1000)
-
-		const sessionData = {
-			startTime,
-			endTime,
-			date: convertToDateString(startTime),
-			isActive: false,
-			duration: diffInMilliseconds(startTime, endTime),
-			createdAt: now,
-			updatedAt: now,
-		}
-
-		try {
-			loading.value = true
-			errorMessage.value = ''
-
-			const overlapping = await checkForOverlappingSessions(startTime, endTime)
-			if (overlapping.length > 0) {
-				throw new Error(
-					'Default time range overlaps with existing sessions. Please edit the times.',
-				)
-			}
-
-			await saveSession(sessionData)
-			await loadSessionsForDate(selectedDate.value)
-
-			// Notify parent that sessions changed
-			if (onSessionsChanged) {
-				await onSessionsChanged()
-			}
-		} catch (error) {
-			errorMessage.value = `Failed to add session: ${error instanceof Error ? error.message : 'Unknown error'}`
-		} finally {
-			loading.value = false
-		}
+	function clearError(): void {
+		errorMessage.value = ''
 	}
 
 	watch(selectedDate, async (newDate) => {
@@ -199,9 +127,10 @@ export function useSessionManager(
 		sessions: shallowReadonly(sessions),
 		loading: shallowReadonly(loading),
 		errorMessage: shallowReadonly(errorMessage),
+		clearError,
 		loadSessionsForDate,
 		updateSessionData,
 		deleteSessionData,
-		addManualSession,
+		createSession,
 	}
 }
