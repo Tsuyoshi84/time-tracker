@@ -10,8 +10,12 @@ import { parseCalendarInput, parseTimeInputValue } from '~/utils/parseCalendarIn
 
 const model = defineModel<Date>({ required: true })
 
-withDefaults(
+const props = withDefaults(
 	defineProps<{
+		/** Accessible name for the date input. */
+		dateAriaLabel: string
+		/** Accessible name for the time input. */
+		timeAriaLabel: string
 		size?: 'xs' | 'sm' | 'md' | 'lg' | 'xl'
 		color?: 'primary' | 'secondary' | 'success' | 'info' | 'warning' | 'error' | 'neutral'
 		variant?: 'outline' | 'soft' | 'subtle' | 'ghost' | 'none'
@@ -47,21 +51,23 @@ function updateTime(value: unknown): void {
 	<UFieldGroup class="w-full">
 		<UInputDate
 			:model-value="datePart"
-			:size="size"
-			:color="color"
-			:variant="variant"
+			:size="props.size"
+			:color="props.color"
+			:variant="props.variant"
+			:aria-label="props.dateAriaLabel"
 			class="flex-1"
-			:disabled="disabled"
+			:disabled="props.disabled"
 			@update:model-value="updateDate"
 		/>
 		<UInputTime
 			:model-value="timePart"
-			:size="size"
-			:color="color"
-			:variant="variant"
+			:size="props.size"
+			:color="props.color"
+			:variant="props.variant"
+			:aria-label="props.timeAriaLabel"
 			:hour-cycle="24"
 			class="flex-1"
-			:disabled="disabled"
+			:disabled="props.disabled"
 			@update:model-value="updateTime"
 		/>
 	</UFieldGroup>

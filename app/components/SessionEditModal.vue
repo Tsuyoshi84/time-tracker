@@ -62,10 +62,10 @@ function resetForm(): void {
 	showValidationErrors.value = false
 
 	if (props.session) {
-		startDateTime.value = props.session.startTime
-		if (props.session.endTime) {
-			endDateTime.value = props.session.endTime
-		}
+		startDateTime.value = new Date(props.session.startTime)
+		endDateTime.value = props.session.endTime
+			? new Date(props.session.endTime)
+			: new Date(props.session.startTime)
 		return
 	}
 
@@ -119,6 +119,8 @@ watch(
 				>
 					<AppDateTimeInput
 						v-model="startDateTime"
+						date-aria-label="Start date"
+						time-aria-label="Start time"
 						size="sm"
 						color="neutral"
 						variant="subtle"
@@ -132,6 +134,8 @@ watch(
 				>
 					<AppDateTimeInput
 						v-model="endDateTime"
+						date-aria-label="End date"
+						time-aria-label="End time"
 						size="sm"
 						color="neutral"
 						variant="subtle"
