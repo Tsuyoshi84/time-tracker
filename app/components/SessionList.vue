@@ -5,49 +5,71 @@
 
 import { Clock } from 'lucide-vue-next'
 
-import type { TimeSession } from '~/types/index.ts'
+import SessionEditModal from '~/components/SessionEditModal.vue'
+import type { DateString, TimeSession } from '~/types/index.ts'
 import { calculateDuration } from '~/utils/calculateDuration.ts'
 import { formatDuration } from '~/utils/formatDuration.ts'
+import { formatSessionTimeRange } from '~/utils/formatSessionTimeRange.ts'
 import { formatTime } from '~/utils/formatTime.ts'
-import { parseTimeInput } from '~/utils/parseTimeInput.ts'
-import type { ValidationError } from '~/utils/validateTimeRange.ts'
-import { validateTimeRange } from '~/utils/validateTimeRange.ts'
 
-import TimeInput from './TimeInput.vue'
-
-withDefaults(
+const props = withDefaults(
 	defineProps<{
 		/** Array of time sessions to display. */
 		sessions: TimeSession[]
+		/** The date currently selected in the day view. */
+		selectedDate: DateString
 		/** Whether the component is loading. */
 		loading?: boolean
+		/** Error message from the last failed save attempt. */
+		saveError?: string
 	}>(),
 	{
 		loading: false,
+		saveError: '',
 	},
 )
 
 const emit = defineEmits<{
 	updateSession: [session: TimeSession, updates: Partial<TimeSession>]
+	createSession: [payload: { startTime: Date; endTime: Date }]
 	deleteSession: [session: TimeSession]
-	addManualSession: []
+	clearSaveError: []
 }>()
 
-function updateStartTime(session: TimeSession, timeString: string) {
-	const newStartTime = parseTimeInput(timeString)
-	if (newStartTime) {
-		emit('updateSession', session, { startTime: newStartTime })
-	}
+const isModalOpen = shallowRef(false)
+const editingSession = shallowRef<TimeSession | null>(null)
+
+function openCreateModal(): void {
+	emit('clearSaveError')
+	editingSession.value = null
+	isModalOpen.value = true
 }
 
-function updateEndTime(session: TimeSession, timeString: string) {
-	const newEndTime = parseTimeInput(timeString)
-	if (newEndTime) {
-		emit('updateSession', session, { endTime: newEndTime })
-	}
+function openEditModal(session: TimeSession): void {
+	emit('clearSaveError')
+	editingSession.value = session
+	isModalOpen.value = true
 }
 
-function deleteSession(session: TimeSession) {
+function handleSave(payload: { startTime: Date; endTime: Date }): void {
+	if (editingSession.value) {
+		emit('updateSession', editingSession.value, {
+			startTime: payload.startTime,
+			endTime: payload.endTime,
+		})
+		return
+	}
+
+	emit('createSession', payload)
+}
+
+watch(isModalOpen, (open) => {
+	if (!open) {
+		editingSession.value = null
+	}
+})
+
+function deleteSession(session: TimeSession): void {
 	if (confirm('Are you sure you want to delete this session?')) {
 		emit('deleteSession', session)
 	}
@@ -64,10 +86,12 @@ function getDurationDisplay(session: TimeSession): string {
 	return '--:--:--'
 }
 
-function getSessionErrors(session: TimeSession): ValidationError[] {
-	if (!session.endTime) return []
+function getTimeRangeDisplay(session: TimeSession): string {
+	if (session.endTime) {
+		return formatSessionTimeRange(session.startTime, session.endTime)
+	}
 
-	return validateTimeRange(session.startTime, session.endTime)
+	return formatTime(session.startTime)
 }
 </script>
 
@@ -81,7 +105,7 @@ function getSessionErrors(session: TimeSession): ValidationError[] {
 				:disabled="loading"
 				type="button"
 				icon="i-lucide-plus"
-				@click="$emit('addManualSession')"
+				@click="openCreateModal"
 			>
 				Add Session
 			</UButton>
@@ -104,8 +128,8 @@ function getSessionErrors(session: TimeSession): ValidationError[] {
 				:key="session.id"
 				:class="{ 'bg-primary ': session.isActive }"
 			>
-				<div class="grid grid-cols-[1fr_2rem] items-center justify-between">
-					<div class="grid grid-cols-[6rem_1fr_6rem] items-center gap-4">
+				<div class="grid grid-cols-[1fr_auto] items-center justify-between gap-4">
+					<div class="grid grid-cols-[6rem_1fr_6rem] items-center gap-4 min-w-0">
 						<!-- Session Status -->
 						<div class="flex items-center text-toned">
 							<div
@@ -118,23 +142,15 @@ function getSessionErrors(session: TimeSession): ValidationError[] {
 						</div>
 
 						<!-- Time Range -->
-						<div class="flex items-center space-x-2">
-							<TimeInput
-								:class="{ 'text-inverted': session.isActive }"
-								:value="formatTime(session.startTime)"
-								:disabled="loading"
-								:readonly="session.isActive"
-								@update="(value) => updateStartTime(session, value)"
-							/>
-							<span>-</span>
-							<TimeInput
-								v-if="session.endTime"
-								:class="{ 'text-inverted': session.isActive }"
-								:value="formatTime(session.endTime)"
-								:disabled="loading"
-								@update="(value) => updateEndTime(session, value)"
-							/>
-						</div>
+						<button
+							type="button"
+							class="text-left text-sm font-mono truncate hover:underline disabled:no-underline disabled:cursor-default"
+							:class="{ 'text-inverted': session.isActive }"
+							:disabled="loading || session.isActive"
+							@click="openEditModal(session)"
+						>
+							{{ getTimeRangeDisplay(session) }}
+						</button>
 
 						<!-- Duration -->
 						<div class="text-sm font-mono">
@@ -143,33 +159,41 @@ function getSessionErrors(session: TimeSession): ValidationError[] {
 					</div>
 
 					<!-- Actions -->
-					<UButton
-						v-if="!session.isActive"
-						icon="i-lucide-trash-2"
-						size="md"
-						color="error"
-						variant="soft"
-						:disabled="loading"
-						title="Delete session"
-						aria-label="Delete session"
-						@click="deleteSession(session)"
-					/>
-				</div>
-
-				<!-- Validation Errors -->
-				<div
-					v-if="getSessionErrors(session).length > 0"
-					class="mt-2"
-				>
-					<div
-						v-for="error in getSessionErrors(session)"
-						:key="error.field"
-						class="text-sm text-error"
-					>
-						{{ error.message }}
+					<div class="flex items-center gap-1">
+						<UButton
+							v-if="!session.isActive"
+							icon="i-lucide-pencil"
+							size="md"
+							color="neutral"
+							variant="soft"
+							:disabled="loading"
+							title="Edit session"
+							aria-label="Edit session"
+							@click="openEditModal(session)"
+						/>
+						<UButton
+							v-if="!session.isActive"
+							icon="i-lucide-trash-2"
+							size="md"
+							color="error"
+							variant="soft"
+							:disabled="loading"
+							title="Delete session"
+							aria-label="Delete session"
+							@click="deleteSession(session)"
+						/>
 					</div>
 				</div>
 			</UCard>
 		</div>
+
+		<SessionEditModal
+			v-model:open="isModalOpen"
+			:session="editingSession"
+			:default-date="selectedDate"
+			:loading="loading"
+			:save-error="saveError"
+			@save="handleSave"
+		/>
 	</div>
 </template>

@@ -18,6 +18,8 @@ interface UseSessionManagerReturnType {
 	loading: Readonly<Ref<boolean>>
 	/** Error message from the last failed operation. */
 	errorMessage: Readonly<Ref<string>>
+	/** Clears the current error message. */
+	clearError(): void
 	/**
 	 * Load sessions for a specific date.
 	 * @param date - DateString in YYYY-MM-DD format
@@ -40,11 +42,12 @@ interface UseSessionManagerReturnType {
 	 */
 	deleteSessionData(session: TimeSession): Promise<void>
 	/**
-	 * Add a manual session with default 1-hour duration.
-	 * Creates a completed session for the current time period.
-	 * @returns Promise that resolves when the session is added
+	 * Create a completed session with the given start and end times.
+	 * @param startTime - Session start
+	 * @param endTime - Session end
+	 * @returns Promise that resolves when the session is created
 	 */
-	addManualSession(): Promise<void>
+	createSession(startTime: Date, endTime: Date): Promise<void>
 }
 
 /**
@@ -96,7 +99,18 @@ export function useSessionManager(
 				}
 			}
 
-			await updateSession(session.id, updates)
+			const startTime = updates.startTime ?? session.startTime
+			const endTime = updates.endTime ?? session.endTime
+			const normalizedUpdates: Partial<TimeSession> = { ...updates }
+
+			if (updates.startTime || updates.endTime) {
+				normalizedUpdates.date = convertToDateString(startTime)
+				if (endTime) {
+					normalizedUpdates.duration = diffInMilliseconds(startTime, endTime)
+				}
+			}
+
+			await updateSession(session.id, normalizedUpdates)
 			await loadSessionsForDate(selectedDate.value)
 
 			// Notify parent that sessions changed
@@ -133,27 +147,8 @@ export function useSessionManager(
 		}
 	}
 
-	async function addManualSession(): Promise<void> {
+	async function createSession(startTime: Date, endTime: Date): Promise<void> {
 		const now = new Date()
-		const selectedDateObj = new Date(selectedDate.value)
-
-		// Check if selected date is today
-		const isToday = convertToDateString(now) === selectedDate.value
-
-		// Set endTime: use current time if today, otherwise use noon (12:00) of the selected date
-		const endTime = isToday
-			? now
-			: new Date(
-					selectedDateObj.getFullYear(),
-					selectedDateObj.getMonth(),
-					selectedDateObj.getDate(),
-					12,
-					0,
-					0,
-				)
-
-		// Set startTime: 1 hour before endTime
-		const startTime = new Date(endTime.getTime() - 60 * 60 * 1000)
 
 		const sessionData = {
 			startTime,
@@ -171,15 +166,12 @@ export function useSessionManager(
 
 			const overlapping = await checkForOverlappingSessions(startTime, endTime)
 			if (overlapping.length > 0) {
-				throw new Error(
-					'Default time range overlaps with existing sessions. Please edit the times.',
-				)
+				throw new Error('This time range overlaps with existing sessions')
 			}
 
 			await saveSession(sessionData)
 			await loadSessionsForDate(selectedDate.value)
 
-			// Notify parent that sessions changed
 			if (onSessionsChanged) {
 				await onSessionsChanged()
 			}
@@ -188,6 +180,10 @@ export function useSessionManager(
 		} finally {
 			loading.value = false
 		}
+	}
+
+	function clearError(): void {
+		errorMessage.value = ''
 	}
 
 	watch(selectedDate, async (newDate) => {
@@ -199,9 +195,10 @@ export function useSessionManager(
 		sessions: shallowReadonly(sessions),
 		loading: shallowReadonly(loading),
 		errorMessage: shallowReadonly(errorMessage),
+		clearError,
 		loadSessionsForDate,
 		updateSessionData,
 		deleteSessionData,
-		addManualSession,
+		createSession,
 	}
 }
