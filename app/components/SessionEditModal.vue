@@ -12,6 +12,7 @@ import { dateToCalendarDate } from '~/utils/dateToCalendarDate.ts'
 import { dateToTime } from '~/utils/dateToTime.ts'
 import { formatDuration } from '~/utils/formatDuration.ts'
 import { getDefaultSessionTimes } from '~/utils/getDefaultSessionTimes.ts'
+import { parseCalendarInput, parseTimeInputValue } from '~/utils/parseCalendarInput.ts'
 import { validateTimeRange } from '~/utils/validateTimeRange.ts'
 
 const props = withDefaults(
@@ -48,48 +49,24 @@ const isCreateMode = computed(() => !props.session)
 
 const modalTitle = computed(() => (isCreateMode.value ? 'Add session' : 'Edit session'))
 
-function toCalendarDate(value: { year: number; month: number; day: number }): CalendarDate {
-	return new CalendarDate(value.year, value.month, value.day)
-}
-
-function toTime(value: { hour: number; minute: number; second: number }): Time {
-	return new Time(value.hour, value.minute, value.second)
-}
-
-function isDateLike(value: unknown): value is { year: number; month: number; day: number } {
-	return (
-		typeof value === 'object' &&
-		value !== null &&
-		'year' in value &&
-		'month' in value &&
-		'day' in value
-	)
-}
-
-function isTimeLike(value: unknown): value is { hour: number; minute: number; second: number } {
-	return (
-		typeof value === 'object' &&
-		value !== null &&
-		'hour' in value &&
-		'minute' in value &&
-		'second' in value
-	)
-}
-
 function updateStartDate(value: unknown): void {
-	if (isDateLike(value)) startDate.value = toCalendarDate(value)
+	const parsedDate = parseCalendarInput(value)
+	if (parsedDate) startDate.value = parsedDate
 }
 
 function updateStartTime(value: unknown): void {
-	if (isTimeLike(value)) startTime.value = toTime(value)
+	const parsedTime = parseTimeInputValue(value)
+	if (parsedTime) startTime.value = parsedTime
 }
 
 function updateEndDate(value: unknown): void {
-	if (isDateLike(value)) endDate.value = toCalendarDate(value)
+	const parsedDate = parseCalendarInput(value)
+	if (parsedDate) endDate.value = parsedDate
 }
 
 function updateEndTime(value: unknown): void {
-	if (isTimeLike(value)) endTime.value = toTime(value)
+	const parsedTime = parseTimeInputValue(value)
+	if (parsedTime) endTime.value = parsedTime
 }
 
 const combinedStartTime = computed(() => combineDateAndTime(startDate.value, startTime.value))

@@ -12,7 +12,7 @@ import { formatDuration } from '~/utils/formatDuration.ts'
 import { formatSessionTimeRange } from '~/utils/formatSessionTimeRange.ts'
 import { formatTime } from '~/utils/formatTime.ts'
 
-const props = withDefaults(
+withDefaults(
 	defineProps<{
 		/** Array of time sessions to display. */
 		sessions: TimeSession[]
