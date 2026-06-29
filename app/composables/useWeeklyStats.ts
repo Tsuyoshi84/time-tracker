@@ -58,6 +58,7 @@ export function useWeeklyStats(): UseWeeklyStatsReturnType {
 	const dailyStats = shallowRef<DayStats[]>([])
 	const errorMessage = shallowRef<string>('')
 
+	// fallow-ignore-next-line complexity
 	async function loadWeeklyStats(): Promise<void> {
 		try {
 			const weekStartStr = convertToDateString(weekStart.value)
