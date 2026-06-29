@@ -11,9 +11,9 @@ paths:
 After creating or editing any `.ts` or `.vue` file, run from the repository root:
 
 ```bash
-pnpm lint:fix
+pnpm oxlint --fix --format json
 
-pnpm lint-vue:fix
+pnpm eslint . --fix --max-warnings 0 -f ./eslint/eslint-clean-json.ts
 
 pnpm check
 ```
