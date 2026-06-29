@@ -119,7 +119,6 @@ function handleSave(): void {
 		startTime: combinedStartTime.value,
 		endTime: combinedEndTime.value,
 	})
-	isOpen.value = false
 }
 
 watch(isOpen, (modalIsOpen) => {
