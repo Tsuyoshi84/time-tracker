@@ -3,16 +3,11 @@
  * Modal for creating or editing a time tracking session with full date and time control.
  */
 
-import { CalendarDate, Time } from '@internationalized/date'
-
+import AppDateTimeInput from '~/components/AppDateTimeInput.vue'
 import type { DateString, TimeSession } from '~/types/index.ts'
 import { calculateDuration } from '~/utils/calculateDuration.ts'
-import { combineDateAndTime } from '~/utils/combineDateAndTime.ts'
-import { dateToCalendarDate } from '~/utils/dateToCalendarDate.ts'
-import { dateToTime } from '~/utils/dateToTime.ts'
 import { formatDuration } from '~/utils/formatDuration.ts'
 import { getDefaultSessionTimes } from '~/utils/getDefaultSessionTimes.ts'
-import { parseCalendarInput, parseTimeInputValue } from '~/utils/parseCalendarInput.ts'
 import { validateTimeRange } from '~/utils/validateTimeRange.ts'
 
 const props = withDefaults(
@@ -39,47 +34,18 @@ const emit = defineEmits<{
 	save: [payload: { startTime: Date; endTime: Date }]
 }>()
 
-const startDate = shallowRef<CalendarDate>(new CalendarDate(1970, 1, 1))
-const startTime = shallowRef<Time>(new Time(0, 0))
-const endDate = shallowRef<CalendarDate>(new CalendarDate(1970, 1, 1))
-const endTime = shallowRef<Time>(new Time(0, 0))
-const showValidationErrors = shallowRef(false)
+const startDateTime = shallowRef<Date>(new Date())
+const endDateTime = shallowRef<Date>(new Date())
 
 const isCreateMode = computed(() => !props.session)
 
 const modalTitle = computed(() => (isCreateMode.value ? 'Add session' : 'Edit session'))
 
-function updateStartDate(value: unknown): void {
-	const parsedDate = parseCalendarInput(value)
-	if (parsedDate) startDate.value = parsedDate
-}
-
-function updateStartTime(value: unknown): void {
-	const parsedTime = parseTimeInputValue(value)
-	if (parsedTime) startTime.value = parsedTime
-}
-
-function updateEndDate(value: unknown): void {
-	const parsedDate = parseCalendarInput(value)
-	if (parsedDate) endDate.value = parsedDate
-}
-
-function updateEndTime(value: unknown): void {
-	const parsedTime = parseTimeInputValue(value)
-	if (parsedTime) endTime.value = parsedTime
-}
-
-const combinedStartTime = computed(() => combineDateAndTime(startDate.value, startTime.value))
-
-const combinedEndTime = computed(() => combineDateAndTime(endDate.value, endTime.value))
-
-const validationErrors = computed(() =>
-	validateTimeRange(combinedStartTime.value, combinedEndTime.value),
-)
+const validationErrors = computed(() => validateTimeRange(startDateTime.value, endDateTime.value))
 
 const durationDisplay = computed(() => {
 	if (validationErrors.value.length > 0) return '--:--:--'
-	return formatDuration(calculateDuration(combinedStartTime.value, combinedEndTime.value))
+	return formatDuration(calculateDuration(startDateTime.value, endDateTime.value))
 })
 
 const displayedErrors = computed(() => {
@@ -90,24 +56,22 @@ const displayedErrors = computed(() => {
 	return errors
 })
 
+const showValidationErrors = shallowRef(false)
+
 function resetForm(): void {
 	showValidationErrors.value = false
 
 	if (props.session) {
-		startDate.value = dateToCalendarDate(props.session.startTime)
-		startTime.value = dateToTime(props.session.startTime)
-		if (props.session.endTime) {
-			endDate.value = dateToCalendarDate(props.session.endTime)
-			endTime.value = dateToTime(props.session.endTime)
-		}
+		startDateTime.value = new Date(props.session.startTime)
+		endDateTime.value = props.session.endTime
+			? new Date(props.session.endTime)
+			: new Date(props.session.startTime)
 		return
 	}
 
 	const { startTime: defaultStart, endTime: defaultEnd } = getDefaultSessionTimes(props.defaultDate)
-	startDate.value = dateToCalendarDate(defaultStart)
-	startTime.value = dateToTime(defaultStart)
-	endDate.value = dateToCalendarDate(defaultEnd)
-	endTime.value = dateToTime(defaultEnd)
+	startDateTime.value = defaultStart
+	endDateTime.value = defaultEnd
 }
 
 function handleSave(): void {
@@ -116,8 +80,8 @@ function handleSave(): void {
 	if (validationErrors.value.length > 0) return
 
 	emit('save', {
-		startTime: combinedStartTime.value,
-		endTime: combinedEndTime.value,
+		startTime: startDateTime.value,
+		endTime: endDateTime.value,
 	})
 }
 
@@ -153,54 +117,30 @@ watch(
 					label="Start"
 					name="start"
 				>
-					<UFieldGroup class="w-full">
-						<UInputDate
-							:model-value="startDate"
-							size="sm"
-							color="neutral"
-							variant="subtle"
-							class="flex-1"
-							:disabled="loading || (session?.isActive ?? false)"
-							@update:model-value="updateStartDate"
-						/>
-						<UInputTime
-							:model-value="startTime"
-							size="sm"
-							color="neutral"
-							variant="subtle"
-							:hour-cycle="24"
-							class="flex-1"
-							:disabled="loading || (session?.isActive ?? false)"
-							@update:model-value="updateStartTime"
-						/>
-					</UFieldGroup>
+					<AppDateTimeInput
+						v-model="startDateTime"
+						date-aria-label="Start date"
+						time-aria-label="Start time"
+						size="sm"
+						color="neutral"
+						variant="subtle"
+						:disabled="loading || (session?.isActive ?? false)"
+					/>
 				</UFormField>
 
 				<UFormField
 					label="End"
 					name="end"
 				>
-					<UFieldGroup class="w-full">
-						<UInputDate
-							:model-value="endDate"
-							size="sm"
-							color="neutral"
-							variant="subtle"
-							class="flex-1"
-							:disabled="loading"
-							@update:model-value="updateEndDate"
-						/>
-						<UInputTime
-							:model-value="endTime"
-							size="sm"
-							color="neutral"
-							variant="subtle"
-							:hour-cycle="24"
-							class="flex-1"
-							:disabled="loading"
-							@update:model-value="updateEndTime"
-						/>
-					</UFieldGroup>
+					<AppDateTimeInput
+						v-model="endDateTime"
+						date-aria-label="End date"
+						time-aria-label="End time"
+						size="sm"
+						color="neutral"
+						variant="subtle"
+						:disabled="loading"
+					/>
 				</UFormField>
 
 				<div class="text-sm text-muted">
@@ -212,7 +152,11 @@ watch(
 					color="error"
 					variant="subtle"
 					icon="i-lucide-circle-alert"
-					:title="displayedErrors.length === 1 ? displayedErrors[0]?.message : 'Please fix the following issues'"
+					:title="
+						displayedErrors.length === 1
+							? displayedErrors[0]?.message
+							: 'Please fix the following issues'
+					"
 				>
 					<template
 						v-if="displayedErrors.length > 1"

@@ -25,9 +25,7 @@ export function getDefaultSessionTimes(
 		throw new Error('Invalid date string format')
 	}
 
-	const endTime = isToday
-		? now
-		: new Date(year, month - 1, day, 12, 0, 0)
+	const endTime = isToday ? now : new Date(year, month - 1, day, 12, 0, 0)
 
 	const startTime = new Date(endTime.getTime() - 60 * 60 * 1000)
 

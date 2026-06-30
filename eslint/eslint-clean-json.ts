@@ -12,29 +12,29 @@ export default function (results: ESLintResult[]): string {
 			messages: r.messages,
 			errorCount: r.errorCount,
 			warningCount: r.warningCount,
-		}));
-	return JSON.stringify(filtered, null, 2);
+		}))
+	return JSON.stringify(filtered, null, 2)
 }
 
 interface Message {
-	ruleId: string;
-	severity: "error" | "warning";
-	message: string;
-	line: number;
-	column: number;
-	endLine: number;
-	endColumn: number;
+	ruleId: string
+	severity: 'error' | 'warning'
+	message: string
+	line: number
+	column: number
+	endLine: number
+	endColumn: number
 	fix?: {
-		range: [number, number];
-		text: string;
-	};
-	source: string;
+		range: [number, number]
+		text: string
+	}
+	source: string
 }
 
 interface ESLintResult {
-	filePath: string;
-	messages: Message[];
-	errorCount: number;
-	warningCount: number;
-	source: string;
+	filePath: string
+	messages: Message[]
+	errorCount: number
+	warningCount: number
+	source: string
 }

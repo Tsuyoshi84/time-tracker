@@ -6,9 +6,8 @@ import { checkForOverlappingSessions, updateSession } from './database.ts'
 import { assertNoOverlappingSessions, persistSessionUpdate } from './sessionMutations'
 
 vi.mock('./database.ts', () => ({
-	checkForOverlappingSessions: vi.fn<
-		(startTime: Date, endTime: Date, excludeId?: number) => Promise<TimeSession[]>
-	>(),
+	checkForOverlappingSessions:
+		vi.fn<(startTime: Date, endTime: Date, excludeId?: number) => Promise<TimeSession[]>>(),
 	updateSession: vi.fn<(id: number, updates: Partial<TimeSession>) => Promise<void>>(),
 }))
 
@@ -64,10 +63,6 @@ describe('persistSessionUpdate', () => {
 
 		await persistSessionUpdate(session, { startTime })
 
-		expect(checkForOverlappingSessions).toHaveBeenCalledWith(
-			startTime,
-			session.endTime,
-			session.id,
-		)
+		expect(checkForOverlappingSessions).toHaveBeenCalledWith(startTime, session.endTime, session.id)
 	})
 })
