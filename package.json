@@ -50,7 +50,7 @@
 		"oxfmt": "^0.54.0",
 		"oxlint": "^1.72.0",
 		"oxlint-tsgolint": "^0.23.0",
-		"tailwindcss": "^4.3.1",
+		"tailwindcss": "^4.3.2",
 		"typescript": "^6.0.3",
 		"vitest": "^4.1.9",
 		"vue-tsc": "^3.3.5",
