@@ -47,7 +47,7 @@
 		"fallow": "^2.104.0",
 		"happy-dom": "^20.10.6",
 		"lefthook": "^2.1.9",
-		"oxfmt": "^0.57.0",
+		"oxfmt": "^0.58.0",
 		"oxlint": "^1.72.0",
 		"oxlint-tsgolint": "^0.24.0",
 		"tailwindcss": "^4.3.2",
