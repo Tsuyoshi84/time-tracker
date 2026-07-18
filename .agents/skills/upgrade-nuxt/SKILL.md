@@ -60,7 +60,7 @@ Fix any build errors before continuing.
 
 Only proceed when type check, lint, and build all pass.
 
-Read and follow [.agents/skills/open-pull-request/SKILL.md](../open-pull-request/SKILL.md) to commit changes (if needed), push, and create the PR.
+Read and follow [.agents/skills/open-pr/SKILL.md](../open-pr/SKILL.md) to commit changes (if needed), push, and create the PR.
 
 Suggested PR title prefix: `chore:` (e.g. `chore: upgrade Nuxt to v4.x`).
 
