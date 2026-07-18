@@ -38,7 +38,7 @@ jobs:
       - name: Install dependencies
         run: pnpm install --no-save
 
-      - uses: fallow-rs/fallow@5da5e73aba1b06bebe51be17f1d65c30c5a36ee7 # v2.101.0
+      - uses: fallow-rs/fallow@c9326d9395c0b46f4077290473060b3e950b6e8c # v3.3.0
         with:
           command: audit
           artifacts-dir: .fallow
@@ -62,7 +62,7 @@ jobs:
         run: pnpm lint:fix
 
       - name: Commit changes
-        uses: stefanzweifel/git-auto-commit-action@04702edda442b2e678b25b537cec683a1493fcb9 # v7.1.0
+        uses: stefanzweifel/git-auto-commit-action@4a55954c782fc1ea30b9056cd3e7a2b40ca8887d # v7.2.0
 
       - name: Build
         run: pnpm build
