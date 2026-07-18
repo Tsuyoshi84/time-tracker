@@ -1,0 +1,15 @@
+diff --git a/.github/workflows/ci.yml b/.github/workflows/ci.yml
+index f6ec1b2..fcc6761 100644
+--- a/.github/workflows/ci.yml
++++ b/.github/workflows/ci.yml
+@@ -26 +26 @@ jobs:
+-          persist-credentials: false
++          persist-credentials: true
+@@ -41 +41 @@ jobs:
+-      - uses: fallow-rs/fallow@5da5e73aba1b06bebe51be17f1d65c30c5a36ee7 # v2.101.0
++      - uses: fallow-rs/fallow@bac74de070af40c7f0c7d7764aec1f5f09e4392d # v3.6.0
+@@ -44 +43,0 @@ jobs:
+-          artifacts-dir: .fallow
+@@ -65 +64 @@ jobs:
+-        uses: stefanzweifel/git-auto-commit-action@04702edda442b2e678b25b537cec683a1493fcb9 # v7.1.0
++        uses: stefanzweifel/git-auto-commit-action@4a55954c782fc1ea30b9056cd3e7a2b40ca8887d # v7.2.0
