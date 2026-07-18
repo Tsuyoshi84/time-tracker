@@ -163,7 +163,7 @@ function useTimerStateImpl(): UseTimerStateReturnType {
 	let timerInterval: ReturnType<typeof globalThis.setInterval> | null = null
 
 	function startTimerInterval(): void {
-		if (timerInterval !== null) clearInterval(timerInterval)
+		if (timerInterval !== null) globalThis.clearInterval(timerInterval)
 		timerInterval = globalThis.setInterval(() => {
 			// Force reactivity update for real-time timer display
 			if (timerState.value.isRunning) {
@@ -174,7 +174,7 @@ function useTimerStateImpl(): UseTimerStateReturnType {
 
 	function stopTimerInterval(): void {
 		if (timerInterval !== null) {
-			clearInterval(timerInterval)
+			globalThis.clearInterval(timerInterval)
 			timerInterval = null
 		}
 	}

@@ -20,7 +20,7 @@ interface TimeFields {
  */
 function getNumberProperty(obj: object, key: string): number | undefined {
 	if (!(key in obj)) return undefined
-	const value: unknown = Object.getOwnPropertyDescriptor(obj, key)?.value
+	const value: unknown = Reflect.get(obj, key)
 	return typeof value === 'number' ? value : undefined
 }
 

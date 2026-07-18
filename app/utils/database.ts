@@ -165,6 +165,15 @@ export async function getSessionsInDateRange(
 }
 
 /**
+ * Checks whether a session has a defined end time.
+ * @param session - Session to inspect
+ * @returns Whether the session is completed
+ */
+function isCompletedSession(session: TimeSession): session is TimeSession & { endTime: Date } {
+	return session.endTime !== undefined
+}
+
+/**
  * Calculates total duration and session count for a day.
  * @param date Date string (YYYY-MM-DD)
  * @returns Object with totalDuration and sessionCount
@@ -173,13 +182,11 @@ export async function calculateDayStats(
 	date: DateString,
 ): Promise<{ totalDuration: number; sessionCount: number }> {
 	const sessions = await getSessionsByDate(date)
-	const completedSessions = sessions.filter((session) => session.endTime !== undefined)
-	const totalDuration = completedSessions.reduce((total, session) => {
-		if (session.endTime !== undefined) {
-			return total + (session.endTime.getTime() - session.startTime.getTime())
-		}
-		return total
-	}, 0)
+	const completedSessions = sessions.filter(isCompletedSession)
+	const totalDuration = completedSessions.reduce(
+		(total, session) => total + (session.endTime.getTime() - session.startTime.getTime()),
+		0,
+	)
 	return {
 		totalDuration,
 		sessionCount: sessions.length,
@@ -209,11 +216,16 @@ export async function checkForOverlappingSessions(
 	const sessions = await getSessionsByDate(date)
 	return sessions.filter((session) => {
 		if (excludeId !== undefined && session.id === excludeId) return false
-		if (session.endTime === undefined) return false
-		const sessionStart = session.startTime.getTime()
-		const sessionEnd = session.endTime.getTime()
+
 		const newStart = startTime.getTime()
 		const newEnd = endTime.getTime()
+		const sessionStart = session.startTime.getTime()
+
+		if (session.endTime === undefined) {
+			return newEnd > sessionStart
+		}
+
+		const sessionEnd = session.endTime.getTime()
 		return newStart < sessionEnd && newEnd > sessionStart
 	})
 }
