@@ -11,15 +11,16 @@ vi.mock('./database.ts', () => ({
 	updateSession: vi.fn<(id: number, updates: Partial<TimeSession>) => Promise<void>>(),
 }))
 
-const session = {
+const endTime = new Date('2023-06-15T10:00:00')
+const session: TimeSession = {
 	id: 1,
 	startTime: new Date('2023-06-15T09:00:00'),
-	endTime: new Date('2023-06-15T10:00:00'),
+	endTime,
 	date: '2023-06-15',
 	isActive: false,
 	createdAt: new Date('2023-06-15T09:00:00'),
-	updatedAt: new Date('2023-06-15T10:00:00'),
-} as TimeSession
+	updatedAt: endTime,
+}
 
 describe('assertNoOverlappingSessions', () => {
 	beforeEach(() => {
@@ -30,7 +31,7 @@ describe('assertNoOverlappingSessions', () => {
 		vi.mocked(checkForOverlappingSessions).mockResolvedValue([])
 
 		await expect(
-			assertNoOverlappingSessions(session.startTime, session.endTime as Date, session.id),
+			assertNoOverlappingSessions(session.startTime, endTime, session.id),
 		).resolves.toBeUndefined()
 	})
 
@@ -38,7 +39,7 @@ describe('assertNoOverlappingSessions', () => {
 		vi.mocked(checkForOverlappingSessions).mockResolvedValue([session])
 
 		await expect(
-			assertNoOverlappingSessions(session.startTime, session.endTime as Date, session.id),
+			assertNoOverlappingSessions(session.startTime, endTime, session.id),
 		).rejects.toThrow('This time range overlaps with existing sessions')
 	})
 })

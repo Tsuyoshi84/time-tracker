@@ -5,6 +5,7 @@ import type { Milliseconds, TimerState } from '../types/index.ts'
 import { convertToDateString } from '../utils/convertToDateString.ts'
 import { getActiveSession, saveSession, updateSession } from '../utils/database.ts'
 import { diffInMilliseconds } from '../utils/diffInMilliseconds.ts'
+import { ZERO_MILLISECONDS } from '../utils/toMilliseconds.ts'
 
 interface UseTimerStateReturnType {
 	/** Current timer state including running status, active session, and start time. */
@@ -47,7 +48,7 @@ function useTimerStateImpl(): UseTimerStateReturnType {
 		startTime: null,
 	})
 
-	const currentSessionDuration = shallowRef<Milliseconds>(0 as Milliseconds)
+	const currentSessionDuration = shallowRef<Milliseconds>(ZERO_MILLISECONDS)
 	const loading = shallowRef(false)
 	const errorMessage = shallowRef<string>('')
 
@@ -114,7 +115,7 @@ function useTimerStateImpl(): UseTimerStateReturnType {
 			startTime: now,
 			date: convertToDateString(now),
 			isActive: true,
-			duration: 0 as Milliseconds,
+			duration: ZERO_MILLISECONDS,
 			createdAt: now,
 			updatedAt: now,
 		}
@@ -149,7 +150,7 @@ function useTimerStateImpl(): UseTimerStateReturnType {
 			currentSession: null,
 			startTime: null,
 		}
-		currentSessionDuration.value = 0 as Milliseconds
+		currentSessionDuration.value = ZERO_MILLISECONDS
 
 		pause()
 
@@ -159,11 +160,11 @@ function useTimerStateImpl(): UseTimerStateReturnType {
 		})
 	}
 
-	let timerInterval: number | null = null
+	let timerInterval: ReturnType<typeof globalThis.setInterval> | null = null
 
 	function startTimerInterval(): void {
-		if (timerInterval) clearInterval(timerInterval)
-		timerInterval = window.setInterval(() => {
+		if (timerInterval !== null) clearInterval(timerInterval)
+		timerInterval = globalThis.setInterval(() => {
 			// Force reactivity update for real-time timer display
 			if (timerState.value.isRunning) {
 				timerState.value = { ...timerState.value }
@@ -172,7 +173,7 @@ function useTimerStateImpl(): UseTimerStateReturnType {
 	}
 
 	function stopTimerInterval(): void {
-		if (timerInterval) {
+		if (timerInterval !== null) {
 			clearInterval(timerInterval)
 			timerInterval = null
 		}

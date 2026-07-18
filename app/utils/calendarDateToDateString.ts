@@ -1,6 +1,7 @@
 import type { CalendarDate } from '@internationalized/date'
 
 import type { DateString } from '~/types/index.ts'
+import { toDateString } from './toDateString.ts'
 
 /**
  * Converts a CalendarDate to a DateString in YYYY-MM-DD format.
@@ -16,5 +17,7 @@ import type { DateString } from '~/types/index.ts'
  * ```
  */
 export function calendarDateToDateString(date: CalendarDate): DateString {
-	return `${date.year}-${date.month.toString().padStart(2, '0')}-${date.day.toString().padStart(2, '0')}` as DateString
+	return toDateString(
+		`${date.year}-${date.month.toString().padStart(2, '0')}-${date.day.toString().padStart(2, '0')}`,
+	)
 }

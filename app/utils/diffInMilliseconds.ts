@@ -1,4 +1,5 @@
 import type { Milliseconds } from '../types/index.ts'
+import { toMilliseconds } from './toMilliseconds.ts'
 
 /**
  * Calculates the difference between two dates in milliseconds.
@@ -16,5 +17,5 @@ import type { Milliseconds } from '../types/index.ts'
  * ```
  */
 export function diffInMilliseconds(start: Date, end: Date): Milliseconds {
-	return (end.getTime() - start.getTime()) as Milliseconds
+	return toMilliseconds(end.getTime() - start.getTime())
 }
