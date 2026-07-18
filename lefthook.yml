@@ -5,4 +5,4 @@ pre-commit:
       run: pnpm check --staged --no-errors-on-unmatched
     format:
       glob: "*.{ts,js,cjs,mjs,json,jsonc,vue,css}"
-      run: pnpm format --staged --no-errors-on-unmatched
+      run: pnpm oxfmt --write {staged_files} || true

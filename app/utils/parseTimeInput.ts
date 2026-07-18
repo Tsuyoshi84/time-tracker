@@ -4,7 +4,10 @@
  * @param now - Time provider used to determine today's date
  * @returns A Date object with the parsed time, or null if invalid
  */
-export function parseTimeInput(timeString: string, now: () => Date = () => new Date()): Date | null {
+export function parseTimeInput(
+	timeString: string,
+	now: () => Date = () => new Date(),
+): Date | null {
 	const match = timeString.match(/^(\d{1,2}):(\d{2})$/)
 	if (!match) return null
 
