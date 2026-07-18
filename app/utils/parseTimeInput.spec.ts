@@ -56,8 +56,8 @@ describe('parseTimeInput', () => {
 	})
 
 	it('should set the date to today', () => {
-		const today = new Date()
-		const parsedTime = parseTimeInput('14:30')
+		const today = new Date('2023-06-15T12:00:00')
+		const parsedTime = parseTimeInput('14:30', () => today)
 
 		expect(parsedTime).toBeInstanceOf(Date)
 		expect(parsedTime?.getFullYear()).toBe(today.getFullYear())

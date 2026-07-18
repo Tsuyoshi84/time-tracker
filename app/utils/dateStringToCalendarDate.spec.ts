@@ -42,6 +42,7 @@ describe('dateStringToCalendarDate', () => {
 		// TypeScript should prevent invalid formats at compile time.
 		// However, we can test the runtime validation logic
 		expect(() => {
+			// oxlint-disable-next-line typescript/no-unsafe-type-assertion -- testing runtime validation with invalid input
 			dateStringToCalendarDate('invalid-date' as DateString)
 		}).toThrow('Invalid date string format')
 	})

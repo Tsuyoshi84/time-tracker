@@ -2,6 +2,7 @@ import type { Table } from 'dexie'
 import Dexie from 'dexie'
 
 import type { DateString, TimeSession } from '../types/index.ts'
+import { convertToDateString } from './convertToDateString.ts'
 
 const DB_NAME = 'timeTracker'
 const DB_VERSION = 1
@@ -31,6 +32,35 @@ class TimeTrackerDexie extends Dexie {
 const db = new TimeTrackerDexie()
 
 /**
+ * Returns the session id or throws when it is missing.
+ * @param id - Session id from the database
+ * @returns Defined session id
+ */
+function requireSessionId(id: number | undefined): number {
+	if (id === undefined) {
+		throw new Error('Session record is missing id')
+	}
+	return id
+}
+
+/**
+ * Converts a database session record to a TimeSession.
+ * @param session - Session record from Dexie
+ * @returns Normalized time session
+ */
+function mapSessionTableToTimeSession(session: SessionTable): TimeSession {
+	return {
+		...session,
+		id: requireSessionId(session.id),
+		isActive: session.isActive === 1,
+		startTime: new Date(session.startTime),
+		endTime: session.endTime ? new Date(session.endTime) : undefined,
+		createdAt: new Date(session.createdAt),
+		updatedAt: new Date(session.updatedAt),
+	}
+}
+
+/**
  * Initializes the Dexie database instance.
  * @returns Dexie database instance
  */
@@ -56,9 +86,9 @@ export async function saveSession(session: Omit<TimeSession, 'id'>): Promise<Tim
 	const id = await db.sessions.add(sessionWithTimestamps)
 	return {
 		...sessionWithTimestamps,
-		id: Number(id),
-		isActive: !!sessionWithTimestamps.isActive,
-	} as TimeSession
+		id: requireSessionId(id),
+		isActive: sessionWithTimestamps.isActive === 1,
+	}
 }
 
 /**
@@ -100,18 +130,9 @@ export async function deleteSession(id: number): Promise<void> {
  * @returns Array of sessions for the date
  */
 export async function getSessionsByDate(date: DateString): Promise<TimeSession[]> {
-	if (!date) return []
 	const sessions = await db.sessions.where('date').equals(date).toArray()
 	return sessions
-		.map((session) => ({
-			...session,
-			id: session.id as number,
-			isActive: !!session.isActive,
-			startTime: new Date(session.startTime),
-			endTime: session.endTime ? new Date(session.endTime) : undefined,
-			createdAt: new Date(session.createdAt),
-			updatedAt: new Date(session.updatedAt),
-		}))
+		.map((session) => mapSessionTableToTimeSession(session))
 		.sort((a, b) => a.startTime.getTime() - b.startTime.getTime())
 }
 
@@ -121,19 +142,10 @@ export async function getSessionsByDate(date: DateString): Promise<TimeSession[]
  */
 export async function getActiveSession(): Promise<TimeSession | null> {
 	const activeSessions = await db.sessions.where('isActive').equals(1).toArray()
-	if (!activeSessions || activeSessions.length === 0) return null
+	if (activeSessions.length === 0) return null
 	const activeSession = activeSessions[0]
-	if (!activeSession || typeof activeSession.date !== 'string') return null
-	return {
-		...activeSession,
-		id: activeSession.id as number,
-		date: activeSession.date,
-		isActive: !!activeSession.isActive,
-		startTime: new Date(activeSession.startTime),
-		endTime: activeSession.endTime ? new Date(activeSession.endTime) : undefined,
-		createdAt: new Date(activeSession.createdAt),
-		updatedAt: new Date(activeSession.updatedAt),
-	}
+	if (activeSession === undefined || typeof activeSession.date !== 'string') return null
+	return mapSessionTableToTimeSession(activeSession)
 }
 
 /**
@@ -148,16 +160,17 @@ export async function getSessionsInDateRange(
 ): Promise<TimeSession[]> {
 	const sessions = await db.sessions.where('date').between(startDate, endDate, true, true).toArray()
 	return sessions
-		.map((session) => ({
-			...session,
-			id: session.id as number,
-			isActive: !!session.isActive,
-			startTime: new Date(session.startTime),
-			endTime: session.endTime ? new Date(session.endTime) : undefined,
-			createdAt: new Date(session.createdAt),
-			updatedAt: new Date(session.updatedAt),
-		}))
+		.map((session) => mapSessionTableToTimeSession(session))
 		.sort((a, b) => a.startTime.getTime() - b.startTime.getTime())
+}
+
+/**
+ * Checks whether a session has a defined end time.
+ * @param session - Session to inspect
+ * @returns Whether the session is completed
+ */
+function isCompletedSession(session: TimeSession): session is TimeSession & { endTime: Date } {
+	return session.endTime !== undefined
 }
 
 /**
@@ -168,14 +181,12 @@ export async function getSessionsInDateRange(
 export async function calculateDayStats(
 	date: DateString,
 ): Promise<{ totalDuration: number; sessionCount: number }> {
-	const sessions = await getSessionsByDate(date ?? '')
-	const completedSessions = sessions.filter((session) => session.endTime)
-	const totalDuration = completedSessions.reduce((total, session) => {
-		if (session.endTime) {
-			return total + (session.endTime.getTime() - session.startTime.getTime())
-		}
-		return total
-	}, 0)
+	const sessions = await getSessionsByDate(date)
+	const completedSessions = sessions.filter(isCompletedSession)
+	const totalDuration = completedSessions.reduce(
+		(total, session) => total + (session.endTime.getTime() - session.startTime.getTime()),
+		0,
+	)
 	return {
 		totalDuration,
 		sessionCount: sessions.length,
@@ -201,15 +212,20 @@ export async function checkForOverlappingSessions(
 	endTime: Date,
 	excludeId?: number,
 ): Promise<TimeSession[]> {
-	const date = startTime.toISOString().split('T')[0] as DateString
+	const date = convertToDateString(startTime)
 	const sessions = await getSessionsByDate(date)
 	return sessions.filter((session) => {
-		if (excludeId && session.id === excludeId) return false
-		if (!session.endTime) return false
-		const sessionStart = session.startTime.getTime()
-		const sessionEnd = session.endTime.getTime()
+		if (excludeId !== undefined && session.id === excludeId) return false
+
 		const newStart = startTime.getTime()
 		const newEnd = endTime.getTime()
+		const sessionStart = session.startTime.getTime()
+
+		if (session.endTime === undefined) {
+			return newEnd > sessionStart
+		}
+
+		const sessionEnd = session.endTime.getTime()
 		return newStart < sessionEnd && newEnd > sessionStart
 	})
 }

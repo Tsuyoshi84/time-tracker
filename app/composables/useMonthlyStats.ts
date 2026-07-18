@@ -1,6 +1,8 @@
 import type { Milliseconds, MonthStats } from '../types/index.ts'
 import { convertToDateString } from '../utils/convertToDateString.ts'
 import { getSessionsInDateRange } from '../utils/database.ts'
+import { diffInMilliseconds } from '../utils/diffInMilliseconds.ts'
+import { toMilliseconds, ZERO_MILLISECONDS } from '../utils/toMilliseconds.ts'
 
 interface UseMonthlyStatsReturnType {
 	/** Monthly statistics for the last 6 months. */
@@ -46,12 +48,11 @@ export function useMonthlyStats(): UseMonthlyStatsReturnType {
 
 				const completedSessions = monthSessions.filter((s) => s.endTime)
 				const totalDuration = completedSessions.reduce<Milliseconds>((total, session) => {
-					if (session.endTime) {
-						return (total +
-							(session.endTime.getTime() - session.startTime.getTime())) as Milliseconds
+					if (session.endTime !== undefined) {
+						return toMilliseconds(total + diffInMilliseconds(session.startTime, session.endTime))
 					}
 					return total
-				}, 0 as Milliseconds)
+				}, ZERO_MILLISECONDS)
 
 				const monthLabel = monthDate.toLocaleDateString('en-US', {
 					month: 'long',

@@ -48,8 +48,7 @@ const weekDays = computed<WeekDay[]>(() => {
 		const dayStats = props.dailyStats.find((stats) => stats.date === dateString)
 
 		days.push({
-			// biome-ignore lint/style/noNonNullAssertion: The value is guaranteed to be defined
-			date: dateString!,
+			date: dateString,
 			dayName: current.toLocaleDateString('en-US', { weekday: 'short' }),
 			isToday: dateString === today,
 			totalDuration: dayStats?.totalDuration || 0,

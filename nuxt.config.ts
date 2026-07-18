@@ -79,11 +79,9 @@ export default defineNuxtConfig({
 
 	sentry: {
 		...(process.env.SENTRY_AUTH_TOKEN && {
-			sourceMapsUploadOptions: {
-				org: 'tsuyoshi',
-				project: 'time-tracker',
-				authToken: process.env.SENTRY_AUTH_TOKEN,
-			},
+			org: 'tsuyoshi',
+			project: 'time-tracker',
+			authToken: process.env.SENTRY_AUTH_TOKEN,
 		}),
 
 		autoInjectServerSentry: 'top-level-import',

@@ -1,6 +1,8 @@
 import type { DayStats, Milliseconds, TimeSession } from '../types/index.ts'
 import { convertToDateString } from '../utils/convertToDateString.ts'
 import { getSessionsInDateRange } from '../utils/database.ts'
+import { diffInMilliseconds } from '../utils/diffInMilliseconds.ts'
+import { toMilliseconds, ZERO_MILLISECONDS } from '../utils/toMilliseconds.ts'
 
 interface UseWeeklyStatsReturnType {
 	/** Start date of the current week being viewed. */
@@ -82,16 +84,15 @@ export function useWeeklyStats(): UseWeeklyStatsReturnType {
 
 			for (let i = 0; i < 7; i++) {
 				const dateStr = convertToDateString(currentDate)
-				const daySessions = sessionsByDate.get(dateStr) || []
+				const daySessions = sessionsByDate.get(dateStr) ?? []
 
 				const completedSessions = daySessions.filter((s) => s.endTime)
 				const totalDuration = completedSessions.reduce<Milliseconds>((total, session) => {
-					if (session.endTime) {
-						return (total +
-							(session.endTime.getTime() - session.startTime.getTime())) as Milliseconds
+					if (session.endTime !== undefined) {
+						return toMilliseconds(total + diffInMilliseconds(session.startTime, session.endTime))
 					}
 					return total
-				}, 0 as Milliseconds)
+				}, ZERO_MILLISECONDS)
 
 				stats.push({
 					date: dateStr,
