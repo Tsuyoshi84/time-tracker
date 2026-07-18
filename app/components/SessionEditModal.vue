@@ -39,13 +39,35 @@ const endDateTime = shallowRef<Date>(new Date())
 
 const isCreateMode = computed(() => !props.session)
 
+const isActiveSession = computed(() => props.session?.isActive ?? false)
+
 const modalTitle = computed(() => (isCreateMode.value ? 'Add session' : 'Edit session'))
 
-const validationErrors = computed(() => validateTimeRange(startDateTime.value, endDateTime.value))
+const validationErrors = computed(() => {
+	if (isActiveSession.value) {
+		const errors = []
+		const now = new Date()
+
+		if (startDateTime.value > now) {
+			errors.push({ field: 'startTime', message: 'Start time cannot be in the future' })
+		}
+
+		const maxDuration = 24 * 60 * 60 * 1000
+		if (now.getTime() - startDateTime.value.getTime() > maxDuration) {
+			errors.push({ field: 'timeRange', message: 'Session cannot be longer than 24 hours' })
+		}
+
+		return errors
+	}
+
+	return validateTimeRange(startDateTime.value, endDateTime.value)
+})
 
 const durationDisplay = computed(() => {
 	if (validationErrors.value.length > 0) return '--:--:--'
-	return formatDuration(calculateDuration(startDateTime.value, endDateTime.value))
+
+	const endTime = isActiveSession.value ? new Date() : endDateTime.value
+	return formatDuration(calculateDuration(startDateTime.value, endTime))
 })
 
 const displayedErrors = computed(() => {
@@ -108,7 +130,9 @@ watch(
 		:description="
 			isCreateMode
 				? 'Set the start and end date and time for the new session.'
-				: 'Adjust the start and end date and time for this session.'
+				: isActiveSession
+					? 'Adjust the start date and time for this running session.'
+					: 'Adjust the start and end date and time for this session.'
 		"
 	>
 		<template #body>
@@ -124,7 +148,7 @@ watch(
 						size="sm"
 						color="neutral"
 						variant="subtle"
-						:disabled="loading || (session?.isActive ?? false)"
+						:disabled="loading"
 					/>
 				</UFormField>
 
@@ -139,9 +163,16 @@ watch(
 						size="sm"
 						color="neutral"
 						variant="subtle"
-						:disabled="loading"
+						:disabled="loading || isActiveSession"
 					/>
 				</UFormField>
+
+				<p
+					v-if="isActiveSession"
+					class="text-sm text-muted"
+				>
+					End time is set when you pause the timer.
+				</p>
 
 				<div class="text-sm text-muted">
 					Duration: <span class="font-mono text-default">{{ durationDisplay }}</span>

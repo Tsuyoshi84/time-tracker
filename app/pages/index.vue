@@ -28,6 +28,7 @@ const {
 	loading: sessionLoading,
 } = useSessionManager(async () => {
 	await loadWeeklyStats()
+	await loadActiveSession()
 })
 
 async function handleCreateSession(payload: { startTime: Date; endTime: Date }): Promise<void> {

@@ -54,10 +54,13 @@ export async function persistSessionUpdate(
 	const startTime = updates.startTime ?? session.startTime
 	const endTime = updates.endTime ?? session.endTime
 	const hasTimeUpdate = 'startTime' in updates || 'endTime' in updates
-	const shouldValidateOverlap = hasTimeUpdate && Boolean(endTime)
 
-	if (shouldValidateOverlap && endTime) {
-		await assertNoOverlappingSessions(startTime, endTime, session.id)
+	if (hasTimeUpdate) {
+		const overlapEndTime = endTime ?? (session.isActive ? new Date() : undefined)
+
+		if (overlapEndTime) {
+			await assertNoOverlappingSessions(startTime, overlapEndTime, session.id)
+		}
 	}
 
 	await updateSession(session.id, normalizeSessionUpdates(session, updates))
