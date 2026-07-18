@@ -127,10 +127,7 @@ function getSessionDuration(session: TimeSession): string {
 					<div class="flex items-center space-x-4">
 						<div class="flex items-center">
 							<div
-								:class="[
-									'w-3 h-3 rounded-full',
-									session.isActive ? 'bg-green-500' : 'bg-gray-300',
-								]"
+								:class="['w-3 h-3 rounded-full', session.isActive ? 'bg-green-500' : 'bg-gray-300']"
 							/>
 							<span class="ml-2 text-sm font-medium">
 								{{ session.isActive ? 'Active' : 'Completed' }}
