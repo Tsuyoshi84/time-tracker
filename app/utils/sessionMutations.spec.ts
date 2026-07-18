@@ -65,4 +65,22 @@ describe('persistSessionUpdate', () => {
 
 		expect(checkForOverlappingSessions).toHaveBeenCalledWith(startTime, session.endTime, session.id)
 	})
+
+	it('should validate overlap using current time when active session start time changes', async () => {
+		vi.useFakeTimers()
+		vi.setSystemTime(new Date('2023-06-15T10:00:00'))
+
+		const activeSession = { ...session, isActive: true, endTime: undefined }
+		const startTime = new Date('2023-06-15T08:00:00')
+
+		await persistSessionUpdate(activeSession, { startTime })
+
+		expect(checkForOverlappingSessions).toHaveBeenCalledWith(
+			startTime,
+			new Date('2023-06-15T10:00:00'),
+			activeSession.id,
+		)
+
+		vi.useRealTimers()
+	})
 })

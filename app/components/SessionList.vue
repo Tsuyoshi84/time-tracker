@@ -53,10 +53,11 @@ function openEditModal(session: TimeSession): void {
 
 function handleSave(payload: { startTime: Date; endTime: Date }): void {
 	if (editingSession.value) {
-		emit('updateSession', editingSession.value, {
-			startTime: payload.startTime,
-			endTime: payload.endTime,
-		})
+		const updates = editingSession.value.isActive
+			? { startTime: payload.startTime }
+			: { startTime: payload.startTime, endTime: payload.endTime }
+
+		emit('updateSession', editingSession.value, updates)
 		return
 	}
 
@@ -146,7 +147,7 @@ function getTimeRangeDisplay(session: TimeSession): string {
 							type="button"
 							class="text-left text-sm font-mono truncate hover:underline disabled:no-underline disabled:cursor-default"
 							:class="{ 'text-inverted': session.isActive }"
-							:disabled="loading || session.isActive"
+							:disabled="loading"
 							@click="openEditModal(session)"
 						>
 							{{ getTimeRangeDisplay(session) }}
@@ -161,14 +162,13 @@ function getTimeRangeDisplay(session: TimeSession): string {
 					<!-- Actions -->
 					<div class="flex items-center gap-1">
 						<UButton
-							v-if="!session.isActive"
 							icon="i-lucide-pencil"
 							size="md"
 							color="neutral"
 							variant="soft"
 							:disabled="loading"
-							title="Edit session"
-							aria-label="Edit session"
+							:title="session.isActive ? 'Edit start time' : 'Edit session'"
+							:aria-label="session.isActive ? 'Edit start time' : 'Edit session'"
 							@click="openEditModal(session)"
 						/>
 						<UButton

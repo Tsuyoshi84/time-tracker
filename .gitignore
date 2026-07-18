@@ -31,3 +31,6 @@ logs
 
 # Git worktrees
 .worktrees
+
+# Playwright CLI
+.playwright-cli
