@@ -38,7 +38,7 @@ jobs:
       - name: Install dependencies
         run: pnpm install --no-save
 
-      - uses: fallow-rs/fallow@c9326d9395c0b46f4077290473060b3e950b6e8c # v3.3.0
+      - uses: fallow-rs/fallow@bac74de070af40c7f0c7d7764aec1f5f09e4392d # v3.6.0
         with:
           command: audit
 
