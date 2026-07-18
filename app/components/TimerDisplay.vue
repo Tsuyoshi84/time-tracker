@@ -17,8 +17,7 @@ withDefaults(
 		/** Total duration for this week in milliseconds. */
 		weekTotalDuration: Milliseconds
 	}>(),
-	{
-	},
+	{},
 )
 
 defineEmits<{
