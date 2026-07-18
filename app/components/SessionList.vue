@@ -3,7 +3,7 @@
  * SessionList displays and manages time tracking sessions, allowing users to view, edit, and delete session entries.
  */
 
-import { Clock } from 'lucide-vue-next'
+import { Clock } from '@lucide/vue'
 
 import SessionEditModal from '~/components/SessionEditModal.vue'
 import type { DateString, TimeSession } from '~/types/index.ts'

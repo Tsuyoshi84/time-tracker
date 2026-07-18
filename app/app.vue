@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import type { NavigationMenuItem } from '@nuxt/ui'
-import { Timer } from 'lucide-vue-next'
+import { Timer } from '@lucide/vue'
 
 import { useTimerFavicon } from '~/composables/useTimerFavicon.ts'
 import { useTimerState } from '~/composables/useTimerState.ts'
