@@ -39,6 +39,7 @@ jobs:
       - uses: fallow-rs/fallow@bac74de070af40c7f0c7d7764aec1f5f09e4392d # v3.6.0
         with:
           command: audit
+          artifacts-dir: .fallow
 
       - parallel:
         - name: Format
