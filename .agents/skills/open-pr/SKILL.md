@@ -11,7 +11,7 @@ Create a standardized, semantic pull request using the Pull Request Format. Anal
 
 ## Tool Constraints
 
-- Use only `git` and `gh` commands for all operations
+- Use `git`, `gh`, and `pnpm format` for all operations
 - Do NOT use other MCP servers or external tools
 
 ## Workflow
@@ -34,7 +34,19 @@ If commit fails due to hooks, fix and create NEW commit (don't amend)
 
 **Never commit secrets** (.env, credentials.json, private keys).
 
-### 3. Generate Pull Request
+### 3. Format Code
+
+Run formatting before opening the PR:
+
+```bash
+pnpm format
+```
+
+If formatting produces a diff, commit it with a `style:` prefix (e.g., `style: format code`).
+
+If the commit fails due to hooks, fix the issue and create a NEW commit (don't amend).
+
+### 4. Generate Pull Request
 
 Push to remote.
 Read `.github/PULL_REQUEST_TEMPLATE.md`, use it as a structure reference, and generate a comprehensive PR description with a summary of changes and a test plan.
