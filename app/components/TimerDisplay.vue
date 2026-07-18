@@ -16,11 +16,8 @@ withDefaults(
 		todaysTotalDuration: Milliseconds
 		/** Total duration for this week in milliseconds. */
 		weekTotalDuration: Milliseconds
-		/** Whether the timer is in a loading state. */
-		loading?: boolean
 	}>(),
 	{
-		loading: false,
 	},
 )
 

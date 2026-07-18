@@ -1,8 +1,8 @@
 {
 	"$schema": "https://raw.githubusercontent.com/fallow-rs/fallow/main/schema.json",
-	"entry": ["app/test/setup.ts"],
+	"entry": ["app/test/setup.ts", "eslint/eslint-clean-json.ts"],
 	"ignorePatterns": ["**/*.d.ts"],
-	"ignoreDependencies": ["@typescript-eslint/parser", "@nuxt/fonts"],
+	"ignoreDependencies": ["@typescript-eslint/parser", "@nuxt/fonts", "nuxt"],
 	"rules": {
 		"unresolved-imports": "error",
 		"unlisted-dependencies": "error",
