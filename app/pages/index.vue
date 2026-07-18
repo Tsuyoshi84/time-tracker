@@ -13,8 +13,7 @@ import { initDatabase } from '~/utils/database.ts'
 
 const { dailyStats, loadWeeklyStats } = useWeeklyStats()
 
-const { loadActiveSession, timerState, currentSessionDuration, toggleTimer, loading } =
-	useTimerState()
+const { loadActiveSession, timerState, currentSessionDuration, toggleTimer } = useTimerState()
 
 const {
 	sessions,
@@ -94,7 +93,6 @@ useSeoMeta({
 					:current-session-duration="currentSessionDuration"
 					:todays-total-duration="todaysTotalDuration"
 					:week-total-duration="weekTotalDuration"
-					:loading="loading"
 					@toggle-timer="toggleTimer"
 				/>
 			</div>
