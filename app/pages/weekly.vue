@@ -1,6 +1,6 @@
 <script setup lang="ts">
+import { Calendar } from '@lucide/vue'
 import { useSum } from '@vueuse/math'
-import { Calendar } from 'lucide-vue-next'
 
 import AppCard from '~/components/AppCard.vue'
 import WeeklyView from '~/components/WeeklyView.vue'

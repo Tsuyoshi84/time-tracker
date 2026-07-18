@@ -7,7 +7,7 @@
  * - Accessible label updates based on current state
  */
 
-import { Moon, Sun } from 'lucide-vue-next'
+import { Moon, Sun } from '@lucide/vue'
 
 import { useTheme } from '../composables/useTheme.ts'
 

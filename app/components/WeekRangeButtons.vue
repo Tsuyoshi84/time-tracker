@@ -3,7 +3,7 @@
  * A component that displays a range of dates and allows the user to navigate between them.
  */
 
-import { ChevronLeft, ChevronRight } from 'lucide-vue-next'
+import { ChevronLeft, ChevronRight } from '@lucide/vue'
 
 import { formatDate } from '~/utils/formatDate.ts'
 
