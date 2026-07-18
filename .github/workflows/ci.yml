@@ -18,8 +18,6 @@ on:
 jobs:
   test:
     runs-on: ubuntu-latest
-    permissions:
-      contents: write
     steps:
       - uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
         with:
@@ -38,31 +36,29 @@ jobs:
       - name: Install dependencies
         run: pnpm install --no-save
 
-      - uses: fallow-rs/fallow@5da5e73aba1b06bebe51be17f1d65c30c5a36ee7 # v2.101.0
+      - uses: fallow-rs/fallow@bac74de070af40c7f0c7d7764aec1f5f09e4392d # v3.6.0
         with:
           command: audit
           artifacts-dir: .fallow
 
-      - name: Format
-        run: pnpm format
+      - parallel:
+        - name: Format
+          run: pnpm format:check
 
-      - name: Type Check
-        run: pnpm typecheck
+        - name: Type Check
+          run: pnpm typecheck
+
+        - name: Lint
+          run: pnpm lint-vue:fix
+
+        - name: Biome Check
+          run: pnpm check
+
+        - name: Oxlint
+          run: pnpm lint
 
       - name: Test
         run: pnpm test
-
-      - name: Lint
-        run: pnpm lint-vue:fix
-
-      - name: Biome Check
-        run: pnpm check
-
-      - name: Oxlint
-        run: pnpm lint:fix
-
-      - name: Commit changes
-        uses: stefanzweifel/git-auto-commit-action@04702edda442b2e678b25b537cec683a1493fcb9 # v7.1.0
 
       - name: Build
         run: pnpm build
