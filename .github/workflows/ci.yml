@@ -41,7 +41,6 @@ jobs:
       - uses: fallow-rs/fallow@c9326d9395c0b46f4077290473060b3e950b6e8c # v3.3.0
         with:
           command: audit
-          artifacts-dir: .fallow
 
       - name: Format
         run: pnpm format
