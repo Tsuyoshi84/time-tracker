@@ -40,23 +40,24 @@ jobs:
         with:
           command: audit
 
-      - name: Format
-        run: pnpm format:check
+      - parallel:
+        - name: Format
+          run: pnpm format:check
 
-      - name: Type Check
-        run: pnpm typecheck
+        - name: Type Check
+          run: pnpm typecheck
+
+        - name: Lint
+          run: pnpm lint-vue:fix
+
+        - name: Biome Check
+          run: pnpm check
+
+        - name: Oxlint
+          run: pnpm lint
 
       - name: Test
         run: pnpm test
-
-      - name: Lint
-        run: pnpm lint-vue:fix
-
-      - name: Biome Check
-        run: pnpm check
-
-      - name: Oxlint
-        run: pnpm lint
 
       - name: Build
         run: pnpm build
