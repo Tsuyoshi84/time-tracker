@@ -39,7 +39,7 @@ A professional time tracking application built for freelance engineers with flex
 ## Technical Stack
 
 - **Framework**: Nuxt 4 with TypeScript
-- **Styling**: Tailwind CSS 3 + daisyUI
+- **Styling**: Tailwind CSS 4 + Nuxt UI
 - **Icons**: Lucide Vue Next
 - **Database**: IndexedDB (via Dexie library)
 - **Architecture**: SPA mode for GitHub Pages deployment
@@ -130,9 +130,9 @@ app/
 
 ### Theme System
 
-- Managed by VueUse `useColorMode` via a small `useTheme` composable
-- DaisyUI reads the current theme from `data-theme` on `<html>`; Tailwind `dark:` utilities are synced using the `dark` class
-- Preference persists to `localStorage` under the key `theme-preference`. To follow the system again, clear this key or add an "Auto" option in the UI and call `setPreference(undefined)`
+- Managed by `@nuxtjs/color-mode`, registered automatically by Nuxt UI
+- Toggle via `UColorModeButton` in the header; defaults to system preference
+- Preference persists to `localStorage` under the key `nuxt-color-mode`
 
 ## License
 

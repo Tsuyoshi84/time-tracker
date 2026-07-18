@@ -3,8 +3,6 @@
  * A component that displays a range of dates and allows the user to navigate between them.
  */
 
-import { ChevronLeft, ChevronRight } from '@lucide/vue'
-
 import { formatDate } from '~/utils/formatDate.ts'
 
 const props = defineProps<{
@@ -32,24 +30,28 @@ const label = computed<string>(() => {
 
 <template>
 	<div class="flex items-center space-x-2">
-		<button
+		<UButton
 			type="button"
-			class="btn btn-sm btn-outline"
+			color="neutral"
+			variant="outline"
+			size="sm"
+			icon="i-lucide-chevron-left"
 			:disabled="loading"
+			aria-label="Previous week"
 			@click="$emit('previousWeek')"
-		>
-			<ChevronLeft class="w-4 h-4" />
-		</button>
+		/>
 		<span class="text-sm font-medium px-3">
 			{{ label }}
 		</span>
-		<button
+		<UButton
 			type="button"
-			class="btn btn-sm btn-outline"
+			color="neutral"
+			variant="outline"
+			size="sm"
+			icon="i-lucide-chevron-right"
 			:disabled="loading"
+			aria-label="Next week"
 			@click="$emit('nextWeek')"
-		>
-			<ChevronRight class="w-4 h-4" />
-		</button>
+		/>
 	</div>
 </template>
