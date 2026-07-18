@@ -30,8 +30,13 @@ const {
 	await loadActiveSession()
 })
 
+const sessionListRef = useTemplateRef('sessionListRef')
+
 async function handleCreateSession(payload: { startTime: Date; endTime: Date }): Promise<void> {
 	await createSession(payload.startTime, payload.endTime)
+	if (!errorMessage.value) {
+		sessionListRef.value?.closeModal()
+	}
 }
 
 async function handleUpdateSession(
@@ -39,6 +44,9 @@ async function handleUpdateSession(
 	updates: Parameters<typeof updateSessionData>[1],
 ): Promise<void> {
 	await updateSessionData(session, updates)
+	if (!errorMessage.value) {
+		sessionListRef.value?.closeModal()
+	}
 }
 
 // Initialize on mount
@@ -104,6 +112,7 @@ useSeoMeta({
 				</div>
 
 				<SessionList
+					ref="sessionListRef"
 					:sessions="sessions"
 					:selected-date="selectedDate"
 					:loading="sessionLoading"

@@ -64,6 +64,12 @@ function handleSave(payload: { startTime: Date; endTime: Date }): void {
 	emit('createSession', payload)
 }
 
+function closeModal(): void {
+	isModalOpen.value = false
+}
+
+defineExpose({ closeModal })
+
 watch(isModalOpen, (open) => {
 	if (!open) {
 		editingSession.value = null
