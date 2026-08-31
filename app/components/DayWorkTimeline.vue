@@ -14,19 +14,7 @@ const props = defineProps<{
 	dayDate: DateString
 }>()
 
-const SEGMENT_COLORS = [
-	'bg-primary',
-	'bg-secondary',
-	'bg-info',
-	'bg-success',
-	'bg-warning',
-] as const
-
 const segments = computed(() => buildTimelineSegments(props.sessions, props.dayDate))
-
-function getSegmentColor(index: number): string {
-	return SEGMENT_COLORS[index % SEGMENT_COLORS.length] ?? 'bg-primary'
-}
 </script>
 
 <template>
@@ -36,13 +24,12 @@ function getSegmentColor(index: number): string {
 		:aria-label="`${segments.length} work session${segments.length === 1 ? '' : 's'}`"
 	>
 		<UTooltip
-			v-for="(segment, index) in segments"
+			v-for="segment in segments"
 			:key="`${segment.startTime.getTime()}-${segment.endTime.getTime()}`"
 			:text="formatSessionTimeRange(segment.startTime, segment.endTime)"
 		>
 			<div
-				class="absolute top-0 h-full rounded-full"
-				:class="getSegmentColor(index)"
+				class="absolute top-0 h-full rounded-full bg-primary"
 				:style="{
 					left: `${segment.leftPercent}%`,
 					width: `${segment.widthPercent}%`,
