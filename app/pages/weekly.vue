@@ -84,9 +84,6 @@ function getSessionDuration(session: TimeSession): string {
 	<div class="max-w-6xl mx-auto">
 		<div class="mb-8">
 			<h1 class="text-3xl font-bold text-center mb-2">Weekly Overview</h1>
-			<p class="text-center text-toned">
-				Track your weekly progress and analyze your work patterns
-			</p>
 		</div>
 
 		<WeeklyView

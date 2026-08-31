@@ -77,11 +77,7 @@ const selectedMonth = computed<MonthStats | undefined>(() =>
 		v-else
 		class="grid grid-cols-1 lg:grid-cols-[minmax(240px,320px)_1fr] gap-4"
 	>
-		<AppCard class="p-0 overflow-hidden">
-			<div class="px-4 py-3 border-b border-default">
-				<h2 class="text-sm font-semibold text-toned">Months</h2>
-			</div>
-
+		<AppCard class="overflow-hidden">
 			<UListbox
 				v-model="selectedMonthStartDate"
 				value-key="value"

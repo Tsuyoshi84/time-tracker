@@ -28,9 +28,6 @@ useSeoMeta({
 	<div class="max-w-6xl mx-auto">
 		<div class="mb-8">
 			<h1 class="text-3xl font-bold text-center mb-2">Monthly Overview</h1>
-			<p class="text-center text-toned">
-				Select a month to explore daily working hours and session timelines
-			</p>
 		</div>
 
 		<MonthlyView

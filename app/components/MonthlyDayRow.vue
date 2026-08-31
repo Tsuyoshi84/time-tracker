@@ -56,7 +56,7 @@ const accessibleLabel = computed<string>(() => {
 		:aria-label="accessibleLabel"
 	>
 		<span
-			class="w-[5.75rem] shrink-0 text-sm font-semibold tabular-nums whitespace-nowrap"
+			class="w-23 shrink-0 text-sm font-semibold tabular-nums whitespace-nowrap"
 			:class="weekdayTextColor"
 			aria-hidden="true"
 		>
@@ -64,7 +64,7 @@ const accessibleLabel = computed<string>(() => {
 		</span>
 
 		<span
-			class="w-[4.75rem] shrink-0 text-sm font-mono tabular-nums"
+			class="w-19 shrink-0 text-sm font-mono tabular-nums"
 			:class="hasWork ? 'text-default font-medium' : 'text-dimmed'"
 			aria-hidden="true"
 		>
