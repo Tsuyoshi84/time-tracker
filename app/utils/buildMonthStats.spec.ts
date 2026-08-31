@@ -16,8 +16,7 @@ function createSession(
 ): TimeSession {
 	const startTime = options.startTime ?? new Date(`${date}T09:00:00`)
 	const endTime =
-		options.endTime ??
-		(options.isActive === true ? undefined : new Date(`${date}T10:00:00`))
+		options.endTime ?? (options.isActive === true ? undefined : new Date(`${date}T10:00:00`))
 
 	return {
 		id,
@@ -33,10 +32,7 @@ function createSession(
 
 describe('buildMonthStats', () => {
 	it('includes a month with two completed sessions', () => {
-		const sessions = [
-			createSession(1, '2026-08-10'),
-			createSession(2, '2026-08-15'),
-		]
+		const sessions = [createSession(1, '2026-08-10'), createSession(2, '2026-08-15')]
 
 		const stats = buildMonthStats(sessions)
 

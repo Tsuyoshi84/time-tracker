@@ -14,7 +14,13 @@ const props = defineProps<{
 	dayDate: DateString
 }>()
 
-const SEGMENT_COLORS = ['bg-primary', 'bg-secondary', 'bg-info', 'bg-success', 'bg-warning'] as const
+const SEGMENT_COLORS = [
+	'bg-primary',
+	'bg-secondary',
+	'bg-info',
+	'bg-success',
+	'bg-warning',
+] as const
 
 const segments = computed(() => buildTimelineSegments(props.sessions, props.dayDate))
 

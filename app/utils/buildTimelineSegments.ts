@@ -38,7 +38,12 @@ function getDayBounds(dayDate: DateString): { dayStart: Date; dayEnd: Date } {
  * @returns Minutes since midnight (0–1440)
  */
 function getMinutesSinceMidnight(date: Date): number {
-	return date.getHours() * 60 + date.getMinutes() + date.getSeconds() / 60 + date.getMilliseconds() / 60000
+	return (
+		date.getHours() * 60 +
+		date.getMinutes() +
+		date.getSeconds() / 60 +
+		date.getMilliseconds() / 60000
+	)
 }
 
 /**
