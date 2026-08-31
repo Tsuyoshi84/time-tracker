@@ -149,6 +149,17 @@ export async function getActiveSession(): Promise<TimeSession | null> {
 }
 
 /**
+ * Gets all sessions sorted by start time.
+ * @returns Array of all sessions in the database
+ */
+export async function getAllSessions(): Promise<TimeSession[]> {
+	const sessions = await db.sessions.toArray()
+	return sessions
+		.map((session) => mapSessionTableToTimeSession(session))
+		.sort((a, b) => a.startTime.getTime() - b.startTime.getTime())
+}
+
+/**
  * Gets all sessions in a date range.
  * @param startDate Start date string (YYYY-MM-DD)
  * @param endDate End date string (YYYY-MM-DD)
