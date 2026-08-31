@@ -1,97 +1,91 @@
-import type { Milliseconds, MonthStats } from '../types/index.ts'
-import { convertToDateString } from '../utils/convertToDateString.ts'
-import { getSessionsInDateRange } from '../utils/database.ts'
-import { diffInMilliseconds } from '../utils/diffInMilliseconds.ts'
-import { toMilliseconds, ZERO_MILLISECONDS } from '../utils/toMilliseconds.ts'
+import type { DateString, DayStats, MonthStats, TimeSession } from '../types/index.ts'
+import { buildDailyStatsForMonth, buildVisibleMonthStats } from '../utils/buildMonthStats.ts'
+import { getAllSessions } from '../utils/database.ts'
 
 interface UseMonthlyStatsReturnType {
-	/** Monthly statistics for the last 6 months. */
+	/** Monthly statistics for months with at least two sessions. */
 	monthlyStats: Readonly<Ref<MonthStats[]>>
+	/** Daily statistics for the currently selected month. */
+	dailyStatsForSelectedMonth: Readonly<Ref<DayStats[]>>
+	/** Start date of the currently selected month. */
+	selectedMonthStartDate: Ref<DateString | undefined>
+	/** Whether monthly data is loading. */
+	loading: Readonly<Ref<boolean>>
 	/** Error message from the last failed operation. */
 	errorMessage: Readonly<Ref<string>>
 	/**
-	 * Load statistics for the last 6 months.
-	 * Calculates monthly totals and session counts.
+	 * Load statistics for all months with sufficient session history.
 	 * @returns Promise that resolves when stats are loaded
 	 */
 	loadMonthlyStats(): Promise<void>
 }
 
 /**
- * Composable for managing monthly statistics.
+ * Composable for managing monthly statistics and daily breakdowns.
  *
  * Provides functionality for:
- * - Calculating monthly statistics for the last 6 months
- * - Tracking total duration and session counts per month
+ * - Calculating monthly statistics across all history
+ * - Filtering months with at least two sessions
+ * - Building daily stats for the selected month
  *
  * @returns UseMonthlyStatsReturnType - API for monthly statistics management
  */
 export function useMonthlyStats(): UseMonthlyStatsReturnType {
+	const allSessions = shallowRef<TimeSession[]>([])
 	const monthlyStats = shallowRef<MonthStats[]>([])
+	const selectedMonthStartDate = shallowRef<DateString | undefined>(undefined)
+	const loading = shallowRef<boolean>(true)
 	const errorMessage = shallowRef<string>('')
 
+	const dailyStatsForSelectedMonth = computed<DayStats[]>(() => {
+		const selectedMonth = monthlyStats.value.find(
+			(month) => month.startDate === selectedMonthStartDate.value,
+		)
+
+		if (selectedMonth === undefined) {
+			return []
+		}
+
+		return buildDailyStatsForMonth(
+			allSessions.value,
+			selectedMonth.startDate,
+			selectedMonth.endDate,
+		)
+	})
+
+	// fallow-ignore-next-line complexity
 	async function loadMonthlyStats(): Promise<void> {
+		loading.value = true
+		errorMessage.value = ''
+
 		try {
-			const stats: MonthStats[] = []
-			const now = new Date()
-
-			// Get the last 6 months (including current month)
-			for (let i = 0; i < 6; i++) {
-				const monthDate = new Date(now.getFullYear(), now.getMonth() - i, 1)
-				const startDate = getStartOfMonth(monthDate)
-				const endDate = getEndOfMonth(monthDate)
-
-				const startDateStr = convertToDateString(startDate)
-				const endDateStr = convertToDateString(endDate)
-
-				const monthSessions = await getSessionsInDateRange(startDateStr, endDateStr)
-
-				const completedSessions = monthSessions.filter((s) => s.endTime)
-				const totalDuration = completedSessions.reduce<Milliseconds>((total, session) => {
-					if (session.endTime !== undefined) {
-						return toMilliseconds(total + diffInMilliseconds(session.startTime, session.endTime))
-					}
-					return total
-				}, ZERO_MILLISECONDS)
-
-				const monthLabel = monthDate.toLocaleDateString('en-US', {
-					month: 'long',
-					year: 'numeric',
-				})
-
-				stats.push({
-					monthLabel,
-					startDate: startDateStr,
-					endDate: endDateStr,
-					totalDuration,
-					sessionCount: monthSessions.length,
-				})
-			}
+			allSessions.value = await getAllSessions()
+			const stats = buildVisibleMonthStats(allSessions.value)
 
 			monthlyStats.value = stats
+
+			const hasCurrentSelection = stats.some(
+				(month) => month.startDate === selectedMonthStartDate.value,
+			)
+
+			if (!hasCurrentSelection) {
+				selectedMonthStartDate.value = stats[0]?.startDate
+			}
 		} catch (error) {
 			errorMessage.value = `Failed to load monthly stats: ${
 				error instanceof Error ? error.message : 'Unknown error'
 			}`
+		} finally {
+			loading.value = false
 		}
 	}
 
 	return {
 		monthlyStats: shallowReadonly(monthlyStats),
+		dailyStatsForSelectedMonth: shallowReadonly(dailyStatsForSelectedMonth),
+		selectedMonthStartDate,
+		loading: shallowReadonly(loading),
 		errorMessage: shallowReadonly(errorMessage),
 		loadMonthlyStats,
 	}
-}
-
-// Helper functions
-function getStartOfMonth(date: Date): Date {
-	const result = new Date(date.getFullYear(), date.getMonth(), 1)
-	result.setHours(0, 0, 0, 0)
-	return result
-}
-
-function getEndOfMonth(date: Date): Date {
-	const result = new Date(date.getFullYear(), date.getMonth() + 1, 0)
-	result.setHours(23, 59, 59, 999)
-	return result
 }
