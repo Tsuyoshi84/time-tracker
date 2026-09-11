@@ -22,7 +22,7 @@
 		"test:run": "vitest run"
 	},
 	"dependencies": {
-		"@internationalized/date": "^3.12.3",
+		"@internationalized/date": "^3.12.4",
 		"@lucide/vue": "^1.41.0",
 		"@nuxt/eslint": "1.17.0",
 		"@nuxt/fonts": "^0.14.0",
