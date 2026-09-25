@@ -49,7 +49,7 @@
 		"lefthook": "^2.1.12",
 		"oxfmt": "^0.67.0",
 		"oxlint": "^1.80.0",
-		"oxlint-tsgolint": "^7.0.2001",
+		"oxlint-tsgolint": "^7.0.2002",
 		"tailwindcss": "^4.3.3",
 		"typescript": "^6.0.3",
 		"vitest": "^4.1.11",
