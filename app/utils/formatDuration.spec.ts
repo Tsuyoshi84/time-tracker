@@ -30,4 +30,13 @@ describe('formatDuration', () => {
 		expect(formatDuration(86400000)).toBe('24:00:00') // 24 hours
 		expect(formatDuration(90061000)).toBe('25:01:01') // 25 hours, 1 minute, 1 second
 	})
+
+	it('should omit seconds when precision is minutes', () => {
+		expect(formatDuration(0, { precision: 'minutes' })).toBe('0:00')
+		expect(formatDuration(-1000, { precision: 'minutes' })).toBe('0:00')
+		expect(formatDuration(59000, { precision: 'minutes' })).toBe('0:00')
+		expect(formatDuration(90000, { precision: 'minutes' })).toBe('0:01')
+		expect(formatDuration(7323000, { precision: 'minutes' })).toBe('2:02')
+		expect(formatDuration(90061000, { precision: 'minutes' })).toBe('25:01')
+	})
 })
