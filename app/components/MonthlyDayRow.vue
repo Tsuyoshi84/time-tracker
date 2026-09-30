@@ -46,7 +46,7 @@ const accessibleLabel = computed<string>(() => {
 	const weekday = localDate.toLocaleDateString('en-US', { weekday: 'long' })
 	const monthDay = localDate.toLocaleDateString('en-US', { month: 'long', day: 'numeric' })
 
-	return `${monthDay}, ${weekday}, ${formatDuration(props.dayStats.totalDuration)} worked`
+	return `${monthDay}, ${weekday}, ${formatDuration(props.dayStats.totalDuration, { precision: 'minutes' })} worked`
 })
 </script>
 
@@ -68,7 +68,7 @@ const accessibleLabel = computed<string>(() => {
 			:class="hasWork ? 'text-default font-medium' : 'text-dimmed'"
 			aria-hidden="true"
 		>
-			{{ formatDuration(props.dayStats.totalDuration) }}
+			{{ formatDuration(props.dayStats.totalDuration, { precision: 'minutes' }) }}
 		</span>
 
 		<DayWorkTimeline

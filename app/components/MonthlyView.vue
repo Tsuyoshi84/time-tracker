@@ -32,7 +32,7 @@ const selectedMonthStartDate = defineModel<DateString | undefined>('selectedMont
 const monthListItems = computed<ListboxItem[]>(() =>
 	props.monthlyStats.map((month) => ({
 		label: month.monthLabel,
-		description: formatDuration(month.totalDuration),
+		description: formatDuration(month.totalDuration, { precision: 'minutes' }),
 		value: month.startDate,
 	})),
 )
@@ -93,7 +93,7 @@ const selectedMonth = computed<MonthStats | undefined>(() =>
 					<p class="text-sm text-toned mt-1">
 						Total:
 						<span class="font-semibold text-primary">
-							{{ formatDuration(selectedMonth.totalDuration) }}
+							{{ formatDuration(selectedMonth.totalDuration, { precision: 'minutes' }) }}
 						</span>
 					</p>
 				</div>
