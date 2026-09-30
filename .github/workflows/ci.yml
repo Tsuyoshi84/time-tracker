@@ -34,7 +34,7 @@ jobs:
           cache-dependency-path: pnpm-lock.yaml
 
       - name: Install dependencies
-        run: pnpm install --no-save
+        run: pnpm install --frozen-lockfile
 
       - uses: fallow-rs/fallow@bac74de070af40c7f0c7d7764aec1f5f09e4392d # v3.6.0
         with:

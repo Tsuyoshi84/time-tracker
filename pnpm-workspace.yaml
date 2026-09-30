@@ -5,9 +5,9 @@ allowBuilds:
   lefthook: true
   unrs-resolver: true
   vue-demi: true
+autoDedupe: true
 blockExoticSubdeps: true
 enablePrePostScripts: false
-ignorePatchFailures: false
 minimumReleaseAge: 1440
 optimisticRepeatInstall: true
 resolutionMode: 'lowest-direct'
