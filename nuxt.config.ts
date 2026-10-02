@@ -83,8 +83,6 @@ export default defineNuxtConfig({
 			project: 'time-tracker',
 			authToken: process.env.SENTRY_AUTH_TOKEN,
 		}),
-
-		autoInjectServerSentry: 'top-level-import',
 	},
 
 	vueScan: {
