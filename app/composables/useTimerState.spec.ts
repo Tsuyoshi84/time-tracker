@@ -1,6 +1,6 @@
 import { cleanup, render } from '@testing-library/vue'
-import { defineComponent, nextTick } from 'vue'
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
+import { defineComponent, nextTick } from 'vue'
 
 import type { TimeSession } from '../types/index.ts'
 import { useTimerState } from './useTimerState.ts'
@@ -11,9 +11,16 @@ const { getActiveSession } = vi.hoisted(() => ({
 
 vi.mock('../utils/database.ts', () => ({
 	getActiveSession,
-	saveSession: vi.fn(),
-	updateSession: vi.fn(),
+	saveSession: vi.fn<() => Promise<TimeSession>>(),
+	updateSession: vi.fn<() => Promise<void>>(),
 }))
+
+function getInitializedTimerState(
+	timerState: ReturnType<typeof useTimerState> | undefined,
+): ReturnType<typeof useTimerState> {
+	if (!timerState) throw new Error('Timer state was not initialized')
+	return timerState
+}
 
 describe('useTimerState', () => {
 	let timerState: ReturnType<typeof useTimerState> | undefined
@@ -54,18 +61,18 @@ describe('useTimerState', () => {
 		if (originalVisibilityState) {
 			Object.defineProperty(document, 'visibilityState', originalVisibilityState)
 		} else {
-			delete (document as Partial<Document>).visibilityState
+			Reflect.deleteProperty(document, 'visibilityState')
 		}
 	})
 
 	it('updates the current session duration every second and pauses while hidden', async () => {
-		if (!timerState) throw new Error('Timer state was not initialized')
+		const timer = getInitializedTimerState(timerState)
 
-		await timerState.loadActiveSession()
-		expect(timerState.currentSessionDuration.value).toBe(5000)
+		await timer.loadActiveSession()
+		expect(timer.currentSessionDuration.value).toBe(5000)
 
 		await vi.advanceTimersByTimeAsync(1000)
-		expect(timerState.currentSessionDuration.value).toBe(6000)
+		expect(timer.currentSessionDuration.value).toBe(6000)
 
 		Object.defineProperty(document, 'visibilityState', {
 			configurable: true,
@@ -75,6 +82,6 @@ describe('useTimerState', () => {
 		await nextTick()
 
 		await vi.advanceTimersByTimeAsync(2000)
-		expect(timerState.currentSessionDuration.value).toBe(6000)
+		expect(timer.currentSessionDuration.value).toBe(6000)
 	})
 })
