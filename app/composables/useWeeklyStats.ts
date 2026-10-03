@@ -1,9 +1,9 @@
 import type { DateString, DayStats } from '../types/index.ts'
 import { buildDailyStatsForWeek } from '../utils/buildDailyStatsForWeek.ts'
-import { convertToDateString } from '../utils/convertToDateString.ts'
 import { calendarDateToDateString } from '../utils/calendarDateToDateString.ts'
-import { dateStringToCalendarDate } from '../utils/dateStringToCalendarDate.ts'
+import { convertToDateString } from '../utils/convertToDateString.ts'
 import { getSessionsInDateRange } from '../utils/database.ts'
+import { dateStringToCalendarDate } from '../utils/dateStringToCalendarDate.ts'
 
 interface UseWeeklyStatsReturnType {
 	/** Currently selected date in the displayed week. */
