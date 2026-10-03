@@ -1,9 +1,9 @@
 import * as Sentry from '@sentry/nuxt'
 import { createSharedComposable, useDocumentVisibility, useIntervalFn } from '@vueuse/core'
 
+import { getActiveSession, saveSession, updateSession } from '../database/database.ts'
 import type { Milliseconds, TimerState } from '../types/index.ts'
 import { convertToDateString } from '../utils/convertToDateString.ts'
-import { getActiveSession, saveSession, updateSession } from '../database/database.ts'
 import { diffInMilliseconds } from '../utils/diffInMilliseconds.ts'
 import { ZERO_MILLISECONDS } from '../utils/toMilliseconds.ts'
 

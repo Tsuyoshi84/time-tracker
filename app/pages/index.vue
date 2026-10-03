@@ -7,10 +7,10 @@ import TimerDisplay from '~/components/TimerDisplay.vue'
 import { useSessionManager } from '~/composables/useSessionManager.ts'
 import { useTimerState } from '~/composables/useTimerState.ts'
 import { useWeeklyStats } from '~/composables/useWeeklyStats.ts'
+import { getSessionsByDate } from '~/database/database.ts'
 import type { Milliseconds, TimeSession } from '~/types/index.ts'
 import { calculateTodaysTotalDuration } from '~/utils/calculateTodaysTotalDuration.ts'
 import { convertToDateString } from '~/utils/convertToDateString.ts'
-import { getSessionsByDate } from '~/database/database.ts'
 
 const { dailyStats, loadWeeklyStats } = useWeeklyStats()
 

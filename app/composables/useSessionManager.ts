@@ -1,6 +1,3 @@
-import type { DateString, TimeSession } from '../types/index.ts'
-import { convertToDateString } from '../utils/convertToDateString.ts'
-import { formatOperationError } from '../utils/formatOperationError.ts'
 import {
 	loadSessionsForSelectedDate,
 	persistNewSession,
@@ -8,6 +5,9 @@ import {
 	persistSessionUpdate,
 	refreshSessionsAfterMutation,
 } from '../database/sessionMutations.ts'
+import type { DateString, TimeSession } from '../types/index.ts'
+import { convertToDateString } from '../utils/convertToDateString.ts'
+import { formatOperationError } from '../utils/formatOperationError.ts'
 
 interface UseSessionManagerReturnType {
 	/** Currently selected date for viewing sessions. */
