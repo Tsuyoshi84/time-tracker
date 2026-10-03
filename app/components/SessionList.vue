@@ -7,10 +7,9 @@ import { Clock } from '@lucide/vue'
 
 import SessionEditModal from '~/components/SessionEditModal.vue'
 import type { DateString, TimeSession } from '~/types/index.ts'
-import { calculateDuration } from '~/utils/calculateDuration.ts'
-import { formatDuration } from '~/utils/formatDuration.ts'
 import { formatSessionTimeRange } from '~/utils/formatSessionTimeRange.ts'
 import { formatTime } from '~/utils/formatTime.ts'
+import { getSessionDurationDisplay } from '~/utils/getSessionDurationDisplay.ts'
 
 withDefaults(
 	defineProps<{
@@ -82,17 +81,6 @@ function deleteSession(session: TimeSession): void {
 	}
 }
 
-function getDurationDisplay(session: TimeSession): string {
-	if (session.isActive) return 'Running...'
-
-	if (session.endTime) {
-		const duration = calculateDuration(session.startTime, session.endTime)
-		return formatDuration(duration)
-	}
-
-	return '--:--:--'
-}
-
 function getTimeRangeDisplay(session: TimeSession): string {
 	if (session.endTime) {
 		return formatSessionTimeRange(session.startTime, session.endTime)
@@ -161,7 +149,7 @@ function getTimeRangeDisplay(session: TimeSession): string {
 
 						<!-- Duration -->
 						<div class="text-sm font-mono">
-							{{ getDurationDisplay(session) }}
+							{{ getSessionDurationDisplay(session) }}
 						</div>
 					</div>
 

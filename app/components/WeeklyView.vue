@@ -80,6 +80,14 @@ const totalSessions = computed<number>(() => {
 			@next-week="$emit('nextWeek')"
 		/>
 
+		<p
+			v-if="loading"
+			class="text-sm text-muted"
+			role="status"
+		>
+			Loading weekly stats…
+		</p>
+
 		<AppCard>
 			<div class="text-center">
 				<div class="text-sm text-toned mb-1">Week Total</div>
