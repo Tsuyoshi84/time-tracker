@@ -13,7 +13,7 @@ A professional time tracking application built for freelance engineers with flex
 
 ### ✏️ Editable Time Entries
 
-- **Click-to-edit** - Edit start and end times directly in the interface
+- **Session editing** - Edit start and end dates and times in a modal
 - **Manual session creation** - Add sessions retroactively
 - **Delete sessions** - Remove individual sessions
 - **Validation** - Prevents overlapping time entries and invalid time ranges
@@ -90,7 +90,7 @@ Click the orange "Pause" button to save the current session. Click "Start" again
 
 ### Editing Time Entries
 
-Click on any start or end time in the sessions list to edit it. Enter time in HH:MM format (24-hour).
+Select a session's time range or pencil button to open the editor. Update its start and end dates and times in the modal.
 
 ### Adding Manual Sessions
 
@@ -113,7 +113,7 @@ All data is stored locally in your browser's IndexedDB. This means:
 - **TimerDisplay** - Main timer interface with start/pause controls
 - **SessionList** - Displays and manages daily sessions
 - **WeeklyView** - Week overview with daily statistics
-- **TimeInput** - Inline time editing component
+- **SessionEditModal** - Modal editor for session dates and times
 
 ### File Structure
 

@@ -1,5 +1,5 @@
 {
-	"ignorePatterns": ["app/components/**/*.spec.ts", "server/api/sentry-example-api.ts"],
+	"ignorePatterns": ["app/components/**/*.spec.ts"],
 	"plugins": ["oxc", "eslint", "typescript", "unicorn", "import", "jsdoc"],
 	"options": {
 		"typeAware": true,
