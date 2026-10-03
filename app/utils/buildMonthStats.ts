@@ -1,9 +1,8 @@
-import type { DateString, DayStats, Milliseconds, MonthStats, TimeSession } from '../types/index.ts'
+import type { DateString, DayStats, MonthStats, TimeSession } from '../types/index.ts'
 import { calendarDateToDateString } from './calendarDateToDateString.ts'
 import { convertToDateString } from './convertToDateString.ts'
 import { dateStringToCalendarDate } from './dateStringToCalendarDate.ts'
-import { diffInMilliseconds } from './diffInMilliseconds.ts'
-import { toMilliseconds, ZERO_MILLISECONDS } from './toMilliseconds.ts'
+import { sumCompletedSessionDuration } from './sumCompletedSessionDuration.ts'
 
 /** Minimum number of sessions required for a past month to appear in the list. */
 export const MIN_SESSIONS_PER_MONTH = 2
@@ -45,15 +44,6 @@ export function buildMonthStats(sessions: ReadonlyArray<TimeSession>): MonthStat
 		const monthDate = new Date(year, month - 1, 1)
 		const startDate = convertToDateString(getStartOfMonth(monthDate))
 		const endDate = convertToDateString(getEndOfMonth(monthDate))
-		const completedSessions = monthSessions.filter((session) => session.endTime !== undefined)
-		const totalDuration = completedSessions.reduce<Milliseconds>((total, session) => {
-			if (session.endTime !== undefined) {
-				return toMilliseconds(total + diffInMilliseconds(session.startTime, session.endTime))
-			}
-
-			return total
-		}, ZERO_MILLISECONDS)
-
 		stats.push({
 			monthLabel: monthDate.toLocaleDateString('en-US', {
 				month: 'long',
@@ -61,7 +51,7 @@ export function buildMonthStats(sessions: ReadonlyArray<TimeSession>): MonthStat
 			}),
 			startDate,
 			endDate,
-			totalDuration,
+			totalDuration: sumCompletedSessionDuration(monthSessions),
 			sessionCount: monthSessions.length,
 		})
 	}
@@ -123,18 +113,9 @@ export function buildDailyStatsForMonth(
 	while (currentDate.compare(lastDate) <= 0) {
 		const dateStr = calendarDateToDateString(currentDate)
 		const daySessions = sessionsByDate.get(dateStr) ?? []
-		const completedSessions = daySessions.filter((session) => session.endTime !== undefined)
-		const totalDuration = completedSessions.reduce<Milliseconds>((total, session) => {
-			if (session.endTime !== undefined) {
-				return toMilliseconds(total + diffInMilliseconds(session.startTime, session.endTime))
-			}
-
-			return total
-		}, ZERO_MILLISECONDS)
-
 		stats.push({
 			date: dateStr,
-			totalDuration,
+			totalDuration: sumCompletedSessionDuration(daySessions),
 			sessionCount: daySessions.length,
 			sessions: daySessions.sort((a, b) => a.startTime.getTime() - b.startTime.getTime()),
 		})

@@ -1,8 +1,7 @@
-import type { DayStats, Milliseconds, TimeSession } from '../types/index.ts'
+import type { DayStats } from '../types/index.ts'
+import { buildDailyStatsForWeek } from '../utils/buildDailyStatsForWeek.ts'
 import { convertToDateString } from '../utils/convertToDateString.ts'
 import { getSessionsInDateRange } from '../utils/database.ts'
-import { diffInMilliseconds } from '../utils/diffInMilliseconds.ts'
-import { toMilliseconds, ZERO_MILLISECONDS } from '../utils/toMilliseconds.ts'
 
 interface UseWeeklyStatsReturnType {
 	/** Start date of the current week being viewed. */
@@ -67,44 +66,7 @@ export function useWeeklyStats(): UseWeeklyStatsReturnType {
 			const weekEndStr = convertToDateString(weekEnd.value)
 
 			const weekSessions = await getSessionsInDateRange(weekStartStr, weekEndStr)
-
-			// Group sessions by date
-			const sessionsByDate = new Map<string, TimeSession[]>()
-			for (const session of weekSessions) {
-				const date = session.date
-				if (!sessionsByDate.has(date)) {
-					sessionsByDate.set(date, [])
-				}
-				sessionsByDate.get(date)?.push(session)
-			}
-
-			// Calculate daily stats
-			const stats: DayStats[] = []
-			const currentDate = new Date(weekStart.value)
-
-			for (let i = 0; i < 7; i++) {
-				const dateStr = convertToDateString(currentDate)
-				const daySessions = sessionsByDate.get(dateStr) ?? []
-
-				const completedSessions = daySessions.filter((s) => s.endTime)
-				const totalDuration = completedSessions.reduce<Milliseconds>((total, session) => {
-					if (session.endTime !== undefined) {
-						return toMilliseconds(total + diffInMilliseconds(session.startTime, session.endTime))
-					}
-					return total
-				}, ZERO_MILLISECONDS)
-
-				stats.push({
-					date: dateStr,
-					totalDuration,
-					sessionCount: daySessions.length,
-					sessions: daySessions,
-				})
-
-				currentDate.setDate(currentDate.getDate() + 1)
-			}
-
-			dailyStats.value = stats
+			dailyStats.value = buildDailyStatsForWeek(weekSessions, weekStartStr)
 		} catch (error) {
 			errorMessage.value = `Failed to load weekly stats: ${
 				error instanceof Error ? error.message : 'Unknown error'

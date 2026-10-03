@@ -1,4 +1,5 @@
 import type { DateString, Milliseconds, TimeSession } from '../types/index.ts'
+import { sumCompletedSessionDuration } from './sumCompletedSessionDuration.ts'
 import { toMilliseconds } from './toMilliseconds.ts'
 
 export function calculateTodaysTotalDuration(
@@ -6,18 +7,7 @@ export function calculateTodaysTotalDuration(
 	today: DateString,
 	currentSessionDuration: Milliseconds,
 ): Milliseconds {
-	const completedSessions = sessions.filter(
-		(session) => session.date === today && session.endTime !== undefined,
-	)
+	const todaySessions = sessions.filter((session) => session.date === today)
 
-	return toMilliseconds(
-		currentSessionDuration +
-			completedSessions.reduce(
-				(total, session) =>
-					session.endTime !== undefined
-						? total + (session.endTime.getTime() - session.startTime.getTime())
-						: total,
-				0,
-			),
-	)
+	return toMilliseconds(currentSessionDuration + sumCompletedSessionDuration(todaySessions))
 }
