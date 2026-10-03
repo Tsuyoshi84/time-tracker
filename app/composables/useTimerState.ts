@@ -160,34 +160,6 @@ function useTimerStateImpl(): UseTimerStateReturnType {
 		})
 	}
 
-	let timerInterval: ReturnType<typeof globalThis.setInterval> | null = null
-
-	function startTimerInterval(): void {
-		if (timerInterval !== null) globalThis.clearInterval(timerInterval)
-		timerInterval = globalThis.setInterval(() => {
-			// Force reactivity update for real-time timer display
-			if (timerState.value.isRunning) {
-				timerState.value = { ...timerState.value }
-			}
-		}, 1000)
-	}
-
-	function stopTimerInterval(): void {
-		if (timerInterval !== null) {
-			globalThis.clearInterval(timerInterval)
-			timerInterval = null
-		}
-	}
-
-	onMounted(() => {
-		startTimerInterval()
-		updateCurrentSessionDuration()
-	})
-
-	onUnmounted(() => {
-		stopTimerInterval()
-	})
-
 	return {
 		timerState: shallowReadonly(timerState),
 		currentSessionDuration: shallowReadonly(currentSessionDuration),
