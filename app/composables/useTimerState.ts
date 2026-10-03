@@ -3,7 +3,7 @@ import { createSharedComposable, useDocumentVisibility, useIntervalFn } from '@v
 
 import type { Milliseconds, TimerState } from '../types/index.ts'
 import { convertToDateString } from '../utils/convertToDateString.ts'
-import { getActiveSession, saveSession, updateSession } from '../utils/database.ts'
+import { getActiveSession, saveSession, updateSession } from '../database/database.ts'
 import { diffInMilliseconds } from '../utils/diffInMilliseconds.ts'
 import { ZERO_MILLISECONDS } from '../utils/toMilliseconds.ts'
 

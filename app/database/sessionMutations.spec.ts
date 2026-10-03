@@ -1,6 +1,6 @@
 import { beforeEach, describe, expect, it, vi } from 'vitest'
 
-import type { TimeSession } from '~/types/index.ts'
+import type { TimeSession } from '../types/index.ts'
 
 import { checkForOverlappingSessions, updateSession } from './database.ts'
 import { assertNoOverlappingSessions, persistSessionUpdate } from './sessionMutations'

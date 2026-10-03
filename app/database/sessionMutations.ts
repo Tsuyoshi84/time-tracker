@@ -1,5 +1,5 @@
 import type { DateString, TimeSession } from '../types/index.ts'
-import { convertToDateString } from './convertToDateString.ts'
+import { convertToDateString } from '../utils/convertToDateString.ts'
 import {
 	checkForOverlappingSessions,
 	deleteSession,
@@ -7,9 +7,9 @@ import {
 	saveSession,
 	updateSession,
 } from './database.ts'
-import { diffInMilliseconds } from './diffInMilliseconds.ts'
-import { formatOperationError } from './formatOperationError.ts'
-import { normalizeSessionUpdates } from './normalizeSessionUpdates.ts'
+import { diffInMilliseconds } from '../utils/diffInMilliseconds.ts'
+import { formatOperationError } from '../utils/formatOperationError.ts'
+import { normalizeSessionUpdates } from '../utils/normalizeSessionUpdates.ts'
 
 /**
  * Ensures a new or updated session does not overlap existing sessions.

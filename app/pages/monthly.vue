@@ -1,12 +1,9 @@
 <script setup lang="ts">
 import MonthlyView from '~/components/MonthlyView.vue'
 import { useMonthlyStats } from '~/composables/useMonthlyStats.ts'
-import { initDatabase } from '~/utils/database.ts'
-
 const monthlyStats = useMonthlyStats()
 
 onMounted(async () => {
-	initDatabase()
 	await monthlyStats.loadMonthlyStats()
 })
 

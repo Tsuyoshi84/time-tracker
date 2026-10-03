@@ -7,7 +7,7 @@ import {
 	persistSessionDeletion,
 	persistSessionUpdate,
 	refreshSessionsAfterMutation,
-} from '../utils/sessionMutations.ts'
+} from '../database/sessionMutations.ts'
 
 interface UseSessionManagerReturnType {
 	/** Currently selected date for viewing sessions. */

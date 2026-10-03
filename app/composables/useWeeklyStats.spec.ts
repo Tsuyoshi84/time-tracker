@@ -6,7 +6,7 @@ const { getSessionsInDateRange } = vi.hoisted(() => ({
 	getSessionsInDateRange: vi.fn<(startDate: string, endDate: string) => Promise<never[]>>(),
 }))
 
-vi.mock('../utils/database.ts', () => ({ getSessionsInDateRange }))
+vi.mock('../database/database.ts', () => ({ getSessionsInDateRange }))
 
 describe('useWeeklyStats', () => {
 	beforeEach(() => {

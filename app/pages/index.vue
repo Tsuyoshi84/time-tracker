@@ -10,7 +10,7 @@ import { useWeeklyStats } from '~/composables/useWeeklyStats.ts'
 import type { Milliseconds, TimeSession } from '~/types/index.ts'
 import { calculateTodaysTotalDuration } from '~/utils/calculateTodaysTotalDuration.ts'
 import { convertToDateString } from '~/utils/convertToDateString.ts'
-import { getSessionsByDate, initDatabase } from '~/utils/database.ts'
+import { getSessionsByDate } from '~/database/database.ts'
 
 const { dailyStats, loadWeeklyStats } = useWeeklyStats()
 
@@ -56,9 +56,8 @@ async function handleUpdateSession(
 	}
 }
 
-// Initialize on mount
+// Load sessions and stats on mount
 onMounted(async () => {
-	initDatabase()
 	await Promise.all([
 		loadActiveSession(),
 		loadSessionsForDate(selectedDate.value),
