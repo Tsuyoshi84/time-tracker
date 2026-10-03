@@ -176,42 +176,6 @@ export async function getSessionsInDateRange(
 }
 
 /**
- * Checks whether a session has a defined end time.
- * @param session - Session to inspect
- * @returns Whether the session is completed
- */
-function isCompletedSession(session: TimeSession): session is TimeSession & { endTime: Date } {
-	return session.endTime !== undefined
-}
-
-/**
- * Calculates total duration and session count for a day.
- * @param date Date string (YYYY-MM-DD)
- * @returns Object with totalDuration and sessionCount
- */
-export async function calculateDayStats(
-	date: DateString,
-): Promise<{ totalDuration: number; sessionCount: number }> {
-	const sessions = await getSessionsByDate(date)
-	const completedSessions = sessions.filter(isCompletedSession)
-	const totalDuration = completedSessions.reduce(
-		(total, session) => total + (session.endTime.getTime() - session.startTime.getTime()),
-		0,
-	)
-	return {
-		totalDuration,
-		sessionCount: sessions.length,
-	}
-}
-
-/**
- * Clears all session data from the database.
- */
-export async function clearAllData(): Promise<void> {
-	await db.sessions.clear()
-}
-
-/**
  * Checks for overlapping sessions in a day, excluding a given session id.
  * @param startTime Start time of the new/edited session
  * @param endTime End time of the new/edited session

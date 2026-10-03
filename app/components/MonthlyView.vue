@@ -5,7 +5,6 @@
 
 import type { ListboxItem } from '@nuxt/ui'
 
-import AppCard from '~/components/AppCard.vue'
 import MonthlyDayRow from '~/components/MonthlyDayRow.vue'
 import type { DateString, DayStats, MonthStats } from '~/types/index.ts'
 import { formatDuration } from '~/utils/formatDuration.ts'
@@ -77,16 +76,16 @@ const selectedMonth = computed<MonthStats | undefined>(() =>
 		v-else
 		class="grid grid-cols-1 lg:grid-cols-[minmax(240px,320px)_1fr] gap-4"
 	>
-		<AppCard class="overflow-hidden">
+		<UCard class="overflow-hidden">
 			<UListbox
 				v-model="selectedMonthStartDate"
 				value-key="value"
 				:items="monthListItems"
 				class="w-full"
 			/>
-		</AppCard>
+		</UCard>
 
-		<AppCard>
+		<UCard>
 			<template v-if="selectedMonth">
 				<div class="mb-4 pb-4 border-b border-default">
 					<h2 class="text-xl font-semibold">{{ selectedMonth.monthLabel }}</h2>
@@ -113,6 +112,6 @@ const selectedMonth = computed<MonthStats | undefined>(() =>
 				title="Select a month"
 				description="Choose a month from the list to view daily work details."
 			/>
-		</AppCard>
+		</UCard>
 	</div>
 </template>
