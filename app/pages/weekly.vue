@@ -2,7 +2,6 @@
 import { Calendar } from '@lucide/vue'
 import { useSum } from '@vueuse/math'
 
-import AppCard from '~/components/AppCard.vue'
 import WeeklyView from '~/components/WeeklyView.vue'
 import { useWeeklyStats } from '~/composables/useWeeklyStats.ts'
 import { initDatabase } from '~/utils/database.ts'
@@ -74,7 +73,7 @@ const formattedSelectedDate = computed<string>(() => {
 		/>
 
 		<!-- Selected Day Details -->
-		<AppCard
+		<UCard
 			v-if="selectedDayStats"
 			class="mt-4"
 		>
@@ -130,28 +129,28 @@ const formattedSelectedDate = computed<string>(() => {
 					</div>
 				</div>
 			</div>
-		</AppCard>
+		</UCard>
 
 		<!-- Weekly Stats Summary -->
 		<div class="mt-4 grid grid-cols-1 md:grid-cols-3 gap-6">
-			<AppCard class="text-center">
+			<UCard class="text-center">
 				<div class="text-sm text-toned mb-1">Daily Average</div>
 				<div class="text-2xl font-bold text-secondary">
 					{{ formatDuration(dailyAverage) }}
 				</div>
-			</AppCard>
-			<AppCard class="text-center">
+			</UCard>
+			<UCard class="text-center">
 				<div class="text-sm text-toned mb-1">Most Productive Day</div>
 				<div class="text-lg font-bold text-accent">
 					{{ mostProductiveDay }}
 				</div>
-			</AppCard>
-			<AppCard class="text-center">
+			</UCard>
+			<UCard class="text-center">
 				<div class="text-sm text-toned mb-1">Total Sessions</div>
 				<div class="text-2xl font-bold text-warning">
 					{{ totalWeeklySessions }}
 				</div>
-			</AppCard>
+			</UCard>
 		</div>
 	</div>
 </template>

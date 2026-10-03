@@ -6,7 +6,6 @@ import type { DateString, DayStats, WeekDay } from '~/types/index.ts'
 import { convertToDateString } from '~/utils/convertToDateString.ts'
 import { formatDuration } from '~/utils/formatDuration.ts'
 
-import AppCard from './AppCard.vue'
 import DaySummaryCard from './DaySummaryCard.vue'
 import WeekRangeButtons from './WeekRangeButtons.vue'
 
@@ -88,7 +87,7 @@ const totalSessions = computed<number>(() => {
 			Loading weekly stats…
 		</p>
 
-		<AppCard>
+		<UCard>
 			<div class="text-center">
 				<div class="text-sm text-toned mb-1">Week Total</div>
 				<div class="text-3xl font-bold text-primary">
@@ -96,7 +95,7 @@ const totalSessions = computed<number>(() => {
 				</div>
 				<div class="text-sm text-muted mt-1">{{ totalSessions }} total sessions</div>
 			</div>
-		</AppCard>
+		</UCard>
 
 		<div class="grid grid-cols-1 sm:grid-cols-7 gap-1 sm:gap-1">
 			<DaySummaryCard
