@@ -7,13 +7,21 @@ import TimerDisplay from '~/components/TimerDisplay.vue'
 import { useSessionManager } from '~/composables/useSessionManager.ts'
 import { useTimerState } from '~/composables/useTimerState.ts'
 import { useWeeklyStats } from '~/composables/useWeeklyStats.ts'
-import type { Milliseconds } from '~/types/index.ts'
+import type { Milliseconds, TimeSession } from '~/types/index.ts'
+import { calculateTodaysTotalDuration } from '~/utils/calculateTodaysTotalDuration.ts'
 import { convertToDateString } from '~/utils/convertToDateString.ts'
-import { initDatabase } from '~/utils/database.ts'
+import { getSessionsByDate, initDatabase } from '~/utils/database.ts'
 
 const { dailyStats, loadWeeklyStats } = useWeeklyStats()
 
 const { loadActiveSession, timerState, currentSessionDuration, toggleTimer } = useTimerState()
+
+const todaysSessions = shallowRef<TimeSession[]>([])
+
+async function loadTodaysSessions(): Promise<void> {
+	const today = convertToDateString(new Date())
+	todaysSessions.value = await getSessionsByDate(today)
+}
 
 const {
 	sessions,
@@ -26,8 +34,7 @@ const {
 	loadSessionsForDate,
 	loading: sessionLoading,
 } = useSessionManager(async () => {
-	await loadWeeklyStats()
-	await loadActiveSession()
+	await Promise.all([loadWeeklyStats(), loadActiveSession(), loadTodaysSessions()])
 })
 
 const sessionListRef = useTemplateRef('sessionListRef')
@@ -52,28 +59,28 @@ async function handleUpdateSession(
 // Initialize on mount
 onMounted(async () => {
 	initDatabase()
-	await loadActiveSession()
-	await loadSessionsForDate(selectedDate.value)
-	await loadWeeklyStats()
+	await Promise.all([
+		loadActiveSession(),
+		loadSessionsForDate(selectedDate.value),
+		loadWeeklyStats(),
+		loadTodaysSessions(),
+	])
 })
 
 watch(
 	() => timerState.value.isRunning,
 	async () => {
-		await loadSessionsForDate(selectedDate.value)
-		await loadWeeklyStats()
+		await Promise.all([
+			loadSessionsForDate(selectedDate.value),
+			loadWeeklyStats(),
+			loadTodaysSessions(),
+		])
 	},
 )
 
 const todaysTotalDuration = computed<Milliseconds>(() => {
 	const today = convertToDateString(new Date())
-	const todaySessions = sessions.value.filter((s) => s.date === today && s.endTime)
-	return (currentSessionDuration.value +
-		todaySessions.reduce(
-			(total, session) =>
-				session.endTime ? total + (session.endTime.getTime() - session.startTime.getTime()) : total,
-			0,
-		)) as Milliseconds
+	return calculateTodaysTotalDuration(todaysSessions.value, today, currentSessionDuration.value)
 })
 
 const totalDurationExcludingCurrentSession = useSum(() =>
