@@ -4,13 +4,10 @@ import type { NavigationMenuItem } from '@nuxt/ui'
 
 import { useTimerFavicon } from '~/composables/useTimerFavicon.ts'
 import { useTimerState } from '~/composables/useTimerState.ts'
-import { initDatabase } from '~/utils/database.ts'
-
 const { loadActiveSession } = useTimerState()
 useTimerFavicon()
 
 onMounted(async () => {
-	initDatabase()
 	await loadActiveSession()
 })
 

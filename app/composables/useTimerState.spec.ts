@@ -9,7 +9,7 @@ const { getActiveSession } = vi.hoisted(() => ({
 	getActiveSession: vi.fn<() => Promise<TimeSession | undefined>>(),
 }))
 
-vi.mock('../utils/database.ts', () => ({
+vi.mock('../database/database.ts', () => ({
 	getActiveSession,
 	saveSession: vi.fn<() => Promise<TimeSession>>(),
 	updateSession: vi.fn<() => Promise<void>>(),

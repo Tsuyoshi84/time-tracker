@@ -4,16 +4,13 @@ import { useSum } from '@vueuse/math'
 
 import WeeklyView from '~/components/WeeklyView.vue'
 import { useWeeklyStats } from '~/composables/useWeeklyStats.ts'
-import { initDatabase } from '~/utils/database.ts'
 import { formatDuration } from '~/utils/formatDuration.ts'
 import { formatTime } from '~/utils/formatTime.ts'
 import { getSessionDurationDisplay } from '~/utils/getSessionDurationDisplay.ts'
 
 const weeklyStats = useWeeklyStats()
 
-// Initialize on mount
 onMounted(async () => {
-	initDatabase()
 	await weeklyStats.loadWeeklyStats()
 })
 

@@ -2,7 +2,7 @@ import type { Table } from 'dexie'
 import Dexie from 'dexie'
 
 import type { DateString, TimeSession } from '../types/index.ts'
-import { convertToDateString } from './convertToDateString.ts'
+import { convertToDateString } from '../utils/convertToDateString.ts'
 
 const DB_NAME = 'timeTracker'
 const DB_VERSION = 1
@@ -58,14 +58,6 @@ function mapSessionTableToTimeSession(session: SessionTable): TimeSession {
 		createdAt: new Date(session.createdAt),
 		updatedAt: new Date(session.updatedAt),
 	}
-}
-
-/**
- * Initializes the Dexie database instance.
- * @returns Dexie database instance
- */
-export function initDatabase(): Dexie {
-	return db
 }
 
 /**
@@ -131,9 +123,7 @@ export async function deleteSession(id: number): Promise<void> {
  */
 export async function getSessionsByDate(date: DateString): Promise<TimeSession[]> {
 	const sessions = await db.sessions.where('date').equals(date).toArray()
-	return sessions
-		.map((session) => mapSessionTableToTimeSession(session))
-		.sort((a, b) => a.startTime.getTime() - b.startTime.getTime())
+	return mapAndSortSessions(sessions)
 }
 
 /**
@@ -154,9 +144,7 @@ export async function getActiveSession(): Promise<TimeSession | null> {
  */
 export async function getAllSessions(): Promise<TimeSession[]> {
 	const sessions = await db.sessions.toArray()
-	return sessions
-		.map((session) => mapSessionTableToTimeSession(session))
-		.sort((a, b) => a.startTime.getTime() - b.startTime.getTime())
+	return mapAndSortSessions(sessions)
 }
 
 /**
@@ -170,6 +158,10 @@ export async function getSessionsInDateRange(
 	endDate: string,
 ): Promise<TimeSession[]> {
 	const sessions = await db.sessions.where('date').between(startDate, endDate, true, true).toArray()
+	return mapAndSortSessions(sessions)
+}
+
+function mapAndSortSessions(sessions: SessionTable[]): TimeSession[] {
 	return sessions
 		.map((session) => mapSessionTableToTimeSession(session))
 		.sort((a, b) => a.startTime.getTime() - b.startTime.getTime())

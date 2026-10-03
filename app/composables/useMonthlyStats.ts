@@ -1,6 +1,6 @@
+import { getAllSessions } from '../database/database.ts'
 import type { DateString, DayStats, MonthStats, TimeSession } from '../types/index.ts'
 import { buildDailyStatsForMonth, buildVisibleMonthStats } from '../utils/buildMonthStats.ts'
-import { getAllSessions } from '../utils/database.ts'
 
 interface UseMonthlyStatsReturnType {
 	/** Monthly statistics for months with at least two sessions. */

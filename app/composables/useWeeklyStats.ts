@@ -1,8 +1,8 @@
+import { getSessionsInDateRange } from '../database/database.ts'
 import type { DateString, DayStats } from '../types/index.ts'
 import { buildDailyStatsForWeek } from '../utils/buildDailyStatsForWeek.ts'
 import { calendarDateToDateString } from '../utils/calendarDateToDateString.ts'
 import { convertToDateString } from '../utils/convertToDateString.ts'
-import { getSessionsInDateRange } from '../utils/database.ts'
 import { dateStringToCalendarDate } from '../utils/dateStringToCalendarDate.ts'
 
 interface UseWeeklyStatsReturnType {
