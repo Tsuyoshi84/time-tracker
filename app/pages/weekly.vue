@@ -4,33 +4,22 @@ import { useSum } from '@vueuse/math'
 
 import AppCard from '~/components/AppCard.vue'
 import WeeklyView from '~/components/WeeklyView.vue'
-import { useSessionManager } from '~/composables/useSessionManager.ts'
 import { useWeeklyStats } from '~/composables/useWeeklyStats.ts'
-import type { TimeSession } from '~/types/index.ts'
-import { calculateDuration } from '~/utils/calculateDuration.ts'
 import { initDatabase } from '~/utils/database.ts'
 import { formatDuration } from '~/utils/formatDuration.ts'
 import { formatTime } from '~/utils/formatTime.ts'
+import { getSessionDurationDisplay } from '~/utils/getSessionDurationDisplay.ts'
 
-// Initialize composables (no timer needed for weekly view)
 const weeklyStats = useWeeklyStats()
-const sessionManager = useSessionManager(async () => {
-	await weeklyStats.loadWeeklyStats()
-})
 
 // Initialize on mount
 onMounted(async () => {
 	initDatabase()
-	await sessionManager.loadSessionsForDate(sessionManager.selectedDate.value)
 	await weeklyStats.loadWeeklyStats()
 })
 
 // Extract values
-const { selectedDate } = sessionManager
-const { weekStart, weekEnd, dailyStats, navigateWeek } = weeklyStats
-
-// Combined loading state
-const loading = computed(() => sessionManager.loading.value)
+const { selectedDate, weekStart, weekEnd, dailyStats, loading, navigateWeek } = weeklyStats
 
 // Selected day details
 const selectedDayStats = computed(() => {
@@ -65,19 +54,6 @@ const formattedSelectedDate = computed<string>(() => {
 		day: 'numeric',
 	})
 })
-
-function getSessionDuration(session: TimeSession): string {
-	if (session.isActive) {
-		return 'Running...'
-	}
-
-	if (session.endTime) {
-		const duration = calculateDuration(session.startTime, session.endTime)
-		return formatDuration(duration)
-	}
-
-	return '--:--:--'
-}
 </script>
 
 <template>
@@ -141,7 +117,7 @@ function getSessionDuration(session: TimeSession): string {
 					</div>
 
 					<div class="text-sm font-mono text-toned">
-						{{ getSessionDuration(session) }}
+						{{ getSessionDurationDisplay(session) }}
 					</div>
 				</div>
 
@@ -157,13 +133,7 @@ function getSessionDuration(session: TimeSession): string {
 		</AppCard>
 
 		<!-- Weekly Stats Summary -->
-		<div class="mt-4 grid grid-cols-1 md:grid-cols-4 gap-6">
-			<AppCard class="text-center">
-				<div class="text-sm text-toned mb-1">Total Hours</div>
-				<div class="text-2xl font-bold text-primary">
-					{{ formatDuration(weeklyTotal) }}
-				</div>
-			</AppCard>
+		<div class="mt-4 grid grid-cols-1 md:grid-cols-3 gap-6">
 			<AppCard class="text-center">
 				<div class="text-sm text-toned mb-1">Daily Average</div>
 				<div class="text-2xl font-bold text-secondary">
