@@ -48,8 +48,8 @@ A professional time tracking application built for freelance engineers with flex
 
 ### Prerequisites
 
-- Node.js 22+
-- pnpm
+- Node.js 26+
+- pnpm 12+
 
 ### Installation
 
