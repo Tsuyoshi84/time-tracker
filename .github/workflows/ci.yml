@@ -40,6 +40,9 @@ jobs:
         with:
           command: audit
           artifacts-dir: .fallow
+          # Exact pin: fallow >=3.43.0 installs only one Linux libc binary, which
+          # breaks this Action's musl verification when package.json uses a range.
+          version: "3.40.0"
 
       - parallel:
         - name: Format

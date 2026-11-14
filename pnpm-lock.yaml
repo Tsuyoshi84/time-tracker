@@ -228,7 +228,7 @@ importers:
         specifier: ^8.1.0
         version: 8.1.0(@vue/compiler-dom@3.5.45)(@vue/compiler-sfc@3.5.45)(@vue/server-renderer@3.5.44)(vue@3.5.44(typescript@6.0.3))
       fallow:
-        specifier: ^3.40.0
+        specifier: 3.40.0
         version: 3.40.0
       happy-dom:
         specifier: ^21.0.4
